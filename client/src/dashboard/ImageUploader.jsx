@@ -15,12 +15,10 @@ export default function ImageUploader({ label, value, onUploaded }) {
     try {
       const formData = new FormData();
       formData.append('image', file);
-      const res = await api.post('/upload', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      const res = await api.post('/upload', formData);
       onUploaded(res.data.url);
     } catch (err) {
-      setError('Upload failed');
+      setError(err.response?.data?.message || err.message || 'Upload failed');
     } finally {
       setUploading(false);
     }

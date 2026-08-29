@@ -31,5 +31,12 @@ app.use('/api/messages', require('./routes/messages'));
 app.get('/', (req, res) => res.json({ status: 'Portfolio API running' }));
 app.get('/api/health', (req, res) => res.json({ ok: true }));
 
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error('Server error:', err);
+  const status = err.status || err.statusCode || 500;
+  res.status(status).json({ message: err.message || 'Internal server error' });
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
