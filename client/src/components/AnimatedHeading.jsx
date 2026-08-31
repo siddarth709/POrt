@@ -3,8 +3,7 @@ import { motion } from 'framer-motion';
 import { wordContainer, wordChild, viewportOnce } from '../animations/variants';
 
 // Splits text into words and reveals them with a soft blur/rise stagger as
-// the heading scrolls into view. Drop-in replacement for a plain <h2>/<h3> -
-// pass the same className you'd use on the heading element.
+// the heading scrolls into view with natural CSS line breaks.
 export default function AnimatedHeading({
   as: Tag = 'h2',
   text = '',
@@ -26,10 +25,9 @@ export default function AnimatedHeading({
         <motion.span
           key={i}
           variants={wordChild}
-          className={`inline-block will-change-transform ${wordClassName}`}
+          className={`inline-block mr-[0.26em] last:mr-0 will-change-transform ${wordClassName}`}
         >
           {word}
-          {i < words.length - 1 ? '\u00A0' : ''}
         </motion.span>
       ))}
     </MotionTag>

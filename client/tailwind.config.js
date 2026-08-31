@@ -29,7 +29,7 @@ export default {
         subtle: '#64748b',
       },
       fontFamily: {
-        display: ['"Outfit"', '"Space Grotesk"', 'sans-serif'],
+        display: ['"Plus Jakarta Sans"', '"Inter"', 'sans-serif'],
         mono: ['"JetBrains Mono"', 'monospace'],
         body: ['"Inter"', 'sans-serif'],
       },

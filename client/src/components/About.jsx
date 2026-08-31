@@ -118,7 +118,7 @@ export default function About({ data = {} }) {
 
               <AnimatedHeading
                 text={data.heading || 'Crafting Digital Experiences'}
-                className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-6"
+                className="font-display text-2xl sm:text-3xl lg:text-[2.15rem] font-bold tracking-tight leading-[1.3] text-white mb-6"
                 wordClassName="text-white"
               />
 
