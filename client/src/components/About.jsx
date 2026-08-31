@@ -4,6 +4,7 @@ import { FiDownload, FiFileText, FiCheckCircle } from 'react-icons/fi';
 import Reveal from './Reveal';
 import AnimatedHeading from './AnimatedHeading';
 import { slideInLeft, slideInRight } from '../animations/variants';
+import { formatExternalUrl } from '../utils/url';
 
 const floatVariant = {
   animate: {
@@ -161,7 +162,7 @@ export default function About({ data = {} }) {
                   <motion.a
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.98 }}
-                    href={data.resumeUrl}
+                    href={formatExternalUrl(data.resumeUrl)}
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-gradient-to-r from-accent to-accent2 text-black font-semibold text-sm shadow-glow-sm hover:shadow-glow-md transition-all"

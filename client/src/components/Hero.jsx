@@ -2,6 +2,7 @@ import React from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { FiArrowDown, FiSend, FiBriefcase, FiDownload, FiUser, FiCode, FiCpu } from 'react-icons/fi';
 import { FaGithub, FaLinkedin, FaTwitter, FaInstagram, FaGlobe } from 'react-icons/fa6';
+import { formatExternalUrl } from '../utils/url';
 
 export default function Hero({ data = {} }) {
   const { scrollY } = useScroll();
@@ -125,7 +126,7 @@ export default function Hero({ data = {} }) {
                   .map((s, i) => (
                     <a
                       key={i}
-                      href={s.url}
+                      href={formatExternalUrl(s.url)}
                       target="_blank"
                       rel="noreferrer"
                       className="w-10 h-10 rounded-full glass flex items-center justify-center text-slate-300 hover:text-white hover:border-accent/50 hover:bg-accent/10 hover:scale-110 transition-all duration-300 shadow-sm"

@@ -5,6 +5,7 @@ import { FaGithub, FaLinkedin, FaTwitter, FaInstagram, FaGlobe } from 'react-ico
 import Reveal from './Reveal';
 import { slideInLeft, slideInRight } from '../animations/variants';
 import api from '../api/axios';
+import { formatExternalUrl } from '../utils/url';
 
 export default function Contact({ data = {} }) {
   const [form, setForm] = useState({ name: '', email: '', message: '' });
@@ -112,7 +113,7 @@ export default function Contact({ data = {} }) {
                         .map((s, i) => (
                           <a
                             key={i}
-                            href={s.url}
+                            href={formatExternalUrl(s.url)}
                             target="_blank"
                             rel="noreferrer"
                             className="px-3.5 py-2 rounded-xl glass flex items-center gap-2 text-xs text-slate-300 hover:text-white hover:border-accent/40 hover:bg-accent/10 transition-all"

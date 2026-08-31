@@ -4,6 +4,7 @@ import { FiX, FiGithub, FiExternalLink, FiLayers, FiEye } from 'react-icons/fi';
 import Reveal from './Reveal';
 import AnimatedHeading from './AnimatedHeading';
 import { scaleIn, modalVariant } from '../animations/variants';
+import { formatExternalUrl } from '../utils/url';
 
 export default function Projects({ data }) {
   const [active, setActive] = useState(null);
@@ -156,7 +157,7 @@ export default function Projects({ data }) {
                 <div className="flex flex-wrap items-center gap-3 pt-6 mt-6 border-t border-white/10">
                   {active.liveUrl && (
                     <a
-                      href={active.liveUrl}
+                      href={formatExternalUrl(active.liveUrl)}
                       target="_blank"
                       rel="noreferrer"
                       className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-accent to-accent2 text-black font-semibold text-xs sm:text-sm shadow-glow-sm hover:shadow-glow-md transition-all"
@@ -167,7 +168,7 @@ export default function Projects({ data }) {
 
                   {active.githubUrl && (
                     <a
-                      href={active.githubUrl}
+                      href={formatExternalUrl(active.githubUrl)}
                       target="_blank"
                       rel="noreferrer"
                       className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass text-white font-medium text-xs sm:text-sm hover:bg-white/10 transition-colors"
