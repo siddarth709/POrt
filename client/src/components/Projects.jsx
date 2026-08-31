@@ -65,7 +65,7 @@ export default function Projects({ data }) {
                   <h3 className="font-display font-bold text-xl text-white group-hover:text-cyan-300 transition-colors">
                     {p.title}
                   </h3>
-                  <p className="text-slate-100 text-sm mt-2.5 line-clamp-2 leading-relaxed flex-grow opacity-95">
+                  <p className="text-slate-100 text-sm mt-2.5 line-clamp-2 leading-relaxed flex-grow opacity-95 text-justify">
                     {p.shortDescription || p.details}
                   </p>
 
@@ -147,7 +147,7 @@ export default function Projects({ data }) {
                   )}
 
                   {/* Detailed Description */}
-                  <div className="text-slate-100 text-sm sm:text-base leading-relaxed whitespace-pre-line space-y-4 font-normal opacity-95">
+                  <div className="text-slate-100 text-sm sm:text-base leading-relaxed whitespace-pre-line space-y-4 font-normal opacity-95 text-justify">
                     {active.details || active.shortDescription}
                   </div>
                 </div>

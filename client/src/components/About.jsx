@@ -131,7 +131,7 @@ export default function About({ data = {} }) {
                 className="origin-left h-px bg-gradient-to-r from-emerald-500/60 via-cyan-400/40 to-transparent mb-6"
               />
 
-              <div className="text-slate-300 text-base md:text-lg leading-relaxed whitespace-pre-line space-y-4 font-normal">
+              <div className="text-slate-300 text-base md:text-lg leading-relaxed whitespace-pre-line space-y-4 font-normal text-justify">
                 {data.bio || 'Passionate engineer dedicated to creating high-performance software with clean design.'}
               </div>
 

@@ -65,7 +65,7 @@ export default function Education({ data }) {
                     {item.description && (
                       <p
                         style={{ color: '#67e8f9' }}
-                        className="text-sm md:text-base leading-relaxed whitespace-pre-line border-t border-cyan-500/30 pt-3 font-normal"
+                        className="text-sm md:text-base leading-relaxed whitespace-pre-line border-t border-cyan-500/30 pt-3 font-normal text-justify"
                       >
                         {item.description}
                       </p>

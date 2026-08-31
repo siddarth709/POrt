@@ -61,7 +61,7 @@ export default function Experience({ data }) {
                     {item.description && (
                       <p
                         style={{ color: '#67e8f9' }}
-                        className="text-sm md:text-base mt-4 leading-relaxed whitespace-pre-line border-t border-cyan-500/30 pt-4 font-normal"
+                        className="text-sm md:text-base mt-4 leading-relaxed whitespace-pre-line border-t border-cyan-500/30 pt-4 font-normal text-justify"
                       >
                         {item.description}
                       </p>

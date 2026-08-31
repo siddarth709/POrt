@@ -376,7 +376,7 @@ export default function Chronicles({ data }) {
                         {c.title}
                       </h3>
 
-                      <p className="text-slate-300 text-sm leading-relaxed whitespace-pre-line line-clamp-3 font-normal opacity-90">
+                      <p className="text-slate-300 text-sm leading-relaxed whitespace-pre-line line-clamp-3 font-normal opacity-90 text-justify">
                         {c.description}
                       </p>
                     </div>
@@ -464,7 +464,7 @@ export default function Chronicles({ data }) {
                     </div>
                   )}
 
-                  <div className="text-slate-200 text-sm sm:text-base leading-relaxed whitespace-pre-line space-y-4 font-normal">
+                  <div className="text-slate-200 text-sm sm:text-base leading-relaxed whitespace-pre-line space-y-4 font-normal text-justify">
                     {selectedChronicle.description}
                   </div>
                 </div>
