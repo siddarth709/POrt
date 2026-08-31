@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { FiX, FiGithub, FiExternalLink, FiLayers, FiEye } from 'react-icons/fi';
 import Reveal from './Reveal';
+import AnimatedHeading from './AnimatedHeading';
 import { scaleIn, modalVariant } from '../animations/variants';
 
 export default function Projects({ data }) {
@@ -24,9 +25,11 @@ export default function Projects({ data }) {
               <FiLayers size={13} />
               <span>FEATURED WORK</span>
             </div>
-            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">
-              <span className="gradient-text">Projects</span>
-            </h2>
+            <AnimatedHeading
+              text="Projects"
+              className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight"
+              wordClassName="gradient-text"
+            />
           </div>
         </Reveal>
 

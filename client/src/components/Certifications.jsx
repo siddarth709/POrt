@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { FiX, FiAward, FiEye, FiCheck, FiCalendar } from 'react-icons/fi';
 import Reveal from './Reveal';
+import AnimatedHeading from './AnimatedHeading';
 import { scaleIn, modalVariant } from '../animations/variants';
 
 export default function Certifications({ data }) {
@@ -17,9 +18,11 @@ export default function Certifications({ data }) {
               <FiAward size={13} />
               <span>ACCREDITATIONS & LICENSES</span>
             </div>
-            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">
-              <span className="gradient-text">Certifications</span>
-            </h2>
+            <AnimatedHeading
+              text="Certifications"
+              className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight"
+              wordClassName="gradient-text"
+            />
           </div>
         </Reveal>
 

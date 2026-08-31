@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { FiDownload, FiFileText, FiCheckCircle } from 'react-icons/fi';
 import Reveal from './Reveal';
+import AnimatedHeading from './AnimatedHeading';
 import { slideInLeft, slideInRight } from '../animations/variants';
 
 const floatVariant = {
@@ -115,9 +116,11 @@ export default function About({ data = {} }) {
                 <span>ABOUT ME</span>
               </div>
 
-              <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-6">
-                <span className="text-white">{data.heading || 'Crafting Digital Experiences'}</span>
-              </h2>
+              <AnimatedHeading
+                text={data.heading || 'Crafting Digital Experiences'}
+                className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-6"
+                wordClassName="text-white"
+              />
 
               {/* Animated divider line */}
               <motion.div

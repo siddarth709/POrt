@@ -1,6 +1,7 @@
 import React from 'react';
 import { FiBookOpen, FiCalendar } from 'react-icons/fi';
 import Reveal from './Reveal';
+import AnimatedHeading from './AnimatedHeading';
 import { fadeUp } from '../animations/variants';
 
 export default function Education({ data }) {
@@ -15,9 +16,11 @@ export default function Education({ data }) {
               <FiBookOpen size={13} />
               <span>ACADEMIC BACKGROUND</span>
             </div>
-            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">
-              <span className="gradient-text">Education</span>
-            </h2>
+            <AnimatedHeading
+              text="Education"
+              className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight"
+              wordClassName="gradient-text"
+            />
           </div>
         </Reveal>
 

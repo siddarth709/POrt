@@ -55,5 +55,45 @@ export const staggerContainer = {
   visible: { transition: { staggerChildren: 0.12 } },
 };
 
+// Soft blur-focus reveal - nice for headings and hero-style text.
+export const blurUp = {
+  hidden: { opacity: 0, y: 24, filter: 'blur(8px)' },
+  visible: (i = 0) => ({
+    opacity: 1,
+    y: 0,
+    filter: 'blur(0px)',
+    transition: { duration: 0.8, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] },
+  }),
+};
+
+// Word-by-word container/child pair used by AnimatedHeading.
+export const wordContainer = {
+  hidden: {},
+  visible: (i = 0) => ({
+    transition: { staggerChildren: 0.06, delayChildren: i * 0.05 },
+  }),
+};
+
+export const wordChild = {
+  hidden: { opacity: 0, y: 18, filter: 'blur(6px)' },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: 'blur(0px)',
+    transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] },
+  },
+};
+
+// Gentle zoom-fade, useful for cards entering a horizontal scroller.
+export const zoomFade = {
+  hidden: { opacity: 0, scale: 0.88, y: 24 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+  },
+};
+
 export const viewportOnce = { once: true, amount: 0.2 };
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { FiBriefcase, FiCalendar } from 'react-icons/fi';
 import Reveal from './Reveal';
+import AnimatedHeading from './AnimatedHeading';
 import { fadeUp } from '../animations/variants';
 
 export default function Experience({ data }) {
@@ -15,9 +16,11 @@ export default function Experience({ data }) {
               <FiBriefcase size={13} />
               <span>CAREER PATH</span>
             </div>
-            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">
-              <span className="gradient-text">Work Experience</span>
-            </h2>
+            <AnimatedHeading
+              text="Work Experience"
+              className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight"
+              wordClassName="gradient-text"
+            />
           </div>
         </Reveal>
 
