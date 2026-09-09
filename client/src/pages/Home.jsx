@@ -25,12 +25,12 @@ export default function Home() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#050508] text-slate-100 selection:bg-cyan-500/20 selection:text-cyan-200">
+    <div className="relative isolate min-h-screen bg-[#050508] text-slate-100 selection:bg-cyan-500/20 selection:text-cyan-200">
       <CustomCursor />
       <BackgroundFX />
       <Navbar visibility={visibility} />
 
-      <main>
+      <main className="relative z-10">
         <Hero data={content?.hero} />
         {visibility.about && <About data={content?.about} />}
         {visibility.education && <Education data={content?.education} />}
