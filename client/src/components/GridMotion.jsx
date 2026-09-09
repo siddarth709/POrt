@@ -1,46 +1,75 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
+import { MoveDiagonal2 } from 'lucide-react';
+
+const LOOP_COPIES = 4;
 
 export default function GridMotion({ items = [] }) {
-  const [pointer, setPointer] = useState({ x: 50, y: 50 });
+  const [pointer, setPointer] = useState({ x: 0, y: 0 });
+  const loopedItems = useMemo(() => Array.from({ length: LOOP_COPIES }, () => items).flat(), [items]);
 
   if (!items.length) return null;
+
+  const rows = [
+    { shift: 0, direction: -1, duration: 32 },
+    { shift: Math.ceil(items.length / 3), direction: 1, duration: 38 },
+    { shift: Math.ceil((items.length * 2) / 3), direction: -1, duration: 35 },
+  ];
 
   return (
     <section
       id="grid-motion"
-      className="relative overflow-hidden border-t border-white/[0.04] py-28 sm:py-36"
+      className="grid-motion-section relative py-20 sm:py-28"
       onMouseMove={(event) => {
         const rect = event.currentTarget.getBoundingClientRect();
-        setPointer({ x: ((event.clientX - rect.left) / rect.width) * 100, y: ((event.clientY - rect.top) / rect.height) * 100 });
+        setPointer({
+          x: ((event.clientX - rect.left) / rect.width - 0.5) * 26,
+          y: ((event.clientY - rect.top) / rect.height - 0.5) * 18,
+        });
       }}
-      style={{ '--grid-x': `${pointer.x}%`, '--grid-y': `${pointer.y}%` }}
+      onMouseLeave={() => setPointer({ x: 0, y: 0 })}
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_var(--grid-x)_var(--grid-y),rgba(53,211,255,0.17),transparent_28rem)]" />
-      <div className="relative z-10 mx-auto mb-12 flex max-w-7xl items-end justify-between gap-6 px-6 sm:px-10">
-        <div>
-          <p className="font-mono text-xs tracking-[0.25em] text-cyan-300/70">VISUAL TELEMETRY</p>
-          <h2 className="mt-3 font-display text-4xl font-bold tracking-tight text-white sm:text-6xl">GRID MOTION</h2>
+      <div className="relative z-20 mx-auto max-w-7xl px-5 sm:px-8">
+        <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+          <div>
+            <p className="font-mono text-[11px] tracking-[0.24em] text-cyan-200/75">VISUAL INDEX</p>
+            <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight text-white sm:text-6xl">In motion.</h2>
+          </div>
+          <p className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.15em] text-slate-400">
+            <MoveDiagonal2 size={14} className="text-cyan-300" /> Move through the archive
+          </p>
         </div>
-        <span className="hidden font-mono text-[10px] tracking-widest text-slate-500 sm:block">MOVE // EXPLORE</span>
       </div>
-      <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-2 gap-2 px-4 sm:grid-cols-3 sm:gap-3 sm:px-10 lg:grid-cols-4">
-        {items.map((item, index) => (
-          <motion.figure
-            key={item._id || index}
-            initial={{ opacity: 0, scale: 0.86, y: 24 }}
-            whileInView={{ opacity: 1, scale: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.15 }}
-            transition={{ duration: 0.55, delay: (index % 8) * 0.045, ease: [0.16, 1, 0.3, 1] }}
-            whileHover={{ y: index % 2 ? -10 : 10, scale: 1.045, rotateX: index % 2 ? 2 : -2, rotateY: index % 3 ? 2 : -2, zIndex: 2 }}
-            className="group relative aspect-square overflow-hidden rounded-xl border border-white/[0.1] bg-slate-950/70 shadow-2xl sm:rounded-2xl"
-          >
-            <img src={item.image} alt={item.title || 'Grid visual'} className="h-full w-full object-cover transition duration-700 group-hover:scale-110 group-hover:saturate-125" loading="lazy" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#030511] via-transparent to-transparent opacity-90" />
-            <div className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 bg-[radial-gradient(circle_at_50%_35%,rgba(103,232,249,0.22),transparent_52%)]" />
-            {item.title && <figcaption className="absolute bottom-3 left-3 right-3 truncate font-mono text-[10px] tracking-wider text-white/80 sm:bottom-4 sm:left-4 sm:text-xs">{item.title}</figcaption>}
-          </motion.figure>
-        ))}
+
+      <div className="grid-motion-viewport mt-12 sm:mt-16" aria-label="Moving visual archive">
+        <motion.div
+          className="grid-motion-canvas"
+          animate={{ x: pointer.x, y: pointer.y }}
+          transition={{ type: 'spring', stiffness: 85, damping: 22, mass: 0.5 }}
+        >
+          {rows.map((row, rowIndex) => {
+            const orderedItems = [...loopedItems.slice(row.shift), ...loopedItems.slice(0, row.shift)];
+            const travel = row.direction * (items.length * 228);
+
+            return (
+              <motion.div
+                key={rowIndex}
+                className="grid-motion-row"
+                animate={{ x: [0, travel] }}
+                transition={{ duration: row.duration, ease: 'linear', repeat: Infinity, repeatType: 'loop' }}
+              >
+                {orderedItems.map((item, itemIndex) => (
+                  <figure className="grid-motion-tile" key={`${rowIndex}-${item._id || itemIndex}-${itemIndex}`}>
+                    <img src={item.image} alt={item.title || 'Portfolio visual'} loading="lazy" />
+                    <figcaption>{item.title || 'Visual study'}</figcaption>
+                  </figure>
+                ))}
+              </motion.div>
+            );
+          })}
+        </motion.div>
+        <div className="grid-motion-fade grid-motion-fade-top" />
+        <div className="grid-motion-fade grid-motion-fade-bottom" />
       </div>
     </section>
   );
