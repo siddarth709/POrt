@@ -1,48 +1,81 @@
-import React from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React, { useEffect } from 'react';
+import { motion, useMotionValue, useSpring, useScroll, useTransform } from 'framer-motion';
 
 export default function BackgroundFX() {
-  const { scrollY } = useScroll();
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
 
-  // Very gentle drift as the page scrolls, so the ambient glows feel alive
-  // without ever distracting from foreground content.
-  const glow1Y = useTransform(scrollY, [0, 2000], [0, 220]);
-  const glow2Y = useTransform(scrollY, [0, 2000], [0, -260]);
-  const gridY = useTransform(scrollY, [0, 2000], [0, 80]);
+  const springConfig = { damping: 40, stiffness: 120 };
+  const smoothMouseX = useSpring(mouseX, springConfig);
+  const smoothMouseY = useSpring(mouseY, springConfig);
+
+  const { scrollY } = useScroll();
+  const backgroundY = useTransform(scrollY, [0, 3000], [0, 150]);
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      // Normalize mouse coordinates around center
+      const { innerWidth, innerHeight } = window;
+      mouseX.set((e.clientX - innerWidth / 2) / innerWidth);
+      mouseY.set((e.clientY - innerHeight / 2) / innerHeight);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [mouseX, mouseY]);
 
   return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 bg-[#07070b]">
-      {/* 1. Subtle Top Center Studio Spotlight (Apple / Linear style) */}
+    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 bg-[#050508]">
+      {/* Noise Texture layer */}
+      <div className="noise-overlay" />
+
+      {/* 1. Subtle Precision Technical Grid */}
       <motion.div
-        style={{
-          y: glow1Y,
-          background: 'radial-gradient(ellipse 60% 50% at 50% 0%, rgba(124, 58, 237, 0.14) 0%, rgba(6, 182, 212, 0.06) 50%, transparent 100%)',
-          filter: 'blur(60px)',
-        }}
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[550px] pointer-events-none"
+        style={{ y: backgroundY }}
+        className="absolute inset-0 bg-tech-grid opacity-[0.55]"
       />
 
-      {/* 2. Soft Mid-page Ambient Falloff */}
-      <motion.div
+      {/* 2. Mathematical Vector Curves (SVG) */}
+      <motion.svg
         style={{
-          y: glow2Y,
-          background: 'radial-gradient(ellipse 50% 50% at 50% 50%, rgba(14, 165, 233, 0.05) 0%, transparent 80%)',
-          filter: 'blur(90px)',
+          x: useTransform(smoothMouseX, (v) => v * 25),
+          y: useTransform(smoothMouseY, (v) => v * 25),
         }}
-        className="absolute top-[45%] left-1/2 -translate-x-1/2 w-[1200px] h-[600px] pointer-events-none opacity-40"
-      />
+        viewBox="0 0 1440 900"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="absolute inset-0 w-full h-full opacity-[0.14] stroke-white"
+      >
+        <path
+          d="M-100 250 C 300 150, 600 450, 1000 300 C 1200 220, 1400 350, 1600 280"
+          strokeWidth="0.75"
+          strokeDasharray="4 6"
+        />
+        <path
+          d="M-100 380 C 400 280, 750 550, 1100 420 C 1300 350, 1500 480, 1600 400"
+          strokeWidth="0.5"
+        />
+        <path
+          d="M-100 520 C 250 620, 650 380, 950 540 C 1250 700, 1450 500, 1600 580"
+          strokeWidth="0.75"
+          strokeDasharray="8 8"
+        />
+        {/* Subtle geometric technical markers */}
+        <circle cx="600" cy="450" r="2" fill="white" opacity="0.6" />
+        <circle cx="1000" cy="300" r="2" fill="white" opacity="0.6" />
+        <line x1="590" y1="450" x2="610" y2="450" stroke="white" strokeWidth="0.5" opacity="0.4" />
+        <line x1="600" y1="440" x2="600" y2="460" stroke="white" strokeWidth="0.5" opacity="0.4" />
+      </motion.svg>
 
-      {/* 3. Ultra-subtle Micro-dot grid (Barely perceptible, extremely clean) */}
+      {/* 3. Understated Ambient Light Falloff */}
       <motion.div
         style={{
-          y: gridY,
-          backgroundImage: 'radial-gradient(rgba(255, 255, 255, 0.35) 1px, transparent 1px)',
-          backgroundSize: '32px 32px',
-          maskImage: 'radial-gradient(ellipse 70% 60% at 50% 30%, black 20%, transparent 80%)',
-          WebkitMaskImage: 'radial-gradient(ellipse 70% 60% at 50% 30%, black 20%, transparent 80%)',
+          x: useTransform(smoothMouseX, (v) => v * 40),
+          y: useTransform(smoothMouseY, (v) => v * 40),
         }}
-        className="absolute inset-0 opacity-[0.07] h-[calc(100%+260px)]"
+        className="absolute top-10 left-1/3 -translate-x-1/2 w-[700px] h-[500px] rounded-full bg-gradient-to-br from-cyan-500/[0.035] via-emerald-500/[0.02] to-transparent blur-[140px] pointer-events-none"
       />
+      <div className="absolute bottom-10 right-10 w-[600px] h-[500px] rounded-full bg-gradient-to-tl from-indigo-500/[0.025] to-transparent blur-[160px] pointer-events-none" />
     </div>
   );
 }

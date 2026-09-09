@@ -1,26 +1,15 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { FiMail, FiPhone, FiSend, FiMessageSquare, FiCheckCircle, FiAlertCircle } from 'react-icons/fi';
-import { FaGithub, FaLinkedin, FaTwitter, FaInstagram, FaGlobe } from 'react-icons/fa6';
-import Reveal from './Reveal';
-import { slideInLeft, slideInRight } from '../animations/variants';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowUpRight, Send, CheckCircle2, AlertCircle } from 'lucide-react';
 import api from '../api/axios';
 import { formatExternalUrl } from '../utils/url';
 
-export default function Contact({ data = {} }) {
+export default function Contact({ data = {}, heroSocials = [] }) {
+  const [formOpen, setFormOpen] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', message: '' });
-  const [status, setStatus] = useState('idle'); // idle | sending | sent | error
+  const [status, setStatus] = useState('idle'); // 'idle' | 'sending' | 'sent' | 'error'
 
-  const getSocialIcon = (platform = '') => {
-    const p = platform.toLowerCase();
-    if (p.includes('git')) return <FaGithub size={16} />;
-    if (p.includes('link')) return <FaLinkedin size={16} />;
-    if (p.includes('twit') || p.includes('x')) return <FaTwitter size={16} />;
-    if (p.includes('insta')) return <FaInstagram size={16} />;
-    return <FaGlobe size={16} />;
-  };
-
-  const submit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.name || !form.email || !form.message) return;
     setStatus('sending');
@@ -28,197 +17,224 @@ export default function Contact({ data = {} }) {
       await api.post('/messages', form);
       setStatus('sent');
       setForm({ name: '', email: '', message: '' });
-      setTimeout(() => setStatus('idle'), 6000);
+      setTimeout(() => setStatus('idle'), 5000);
     } catch {
       setStatus('error');
     }
   };
 
+  // Social links from Dashboard: use data.socials or heroSocials as added in dashboard
+  const socials = (data.socials && data.socials.length > 0) ? data.socials : (heroSocials || []);
+  const hasImage = Boolean(data.image);
+
   return (
-    <section id="contact" className="relative py-28 px-6 bg-grid-pattern">
-      {/* Ambient background glow */}
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/15 rounded-full blur-[150px] pointer-events-none -z-10" />
+    <section id="contact" className="relative pt-36 pb-20 px-6 sm:px-10 border-t border-white/[0.04]">
+      <div className="max-w-7xl mx-auto">
+        {/* Section Identifier */}
+        <div className="mb-16 sm:mb-20">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="font-mono text-xs sm:text-sm tracking-[0.25em] text-slate-400 uppercase"
+          >
+            CONTACT
+          </motion.h2>
+        </div>
 
-      <div className="max-w-6xl mx-auto">
-        <Reveal>
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent2 text-xs font-mono mb-3">
-              <FiMessageSquare size={13} />
-              <span>GET IN TOUCH</span>
-            </div>
-            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">
-              <span className="gradient-text">{data.heading || "Let's Connect"}</span>
-            </h2>
-            <p className="text-slate-400 text-sm md:text-base max-w-lg mx-auto mt-3">
-              Have a project in mind, an opportunity, or just want to say hi? Drop me a message below.
-            </p>
+        {/* Finale: Grid with image if present, or typography */}
+        <div className={hasImage ? "grid lg:grid-cols-12 gap-12 lg:gap-16 items-center mb-16 sm:mb-24" : "mb-16 sm:mb-24"}>
+          <div className={hasImage ? "lg:col-span-7" : "max-w-5xl"}>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className={`font-display font-bold tracking-tight text-white leading-[1.05] ${
+                hasImage ? "text-4xl sm:text-5xl lg:text-7xl" : "text-4xl sm:text-6xl md:text-7xl lg:text-8xl"
+              }`}
+            >
+              <div>{data.heading || "LET'S BUILD SOMETHING INTERESTING."}</div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="mt-10 flex flex-wrap items-center gap-6"
+            >
+              <button
+                onClick={() => setFormOpen(!formOpen)}
+                className="group px-8 py-4 rounded-full bg-white text-[#050508] font-mono text-xs sm:text-sm font-semibold tracking-wider flex items-center gap-2 hover:bg-slate-200 transition-colors shadow-lg"
+              >
+                <span>GET IN TOUCH</span>
+                <ArrowUpRight
+                  size={16}
+                  className="transition-transform duration-250 group-hover:translate-x-1 group-hover:-translate-y-1"
+                />
+              </button>
+
+              {data.email && (
+                <a
+                  href={`mailto:${data.email}`}
+                  data-cursor="open"
+                  className="font-mono text-xs sm:text-sm text-slate-400 hover:text-white transition-colors"
+                >
+                  {data.email}
+                </a>
+              )}
+            </motion.div>
           </div>
-        </Reveal>
 
-        <div className="grid md:grid-cols-12 gap-10 lg:gap-14 items-center">
-          {/* Left Column: Direct Info & Photo */}
-          <div className="md:col-span-5">
-            <Reveal variants={slideInLeft}>
-              {data.image ? (
-                <div className="glass-card rounded-2xl overflow-hidden p-2 group border border-white/10 shadow-2xl mb-8">
-                  <div className="rounded-xl overflow-hidden max-h-[340px]">
-                    <img
-                      src={data.image}
-                      alt="Contact"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                    />
-                  </div>
+          {/* Optional Contact Image Column */}
+          {hasImage && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="lg:col-span-5 flex justify-center"
+            >
+              <div className="w-full max-w-sm aspect-[4/3] rounded-2xl overflow-hidden glass-panel border border-white/[0.1] p-2 shadow-xl">
+                <div className="w-full h-full rounded-xl overflow-hidden bg-black/40">
+                  <img src={data.image} alt="Contact" className="w-full h-full object-cover" />
                 </div>
-              ) : null}
-
-              <div className="glass-card rounded-2xl p-6 sm:p-7 border border-white/10 shadow-xl space-y-5">
-                <h3 className="font-display font-bold text-xl text-white">Contact Information</h3>
-
-                {data.email && (
-                  <a
-                    href={`mailto:${data.email}`}
-                    className="flex items-center gap-3.5 text-slate-300 hover:text-cyan-300 transition-colors group"
-                  >
-                    <div className="w-10 h-10 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent2 group-hover:scale-110 transition-transform">
-                      <FiMail size={18} />
-                    </div>
-                    <span className="text-sm font-medium">{data.email}</span>
-                  </a>
-                )}
-
-                {data.phone && (
-                  <a
-                    href={`tel:${data.phone}`}
-                    className="flex items-center gap-3.5 text-slate-300 hover:text-cyan-300 transition-colors group"
-                  >
-                    <div className="w-10 h-10 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent2 group-hover:scale-110 transition-transform">
-                      <FiPhone size={18} />
-                    </div>
-                    <span className="text-sm font-medium">{data.phone}</span>
-                  </a>
-                )}
-
-                {data.socials?.filter(s => {
-                  const p = (s.platform || '').toLowerCase();
-                  return !p.includes('twit') && !p.includes('x') && !p.includes('git');
-                }).length > 0 && (
-                  <div className="pt-4 border-t border-white/[0.06]">
-                    <p className="text-xs uppercase tracking-wider font-mono text-slate-400 mb-3">Connect on Socials</p>
-                    <div className="flex flex-wrap gap-2.5">
-                      {data.socials
-                        .filter(s => {
-                          const p = (s.platform || '').toLowerCase();
-                          return !p.includes('twit') && !p.includes('x') && !p.includes('git');
-                        })
-                        .map((s, i) => (
-                          <a
-                            key={i}
-                            href={formatExternalUrl(s.url)}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="px-3.5 py-2 rounded-xl glass flex items-center gap-2 text-xs text-slate-300 hover:text-white hover:border-accent/40 hover:bg-accent/10 transition-all"
-                          >
-                            {getSocialIcon(s.platform)}
-                            <span>{s.platform}</span>
-                          </a>
-                        ))}
-                    </div>
-                  </div>
-                )}
               </div>
-            </Reveal>
-          </div>
+            </motion.div>
+          )}
+        </div>
 
-          {/* Right Column: Direct Messaging Form */}
-          <div className="md:col-span-7">
-            <Reveal variants={slideInRight}>
-              <form onSubmit={submit} className="glass-card rounded-2xl p-7 sm:p-9 border border-white/10 shadow-2xl flex flex-col gap-5">
-                <div>
-                  <label className="block text-xs font-mono uppercase tracking-wider text-slate-300 mb-2">
-                    Your Name
-                  </label>
+        {/* Message Form */}
+        <AnimatePresence>
+          {formOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="overflow-hidden mb-20 max-w-2xl"
+            >
+              <form
+                onSubmit={handleSubmit}
+                className="glass-panel p-8 sm:p-10 rounded-2xl border border-white/[0.1] flex flex-col gap-6"
+              >
+                <div className="flex items-center justify-between border-b border-white/[0.06] pb-4">
+                  <span className="font-mono text-xs tracking-widest text-emerald-400 uppercase">
+                    DIRECT DISPATCH // INBOX
+                  </span>
+                  <span className="font-mono text-[11px] text-slate-500">256-BIT ENCRYPTION</span>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label className="font-mono text-xs text-slate-400">NAME</label>
                   <input
+                    type="text"
                     required
-                    placeholder="John Doe"
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    className="w-full bg-surface/80 border border-white/10 rounded-xl px-4 py-3.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all"
+                    placeholder="Your Name"
+                    className="bg-white/[0.03] border border-white/[0.08] focus:border-cyan-400 rounded-lg px-4 py-3 text-sm text-white focus:outline-none transition-colors"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-xs font-mono uppercase tracking-wider text-slate-300 mb-2">
-                    Your Email
-                  </label>
+                <div className="flex flex-col gap-2">
+                  <label className="font-mono text-xs text-slate-400">EMAIL</label>
                   <input
-                    required
                     type="email"
-                    placeholder="john@example.com"
+                    required
                     value={form.email}
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
-                    className="w-full bg-surface/80 border border-white/10 rounded-xl px-4 py-3.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all"
+                    placeholder="your@email.com"
+                    className="bg-white/[0.03] border border-white/[0.08] focus:border-cyan-400 rounded-lg px-4 py-3 text-sm text-white focus:outline-none transition-colors"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-xs font-mono uppercase tracking-wider text-slate-300 mb-2">
-                    Your Message
-                  </label>
+                <div className="flex flex-col gap-2">
+                  <label className="font-mono text-xs text-slate-400">MESSAGE</label>
                   <textarea
                     required
-                    rows={5}
-                    placeholder="Tell me about your project, idea, or questions..."
+                    rows={4}
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
-                    className="w-full bg-surface/80 border border-white/10 rounded-xl px-4 py-3.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all resize-none"
+                    placeholder="Briefly describe your project or inquiry..."
+                    className="bg-white/[0.03] border border-white/[0.08] focus:border-cyan-400 rounded-lg px-4 py-3 text-sm text-white focus:outline-none transition-colors resize-none"
                   />
                 </div>
 
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  disabled={status === 'sending'}
-                  className="mt-2 py-3.5 px-6 rounded-xl bg-gradient-to-r from-accent to-accent2 text-black font-bold text-sm shadow-glow-sm hover:shadow-glow-md disabled:opacity-60 flex items-center justify-center gap-2 transition-all"
-                >
-                  {status === 'sending' ? (
-                    <>
-                      <span className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
-                      Sending message...
-                    </>
-                  ) : status === 'sent' ? (
-                    <>
-                      <FiCheckCircle size={16} /> Message Delivered!
-                    </>
-                  ) : (
-                    <>
-                      <FiSend size={16} /> Send Direct Message
-                    </>
+                <div className="flex items-center justify-between pt-2">
+                  <button
+                    type="submit"
+                    disabled={status === 'sending'}
+                    className="px-6 py-3 rounded-full bg-white text-[#050508] font-mono text-xs font-semibold tracking-wider flex items-center gap-2 hover:bg-slate-200 transition-colors disabled:opacity-50"
+                  >
+                    <Send size={14} />
+                    <span>{status === 'sending' ? 'TRANSMITTING...' : 'SEND MESSAGE'}</span>
+                  </button>
+
+                  {status === 'sent' && (
+                    <span className="flex items-center gap-1.5 font-mono text-xs text-emerald-400">
+                      <CheckCircle2 size={14} />
+                      <span>Transmitted successfully.</span>
+                    </span>
                   )}
-                </motion.button>
-
-                {status === 'sent' && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs flex items-center gap-2"
-                  >
-                    <FiCheckCircle size={15} /> Thank you! Your message has been saved to the dashboard inbox.
-                  </motion.div>
-                )}
-
-                {status === 'error' && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs flex items-center gap-2"
-                  >
-                    <FiAlertCircle size={15} /> Failed to deliver message. Please check the backend connection.
-                  </motion.div>
-                )}
+                  {status === 'error' && (
+                    <span className="flex items-center gap-1.5 font-mono text-xs text-rose-400">
+                      <AlertCircle size={14} />
+                      <span>Transmission failed. Please try again.</span>
+                    </span>
+                  )}
+                </div>
               </form>
-            </Reveal>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Dynamic Social Links from Dashboard */}
+        {socials.length > 0 && (
+          <div className="border-t border-white/[0.08] pt-12 grid sm:grid-cols-2 md:grid-cols-4 gap-6">
+            {socials.map((social, idx) => (
+              <a
+                key={idx}
+                href={formatExternalUrl(social.url)}
+                target="_blank"
+                rel="noreferrer"
+                data-cursor="open"
+                className="group flex items-center justify-between py-4 border-b border-white/[0.06] hover:border-white/40 transition-colors"
+              >
+                <span className="font-mono text-xs tracking-wider text-slate-300 group-hover:text-white uppercase">
+                  {social.platform}
+                </span>
+                <ArrowUpRight
+                  size={14}
+                  className="text-slate-500 group-hover:text-cyan-400 transition-transform duration-250 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                />
+              </a>
+            ))}
           </div>
-        </div>
+        )}
+
+        {/* Minimal Footer */}
+        <footer className="mt-28 pt-10 border-t border-white/[0.04] flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-slate-500">
+          <div className="flex items-center gap-2">
+            <span className="text-slate-300 font-semibold uppercase">{data.name || 'NS SIDDARTH'}</span>
+            <span>//</span>
+            <span>CMS PORTFOLIO</span>
+          </div>
+
+          <div className="flex items-center gap-4">
+            {socials.map((s, idx) => (
+              <React.Fragment key={idx}>
+                <a href={formatExternalUrl(s.url)} target="_blank" rel="noreferrer" className="hover:text-slate-300 transition-colors">
+                  {s.platform}
+                </a>
+                <span>·</span>
+              </React.Fragment>
+            ))}
+            <span>© {new Date().getFullYear()}</span>
+          </div>
+        </footer>
       </div>
     </section>
   );

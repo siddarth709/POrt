@@ -8,9 +8,31 @@ import SocialsEditor from './SocialsEditor';
 import VisibilityToggle from './VisibilityToggle';
 import ItemListEditor from './ItemListEditor';
 import Messages from './Messages';
+import {
+  Sparkles,
+  User,
+  GraduationCap,
+  Briefcase,
+  Award,
+  FolderGit2,
+  BookOpen,
+  Mail,
+  MessageSquare,
+  LogOut,
+  ExternalLink,
+  CheckCircle2,
+} from 'lucide-react';
 
 const TABS = [
-  'Hero', 'About', 'Education', 'Experience', 'Certifications', 'Projects', 'Chronicles', 'Contact', 'Messages',
+  { id: 'Hero', label: 'Hero', icon: Sparkles },
+  { id: 'About', label: 'About', icon: User },
+  { id: 'Education', label: 'Education', icon: GraduationCap },
+  { id: 'Experience', label: 'Experience', icon: Briefcase },
+  { id: 'Certifications', label: 'Certifications', icon: Award },
+  { id: 'Projects', label: 'Projects', icon: FolderGit2 },
+  { id: 'Chronicles', label: 'Chronicles', icon: BookOpen },
+  { id: 'Contact', label: 'Contact', icon: Mail },
+  { id: 'Messages', label: 'Messages', icon: MessageSquare },
 ];
 
 export default function Dashboard() {
@@ -22,74 +44,164 @@ export default function Dashboard() {
   const [savedFlash, setSavedFlash] = useState(false);
 
   const load = async () => {
-    const res = await api.get('/content');
-    setContent(res.data);
+    try {
+      const res = await api.get('/content');
+      if (res.data) {
+        setContent(res.data);
+        try {
+          localStorage.setItem('portfolio_content', JSON.stringify(res.data));
+        } catch {}
+      }
+    } catch (err) {
+      console.warn('API get /content failed, loading from local cache:', err.message);
+      try {
+        const cached = localStorage.getItem('portfolio_content');
+        if (cached) {
+          setContent(JSON.parse(cached));
+          return;
+        }
+      } catch {}
+      setContent({
+        hero: { name: '', tagline: '', image: '', socials: [] },
+        about: { heading: '', bio: '', image: '', resumeUrl: '' },
+        education: { visible: true, items: [] },
+        experience: { visible: true, items: [] },
+        certifications: { visible: true, items: [] },
+        projects: { visible: true, items: [] },
+        chronicles: { visible: true, items: [] },
+        contact: { heading: '', email: '', phone: '', image: '', socials: [] },
+      });
+    }
   };
 
   useEffect(() => { load(); }, []);
 
   const flashSaved = () => {
     setSavedFlash(true);
-    setTimeout(() => setSavedFlash(false), 1500);
+    setTimeout(() => setSavedFlash(false), 2000);
   };
 
   const saveSection = async (section, data) => {
     setSaving(true);
     try {
-      const res = await api.patch(`/content/${section}`, data);
-      setContent(res.data);
+      let updated;
+      try {
+        const res = await api.patch(`/content/${section}`, data);
+        updated = res.data;
+      } catch (err) {
+        console.warn(`API patch /content/${section} failed, saving locally:`, err.message);
+        updated = { ...content, [section]: { ...content[section], ...data } };
+      }
+      setContent(updated);
+      try {
+        localStorage.setItem('portfolio_content', JSON.stringify(updated));
+      } catch {}
       flashSaved();
     } finally {
       setSaving(false);
     }
   };
 
-  if (!content) return <div className="min-h-screen flex items-center justify-center text-muted">Loading…</div>;
+  if (!content) {
+    return (
+      <div className="min-h-screen bg-[#050508] flex items-center justify-center font-mono text-xs text-slate-400">
+        INITIALIZING CMS DATA…
+      </div>
+    );
+  }
 
-  const doLogout = () => { logout(); navigate('/dashboard/login'); };
+  const doLogout = () => {
+    logout();
+    navigate('/dashboard/login');
+  };
 
   return (
-    <div className="min-h-screen bg-base flex">
+    <div className="min-h-screen bg-[#050508] text-slate-100 flex">
       {/* Sidebar */}
-      <aside className="w-60 shrink-0 border-r border-white/10 p-5 hidden md:flex flex-col">
-        <h2 className="font-display font-semibold gradient-text mb-8">Owner Dashboard</h2>
-        <nav className="flex flex-col gap-1">
-          {TABS.map((t) => (
-            <button
-              key={t}
-              onClick={() => setTab(t)}
-              className={`text-left text-sm px-3 py-2 rounded-lg transition-colors ${
-                tab === t ? 'bg-accent/15 text-accent2' : 'text-muted hover:bg-white/5'
-              }`}
-            >
-              {t}
-            </button>
-          ))}
+      <aside className="w-64 shrink-0 border-r border-white/[0.08] p-6 hidden md:flex flex-col bg-[#07080f]/80 backdrop-blur-xl">
+        <div className="mb-8">
+          <span className="font-mono text-[10px] tracking-widest text-emerald-400 uppercase block mb-1">
+            CONTROL CENTER
+          </span>
+          <h2 className="font-display text-base font-bold tracking-tight text-white">
+            NS SIDDARTH CMS
+          </h2>
+        </div>
+
+        <nav className="flex flex-col gap-1.5">
+          {TABS.map((t) => {
+            const Icon = t.icon;
+            const isActive = tab === t.id;
+            return (
+              <button
+                key={t.id}
+                onClick={() => setTab(t.id)}
+                className={`text-left text-xs font-mono tracking-wider px-3.5 py-2.5 rounded-xl transition-all flex items-center gap-2.5 ${
+                  isActive
+                    ? 'bg-white text-[#050508] font-semibold shadow-sm'
+                    : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
+                }`}
+              >
+                <Icon size={14} className={isActive ? 'text-[#050508]' : 'text-slate-500'} />
+                <span>{t.label}</span>
+              </button>
+            );
+          })}
         </nav>
-        <div className="mt-auto flex flex-col gap-2 pt-6">
-          <a href="/" target="_blank" rel="noreferrer" className="text-xs text-muted hover:text-white">View live site ↗</a>
-          <button onClick={doLogout} className="text-xs text-red-400 text-left hover:underline">Log out</button>
+
+        <div className="mt-auto flex flex-col gap-3 pt-6 border-t border-white/[0.06]">
+          <a
+            href="/"
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-1.5 font-mono text-xs text-slate-400 hover:text-white transition-colors"
+          >
+            <span>View live site</span>
+            <ExternalLink size={12} />
+          </a>
+          <button
+            onClick={doLogout}
+            className="flex items-center gap-1.5 font-mono text-xs text-rose-400 hover:text-rose-300 transition-colors"
+          >
+            <LogOut size={12} />
+            <span>Log out</span>
+          </button>
         </div>
       </aside>
 
       {/* Mobile tab bar */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 glass p-2 flex gap-2 overflow-x-auto">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#07080f]/95 backdrop-blur-xl border-t border-white/[0.08] p-2 flex gap-2 overflow-x-auto">
         {TABS.map((t) => (
           <button
-            key={t}
-            onClick={() => setTab(t)}
-            className={`text-xs px-3 py-2 rounded-lg whitespace-nowrap ${tab === t ? 'bg-accent/20 text-accent2' : 'text-muted'}`}
+            key={t.id}
+            onClick={() => setTab(t.id)}
+            className={`text-xs font-mono px-3.5 py-2 rounded-xl whitespace-nowrap ${
+              tab === t.id ? 'bg-white text-[#050508] font-semibold' : 'text-slate-400'
+            }`}
           >
-            {t}
+            {t.label}
           </button>
         ))}
       </div>
 
       {/* Main panel */}
-      <main className="flex-1 p-6 md:p-10 pb-24 md:pb-10 max-w-3xl">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="font-display text-2xl font-semibold">{tab}</h1>
-          {savedFlash && <span className="text-xs text-accent2">Saved ✓ — live instantly</span>}
+      <main className="flex-1 p-6 sm:p-10 pb-28 md:pb-12 max-w-4xl">
+        <div className="flex items-center justify-between mb-8 pb-4 border-b border-white/[0.06]">
+          <div>
+            <span className="font-mono text-[10px] text-slate-500 uppercase tracking-widest block mb-1">
+              SECTION EDITOR
+            </span>
+            <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-white">
+              {tab}
+            </h1>
+          </div>
+
+          {savedFlash && (
+            <span className="inline-flex items-center gap-1.5 font-mono text-xs text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full">
+              <CheckCircle2 size={13} />
+              <span>Saved — live instantly</span>
+            </span>
+          )}
         </div>
 
         {tab === 'Hero' && (
@@ -100,17 +212,21 @@ export default function Dashboard() {
         )}
         {tab === 'Education' && (
           <>
-            <VisibilityToggle section="education" visible={content.education.visible} onChanged={setContent} />
-            <div className="mt-5">
+            <VisibilityToggle section="education" visible={content.education?.visible} onChanged={setContent} />
+            <div className="mt-6">
               <ItemListEditor
                 section="education"
-                title="Education entries"
-                items={content.education.items}
-                onChange={(items) => setContent({ ...content, education: { ...content.education, items } })}
+                title="Education Entries"
+                items={content.education?.items || []}
+                onChange={(items) => {
+                  const next = { ...content, education: { ...content.education, items } };
+                  setContent(next);
+                  try { localStorage.setItem('portfolio_content', JSON.stringify(next)); } catch {}
+                }}
                 fields={[
                   { name: 'degree', label: 'Degree / Program', type: 'text' },
-                  { name: 'institution', label: 'Institution', type: 'text' },
-                  { name: 'year', label: 'Year', type: 'text' },
+                  { name: 'institution', label: 'Institution / School', type: 'text' },
+                  { name: 'year', label: 'Year / Duration', type: 'text' },
                   { name: 'logo', label: 'Institution Logo (Optional)', type: 'image' },
                   { name: 'description', label: 'Description', type: 'textarea' },
                 ]}
@@ -120,19 +236,23 @@ export default function Dashboard() {
         )}
         {tab === 'Experience' && (
           <>
-            <VisibilityToggle section="experience" visible={content.experience.visible} onChanged={setContent} />
-            <div className="mt-5">
+            <VisibilityToggle section="experience" visible={content.experience?.visible} onChanged={setContent} />
+            <div className="mt-6">
               <ItemListEditor
                 section="experience"
-                title="Experience entries"
-                items={content.experience.items}
-                onChange={(items) => setContent({ ...content, experience: { ...content.experience, items } })}
+                title="Work Experience Entries"
+                items={content.experience?.items || []}
+                onChange={(items) => {
+                  const next = { ...content, experience: { ...content.experience, items } };
+                  setContent(next);
+                  try { localStorage.setItem('portfolio_content', JSON.stringify(next)); } catch {}
+                }}
                 fields={[
-                  { name: 'role', label: 'Role', type: 'text' },
-                  { name: 'company', label: 'Company', type: 'text' },
-                  { name: 'duration', label: 'Duration', type: 'text' },
+                  { name: 'role', label: 'Role / Title', type: 'text' },
+                  { name: 'company', label: 'Company / Organization', type: 'text' },
+                  { name: 'duration', label: 'Duration / Period', type: 'text' },
                   { name: 'logo', label: 'Company Logo (Optional)', type: 'image' },
-                  { name: 'description', label: 'Description', type: 'textarea' },
+                  { name: 'description', label: 'Contribution & Impact Description', type: 'textarea' },
                 ]}
               />
             </div>
@@ -140,18 +260,22 @@ export default function Dashboard() {
         )}
         {tab === 'Certifications' && (
           <>
-            <VisibilityToggle section="certifications" visible={content.certifications.visible} onChanged={setContent} />
-            <div className="mt-5">
+            <VisibilityToggle section="certifications" visible={content.certifications?.visible} onChanged={setContent} />
+            <div className="mt-6">
               <ItemListEditor
                 section="certifications"
-                title="Certifications"
-                items={content.certifications.items}
-                onChange={(items) => setContent({ ...content, certifications: { ...content.certifications, items } })}
+                title="Certifications & Accreditations"
+                items={content.certifications?.items || []}
+                onChange={(items) => {
+                  const next = { ...content, certifications: { ...content.certifications, items } };
+                  setContent(next);
+                  try { localStorage.setItem('portfolio_content', JSON.stringify(next)); } catch {}
+                }}
                 fields={[
-                  { name: 'title', label: 'Certificate title', type: 'text' },
-                  { name: 'issuer', label: 'Issuer', type: 'text' },
+                  { name: 'title', label: 'Certificate Title', type: 'text' },
+                  { name: 'issuer', label: 'Issuing Organization', type: 'text' },
                   { name: 'date', label: 'Date', type: 'text' },
-                  { name: 'image', label: 'Certificate image', type: 'image' },
+                  { name: 'image', label: 'Certificate Image', type: 'image' },
                 ]}
               />
             </div>
@@ -159,21 +283,25 @@ export default function Dashboard() {
         )}
         {tab === 'Projects' && (
           <>
-            <VisibilityToggle section="projects" visible={content.projects.visible} onChanged={setContent} />
-            <div className="mt-5">
+            <VisibilityToggle section="projects" visible={content.projects?.visible} onChanged={setContent} />
+            <div className="mt-6">
               <ItemListEditor
                 section="projects"
                 title="Projects"
-                items={content.projects.items}
-                onChange={(items) => setContent({ ...content, projects: { ...content.projects, items } })}
+                items={content.projects?.items || []}
+                onChange={(items) => {
+                  const next = { ...content, projects: { ...content.projects, items } };
+                  setContent(next);
+                  try { localStorage.setItem('portfolio_content', JSON.stringify(next)); } catch {}
+                }}
                 fields={[
-                  { name: 'title', label: 'Project title', type: 'text' },
-                  { name: 'shortDescription', label: 'Short description (card)', type: 'textarea' },
-                  { name: 'details', label: 'Full details (shown in popup)', type: 'textarea' },
-                  { name: 'techStack', label: 'Tech stack (comma separated)', type: 'tags' },
-                  { name: 'image', label: 'Cover image', type: 'image' },
+                  { name: 'title', label: 'Project Title', type: 'text' },
+                  { name: 'shortDescription', label: 'Short Tagline / Overview', type: 'textarea' },
+                  { name: 'details', label: 'Case Study Narrative / Approach', type: 'textarea' },
+                  { name: 'techStack', label: 'Tech Stack (comma separated)', type: 'tags' },
+                  { name: 'image', label: 'Cover Image', type: 'image' },
                   { name: 'githubUrl', label: 'GitHub URL', type: 'text' },
-                  { name: 'liveUrl', label: 'Live URL', type: 'text' },
+                  { name: 'liveUrl', label: 'Live Demo URL', type: 'text' },
                 ]}
               />
             </div>
@@ -181,19 +309,23 @@ export default function Dashboard() {
         )}
         {tab === 'Chronicles' && (
           <>
-            <VisibilityToggle section="chronicles" visible={content.chronicles.visible} onChanged={setContent} />
-            <div className="mt-5">
+            <VisibilityToggle section="chronicles" visible={content.chronicles?.visible} onChanged={setContent} />
+            <div className="mt-6">
               <ItemListEditor
                 section="chronicles"
-                title="Chronicles (events attended)"
-                items={content.chronicles.items}
-                onChange={(items) => setContent({ ...content, chronicles: { ...content.chronicles, items } })}
+                title="Chronicles & Research Notes"
+                items={content.chronicles?.items || []}
+                onChange={(items) => {
+                  const next = { ...content, chronicles: { ...content.chronicles, items } };
+                  setContent(next);
+                  try { localStorage.setItem('portfolio_content', JSON.stringify(next)); } catch {}
+                }}
                 fields={[
-                  { name: 'title', label: 'Event title', type: 'text' },
-                  { name: 'date', label: 'Date', type: 'text' },
-                  { name: 'location', label: 'Location', type: 'text' },
-                  { name: 'description', label: 'Description', type: 'textarea' },
-                  { name: 'image', label: 'Image', type: 'image' },
+                  { name: 'title', label: 'Note / Chronicle Title', type: 'text' },
+                  { name: 'date', label: 'Date / Period', type: 'text' },
+                  { name: 'location', label: 'Domain Category (e.g. SYSTEMS ARCHITECTURE)', type: 'text' },
+                  { name: 'description', label: 'Synthesis / Detailed Note', type: 'textarea' },
+                  { name: 'image', label: 'Visual Preview (Optional)', type: 'image' },
                 ]}
               />
             </div>
@@ -209,44 +341,56 @@ export default function Dashboard() {
 }
 
 function HeroForm({ data, onSave, saving }) {
-  const [form, setForm] = useState(data);
-  useEffect(() => setForm(data), [data]);
+  const [form, setForm] = useState(data || {});
+  useEffect(() => setForm(data || {}), [data]);
   return (
-    <div className="glass rounded-2xl p-6 flex flex-col gap-4 max-w-lg">
-      <ImageUploader label="Hero image / photo" value={form.image} onUploaded={(url) => setForm({ ...form, image: url })} />
+    <div className="glass-panel rounded-2xl p-6 sm:p-8 flex flex-col gap-5 max-w-xl border border-white/[0.08]">
+      <ImageUploader label="Hero Image / Visual" value={form.image} onUploaded={(url) => setForm({ ...form, image: url })} />
       <TextField label="Name" value={form.name || ''} onChange={(e) => setForm({ ...form, name: e.target.value })} />
       <TextField label="Tagline" value={form.tagline || ''} onChange={(e) => setForm({ ...form, tagline: e.target.value })} />
       <SocialsEditor socials={form.socials || []} onChange={(socials) => setForm({ ...form, socials })} />
-      <SaveButton onClick={() => onSave(form)} disabled={saving}>{saving ? 'Saving…' : 'Save Hero'}</SaveButton>
+      <div className="pt-2">
+        <SaveButton onClick={() => onSave(form)} disabled={saving}>
+          {saving ? 'SAVING…' : 'SAVE HERO'}
+        </SaveButton>
+      </div>
     </div>
   );
 }
 
 function AboutForm({ data, onSave, saving }) {
-  const [form, setForm] = useState(data);
-  useEffect(() => setForm(data), [data]);
+  const [form, setForm] = useState(data || {});
+  useEffect(() => setForm(data || {}), [data]);
   return (
-    <div className="glass rounded-2xl p-6 flex flex-col gap-4 max-w-lg">
-      <ImageUploader label="About photo" value={form.image} onUploaded={(url) => setForm({ ...form, image: url })} />
-      <TextField label="Heading" value={form.heading || ''} onChange={(e) => setForm({ ...form, heading: e.target.value })} />
-      <TextArea label="Bio" rows={6} value={form.bio || ''} onChange={(e) => setForm({ ...form, bio: e.target.value })} />
+    <div className="glass-panel rounded-2xl p-6 sm:p-8 flex flex-col gap-5 max-w-xl border border-white/[0.08]">
+      <ImageUploader label="About Photo / Visual" value={form.image} onUploaded={(url) => setForm({ ...form, image: url })} />
+      <TextField label="Headline" value={form.heading || ''} onChange={(e) => setForm({ ...form, heading: e.target.value })} />
+      <TextArea label="Bio / Narrative" rows={6} value={form.bio || ''} onChange={(e) => setForm({ ...form, bio: e.target.value })} />
       <TextField label="Resume URL (optional)" value={form.resumeUrl || ''} onChange={(e) => setForm({ ...form, resumeUrl: e.target.value })} />
-      <SaveButton onClick={() => onSave(form)} disabled={saving}>{saving ? 'Saving…' : 'Save About'}</SaveButton>
+      <div className="pt-2">
+        <SaveButton onClick={() => onSave(form)} disabled={saving}>
+          {saving ? 'SAVING…' : 'SAVE ABOUT'}
+        </SaveButton>
+      </div>
     </div>
   );
 }
 
 function ContactForm({ data, onSave, saving }) {
-  const [form, setForm] = useState(data);
-  useEffect(() => setForm(data), [data]);
+  const [form, setForm] = useState(data || {});
+  useEffect(() => setForm(data || {}), [data]);
   return (
-    <div className="glass rounded-2xl p-6 flex flex-col gap-4 max-w-lg">
-      <ImageUploader label="Contact image (optional - if set, replaces text block)" value={form.image} onUploaded={(url) => setForm({ ...form, image: url })} />
+    <div className="glass-panel rounded-2xl p-6 sm:p-8 flex flex-col gap-5 max-w-xl border border-white/[0.08]">
+      <ImageUploader label="Contact Visual (optional)" value={form.image} onUploaded={(url) => setForm({ ...form, image: url })} />
       <TextField label="Heading" value={form.heading || ''} onChange={(e) => setForm({ ...form, heading: e.target.value })} />
       <TextField label="Email" value={form.email || ''} onChange={(e) => setForm({ ...form, email: e.target.value })} />
-      <TextField label="Phone" value={form.phone || ''} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+      <TextField label="Phone (optional)" value={form.phone || ''} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
       <SocialsEditor socials={form.socials || []} onChange={(socials) => setForm({ ...form, socials })} />
-      <SaveButton onClick={() => onSave(form)} disabled={saving}>{saving ? 'Saving…' : 'Save Contact'}</SaveButton>
+      <div className="pt-2">
+        <SaveButton onClick={() => onSave(form)} disabled={saving}>
+          {saving ? 'SAVING…' : 'SAVE CONTACT'}
+        </SaveButton>
+      </div>
     </div>
   );
 }

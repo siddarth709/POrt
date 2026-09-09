@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import api from '../api/axios';
+import { UploadCloud, Image as ImageIcon, Loader2 } from 'lucide-react';
 
 // Reusable image upload control used everywhere in the dashboard.
 // Uploads to Cloudinary via the backend and returns the resulting URL through onUploaded.
@@ -26,15 +27,34 @@ export default function ImageUploader({ label, value, onUploaded }) {
 
   return (
     <div>
-      {label && <label className="text-xs text-muted block mb-1.5">{label}</label>}
-      <div className="flex items-center gap-3">
-        {value && <img src={value} alt="" className="w-14 h-14 rounded-lg object-cover border border-white/10" />}
-        <label className="cursor-pointer text-xs px-3 py-2 rounded-lg bg-accent/10 border border-accent/30 text-accent2 hover:bg-accent/20">
-          {uploading ? 'Uploading…' : value ? 'Replace image' : 'Upload image'}
-          <input type="file" accept="image/*" className="hidden" onChange={handleFile} />
+      {label && <label className="text-xs font-mono text-slate-400 block mb-2 uppercase tracking-wider">{label}</label>}
+      <div className="flex items-center gap-4">
+        {value ? (
+          <div className="relative w-16 h-16 rounded-xl overflow-hidden border border-white/[0.1] bg-black/40 flex-shrink-0">
+            <img src={value} alt="" className="w-full h-full object-cover" />
+          </div>
+        ) : (
+          <div className="w-16 h-16 rounded-xl border border-dashed border-white/[0.1] bg-white/[0.02] flex items-center justify-center text-slate-500 flex-shrink-0">
+            <ImageIcon size={22} className="opacity-40" />
+          </div>
+        )}
+
+        <label className="cursor-pointer inline-flex items-center gap-2 text-xs font-mono tracking-wider px-4 py-2.5 rounded-xl border border-white/[0.1] bg-white/[0.04] text-slate-200 hover:bg-white/[0.08] hover:border-white/[0.2] transition-colors">
+          {uploading ? (
+            <>
+              <Loader2 size={14} className="animate-spin text-cyan-400" />
+              <span>UPLOADING…</span>
+            </>
+          ) : (
+            <>
+              <UploadCloud size={14} className="text-cyan-400" />
+              <span>{value ? 'REPLACE IMAGE' : 'UPLOAD IMAGE'}</span>
+            </>
+          )}
+          <input type="file" accept="image/*" className="hidden" onChange={handleFile} disabled={uploading} />
         </label>
       </div>
-      {error && <p className="text-red-400 text-xs mt-1">{error}</p>}
+      {error && <p className="text-rose-400 font-mono text-xs mt-2">{error}</p>}
     </div>
   );
 }

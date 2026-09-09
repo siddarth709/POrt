@@ -1,179 +1,150 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { FiDownload, FiFileText, FiCheckCircle } from 'react-icons/fi';
-import Reveal from './Reveal';
-import AnimatedHeading from './AnimatedHeading';
-import { slideInLeft, slideInRight } from '../animations/variants';
+import React, { useRef } from 'react';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { ArrowUpRight, FileText } from 'lucide-react';
 import { formatExternalUrl } from '../utils/url';
 
-const floatVariant = {
-  animate: {
-    y: [0, -14, 0],
-    transition: { duration: 4, repeat: Infinity, ease: 'easeInOut' },
-  },
-};
-
-const floatVariantSlow = {
-  animate: {
-    y: [0, -8, 0],
-    rotate: [0, 5, 0],
-    transition: { duration: 6, repeat: Infinity, ease: 'easeInOut' },
-  },
-};
-
-const ringPulse = {
-  animate: {
-    scale: [1, 1.12, 1],
-    opacity: [0.25, 0.08, 0.25],
-    transition: { duration: 3.5, repeat: Infinity, ease: 'easeInOut' },
-  },
-};
-
-const ringPulse2 = {
-  animate: {
-    scale: [1, 1.18, 1],
-    opacity: [0.15, 0.04, 0.15],
-    transition: { duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1 },
-  },
-};
-
-
-
 export default function About({ data = {} }) {
-  if (!data || (!data.bio && !data.image)) return null;
+  const visualRef = useRef(null);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const springX = useSpring(mouseX, { stiffness: 90, damping: 25 });
+  const springY = useSpring(mouseY, { stiffness: 90, damping: 25 });
+
+  const handleMouseMove = (e) => {
+    if (!visualRef.current) return;
+    const rect = visualRef.current.getBoundingClientRect();
+    const x = (e.clientX - (rect.left + rect.width / 2)) / rect.width;
+    const y = (e.clientY - (rect.top + rect.height / 2)) / rect.height;
+    mouseX.set(x * 16);
+    mouseY.set(y * 16);
+  };
+
+  // Nothing hardcoded: If about has no content from dashboard, don't show empty skeleton
+  if (!data || (!data.heading && !data.bio && !data.image)) {
+    return null;
+  }
+
+  const hasImage = Boolean(data.image);
 
   return (
-    <section id="about" className="relative py-28 px-6 overflow-hidden">
-      {/* Ambient background glows */}
-      <div className="absolute top-1/4 left-0 w-80 h-80 bg-emerald-500/8 rounded-full blur-[130px] pointer-events-none -z-10" />
-      <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-cyan-500/6 rounded-full blur-[150px] pointer-events-none -z-10" />
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-full bg-gradient-to-b from-transparent via-emerald-500/10 to-transparent pointer-events-none -z-10" />
+    <section id="about" className="relative py-32 px-6 sm:px-10 border-t border-white/[0.04]">
+      <div className="max-w-7xl mx-auto">
+        {/* Section Heading */}
+        <div className="mb-16 sm:mb-24">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="font-mono text-xs sm:text-sm tracking-[0.25em] text-slate-400 uppercase"
+          >
+            ABOUT
+          </motion.h2>
+        </div>
 
-      <div className="max-w-6xl mx-auto">
-        <div className="grid md:grid-cols-12 gap-12 lg:gap-20 items-stretch">
+        {/* Split Editorial Layout */}
+        <div className="grid lg:grid-cols-12 gap-16 lg:gap-24 items-center">
+          {/* Narrative Column */}
+          <div className="lg:col-span-7 flex flex-col justify-start">
+            {data.heading && (
+              <motion.h3
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                className="font-display text-2xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-white leading-tight mb-10"
+              >
+                {data.heading}
+              </motion.h3>
+            )}
 
-          {/* ── Left Column: Image ── */}
-          <div className="md:col-span-5 flex">
-            <Reveal variants={slideInLeft} className="relative group w-full">
-              {/* Pulsing outer rings */}
+            {data.bio && (
               <motion.div
-                variants={ringPulse}
-                animate="animate"
-                className="absolute inset-[-18px] rounded-3xl border border-emerald-400/30 pointer-events-none"
-              />
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+                className="text-slate-300 text-base sm:text-lg leading-relaxed space-y-4 text-justify-editorial font-light whitespace-pre-line"
+              >
+                {data.bio}
+              </motion.div>
+            )}
+
+            {/* Resume Link if entered in dashboard */}
+            {data.resumeUrl && (
               <motion.div
-                variants={ringPulse2}
-                animate="animate"
-                className="absolute inset-[-36px] rounded-3xl border border-cyan-400/20 pointer-events-none"
-              />
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.25 }}
+                className="mt-10"
+              >
+                <a
+                  href={formatExternalUrl(data.resumeUrl)}
+                  target="_blank"
+                  rel="noreferrer"
+                  data-cursor="open"
+                  className="inline-flex items-center gap-2 text-xs font-mono tracking-wider text-slate-300 hover:text-white border-b border-white/20 hover:border-white pb-1 transition-colors"
+                >
+                  <FileText size={14} />
+                  <span>CURRICULUM VITAE / RESUME</span>
+                  <ArrowUpRight size={14} />
+                </a>
+              </motion.div>
+            )}
+          </div>
 
-              {/* Decorative corner accents */}
-              <div className="absolute -top-2 -left-2 w-6 h-6 border-t-2 border-l-2 border-emerald-400/60 rounded-tl-lg pointer-events-none" />
-              <div className="absolute -bottom-2 -right-2 w-6 h-6 border-b-2 border-r-2 border-cyan-400/60 rounded-br-lg pointer-events-none" />
-
-
-
-              {/* Ambient gradient bloom behind image */}
-              <div className="absolute -inset-3 rounded-3xl bg-gradient-to-tr from-emerald-500/20 via-transparent to-cyan-500/15 opacity-0 group-hover:opacity-100 blur-xl transition duration-700 pointer-events-none" />
-
-              {/* Image container — stretches full height to match right column */}
-              {data.image ? (
-                <div className="relative w-full h-full min-h-[320px] rounded-2xl overflow-hidden border border-white/10 bg-surface/40 shadow-2xl">
+          {/* Visual Column */}
+          <div
+            ref={visualRef}
+            onMouseMove={handleMouseMove}
+            className="lg:col-span-5 flex items-center justify-center relative"
+          >
+            {hasImage ? (
+              <motion.div
+                style={{ x: springX, y: springY }}
+                className="w-full max-w-sm sm:max-w-md aspect-[4/5] rounded-3xl overflow-hidden glass-panel border border-white/[0.1] p-3 shadow-2xl relative"
+              >
+                <div className="relative w-full h-full rounded-2xl overflow-hidden bg-black/40 border border-white/[0.06]">
                   <img
                     src={data.image}
-                    alt="About"
-                    className="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-700"
+                    alt={data.heading || 'About'}
+                    className="w-full h-full object-cover grayscale-[20%] hover:grayscale-0 transition-all duration-500"
                   />
-                  {/* Subtle bottom fade to blend white-bg photos */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#07070b]/70 via-transparent to-transparent" />
-                  {/* Subtle top glow edge */}
-                  <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-emerald-400/40 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#050508]/80 via-transparent to-transparent opacity-60" />
                 </div>
-              ) : (
-                <div className="rounded-2xl w-full h-full min-h-[320px] glass flex items-center justify-center border border-white/10 text-slate-500">
-                  <FiFileText size={48} className="opacity-40" />
-                </div>
-              )}
-
-              {/* Floating bottom label */}
-              <motion.div
-                variants={floatVariantSlow}
-                animate="animate"
-                className="absolute -bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-1.5
-                  px-3 py-1.5 rounded-full bg-black/70 backdrop-blur border border-white/10
-                  text-[10px] font-mono text-slate-400 shadow-lg whitespace-nowrap"
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                Available for opportunities
               </motion.div>
-            </Reveal>
-          </div>
-
-          {/* ── Right Column: Bio ── */}
-          <div className="md:col-span-7 flex flex-col justify-center">
-            <Reveal variants={slideInRight}>
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent2 text-xs font-mono mb-4">
-                <FiCheckCircle size={13} />
-                <span>ABOUT ME</span>
-              </div>
-
-              <AnimatedHeading
-                text={data.heading || 'Crafting Digital Experiences'}
-                className="font-display text-2xl sm:text-3xl lg:text-[2.15rem] font-bold tracking-tight leading-[1.3] text-white mb-6"
-                wordClassName="text-white"
-              />
-
-              {/* Animated divider line */}
+            ) : (
               <motion.div
-                initial={{ scaleX: 0, opacity: 0 }}
-                whileInView={{ scaleX: 1, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
-                className="origin-left h-px bg-gradient-to-r from-emerald-500/60 via-cyan-400/40 to-transparent mb-6"
-              />
+                style={{ x: springX, y: springY }}
+                className="w-full max-w-md aspect-square rounded-2xl glass-panel p-8 relative flex flex-col justify-between overflow-hidden group border border-white/[0.08]"
+              >
+                <svg
+                  className="absolute inset-0 w-full h-full opacity-20 stroke-white"
+                  viewBox="0 0 400 400"
+                  fill="none"
+                >
+                  <circle cx="200" cy="200" r="140" strokeWidth="0.5" strokeDasharray="3 4" />
+                  <circle cx="200" cy="200" r="90" strokeWidth="0.75" />
+                  <circle cx="200" cy="200" r="40" strokeWidth="0.5" />
+                  <line x1="200" y1="20" x2="200" y2="380" strokeWidth="0.5" strokeDasharray="2 3" />
+                  <line x1="20" y1="200" x2="380" y2="200" strokeWidth="0.5" strokeDasharray="2 3" />
+                </svg>
 
-              <div className="text-slate-300 text-base md:text-lg leading-relaxed whitespace-pre-line space-y-4 font-normal text-justify">
-                {data.bio || 'Passionate engineer dedicated to creating high-performance software with clean design.'}
-              </div>
-
-              {/* Animated stat chips */}
-              <div className="mt-8 flex flex-wrap gap-3">
-                {[
-                  { label: 'ML / AI Systems', dot: 'bg-emerald-400' },
-                  { label: 'Time-Series Modeling', dot: 'bg-cyan-400' },
-                  { label: 'High-Perf Engineering', dot: 'bg-teal-400' },
-                ].map((tag, i) => (
-                  <motion.span
-                    key={tag.label}
-                    initial={{ opacity: 0, x: -10 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.3 + i * 0.1, duration: 0.4 }}
-                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/10 text-xs font-mono text-slate-400"
-                  >
-                    <span className={`w-1.5 h-1.5 rounded-full ${tag.dot}`} />
-                    {tag.label}
-                  </motion.span>
-                ))}
-              </div>
-
-              {data.resumeUrl && (
-                <div className="mt-8 flex items-center gap-4">
-                  <motion.a
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.98 }}
-                    href={formatExternalUrl(data.resumeUrl)}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-gradient-to-r from-accent to-accent2 text-black font-semibold text-sm shadow-glow-sm hover:shadow-glow-md transition-all"
-                  >
-                    <FiDownload size={16} /> View / Download Resume
-                  </motion.a>
+                <div className="relative z-10 flex items-center justify-between font-mono text-[11px] text-slate-400 border-b border-white/[0.06] pb-3">
+                  <span className="tracking-widest uppercase">ABOUT</span>
+                  <span className="text-emerald-400">ACTIVE</span>
                 </div>
-              )}
-            </Reveal>
-          </div>
 
+                <div className="relative z-10 my-auto flex flex-col items-center justify-center py-6">
+                  <div className="w-24 h-24 rounded-full border border-white/15 flex items-center justify-center font-display text-2xl font-bold tracking-tighter text-white/90 bg-white/[0.02]">
+                    NS
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </div>
         </div>
       </div>
     </section>

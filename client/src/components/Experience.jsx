@@ -1,76 +1,95 @@
-import React from 'react';
-import { FiBriefcase, FiCalendar } from 'react-icons/fi';
-import Reveal from './Reveal';
-import AnimatedHeading from './AnimatedHeading';
-import { fadeUp } from '../animations/variants';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { ArrowUpRight } from 'lucide-react';
 
 export default function Experience({ data }) {
-  if (!data || data.visible === false || !data.items?.length) return null;
+  const [hoveredId, setHoveredId] = useState(null);
+
+  // Nothing hardcoded: Render strictly what is in data.items from the dashboard
+  if (!data || data.visible === false || !data.items || data.items.length === 0) {
+    return null;
+  }
+
+  const items = data.items;
 
   return (
-    <section id="experience" className="relative py-24 px-6 bg-surface/30">
-      <div className="max-w-4xl mx-auto">
-        <Reveal>
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent2 text-xs font-mono mb-3">
-              <FiBriefcase size={13} />
-              <span>CAREER PATH</span>
-            </div>
-            <AnimatedHeading
-              text="Work Experience"
-              className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight"
-              wordClassName="gradient-text"
-            />
-          </div>
-        </Reveal>
+    <section id="experience" className="relative py-32 px-6 sm:px-10 border-t border-white/[0.04]">
+      <div className="max-w-7xl mx-auto">
+        {/* Section Heading */}
+        <div className="mb-20">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="font-mono text-xs sm:text-sm tracking-[0.25em] text-slate-400 uppercase"
+          >
+            WORK EXPERIENCE
+          </motion.h2>
+        </div>
 
-        <div className="grid gap-6">
-          {data.items.map((item, i) => (
-            <Reveal key={item._id || i} custom={i} variants={fadeUp}>
-              <div className="glass-card rounded-2xl p-6 sm:p-8 hover:border-cyan-400/40 transition-all duration-300">
-                <div className="flex items-start gap-4">
-                  {item.logo && (
-                    <div className="w-12 h-12 rounded-xl bg-white/[0.05] border border-white/10 p-1.5 flex items-center justify-center shrink-0 overflow-hidden shadow-md">
-                      <img src={item.logo} alt={item.company || 'Logo'} className="w-full h-full object-contain rounded-lg" />
-                    </div>
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex flex-wrap justify-between items-start gap-3 mb-2">
-                      <div>
-                        <div className="flex items-center gap-3">
-                          <span className="px-2.5 py-0.5 rounded-md bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-mono font-bold">
-                            #{String(i + 1).padStart(2, '0')}
-                          </span>
-                          <h3 className="font-display text-xl font-bold text-white tracking-tight">{item.role}</h3>
-                        </div>
-                        <div className="flex items-center gap-2 mt-2">
-                          <span className="w-2.5 h-2.5 rounded-full bg-[#22d3ee] shadow-glow-cyan animate-pulse" />
-                          <span style={{ color: '#22d3ee' }} className="font-bold text-base md:text-lg text-cyan-300">
-                            {item.company}
-                          </span>
-                        </div>
+        {/* Editorial Experiences Flowing Seamlessly */}
+        <div className="divide-y divide-white/[0.06] border-y border-white/[0.06]">
+          {items.map((item, idx) => {
+            const isHovered = hoveredId === (item._id || idx);
+            return (
+              <motion.div
+                key={item._id || idx}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.6, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                onMouseEnter={() => setHoveredId(item._id || idx)}
+                onMouseLeave={() => setHoveredId(null)}
+                className="py-12 sm:py-16 transition-colors duration-300 group cursor-default"
+              >
+                <div className="grid lg:grid-cols-12 gap-8 lg:gap-16 items-start">
+                  {/* Left: Role, Company, Duration */}
+                  <div className="lg:col-span-5">
+                    <motion.div
+                      animate={{ x: isHovered ? 8 : 0 }}
+                      transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                      className="flex flex-col"
+                    >
+                      <div className="flex items-center gap-3">
+                        <h3 className="font-display text-2xl sm:text-3xl font-semibold text-white tracking-tight group-hover:text-cyan-200 transition-colors">
+                          {item.role}
+                        </h3>
+                        <motion.span
+                          animate={{
+                            opacity: isHovered ? 1 : 0,
+                            x: isHovered ? 4 : -4,
+                          }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <ArrowUpRight size={18} className="text-cyan-400" />
+                        </motion.span>
                       </div>
-                      {item.duration && (
-                        <span className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 font-mono">
-                          <FiCalendar size={12} className="text-cyan-400" />
-                          {item.duration}
-                        </span>
-                      )}
-                    </div>
 
-                    {item.description && (
-                      <p
-                        style={{ color: '#67e8f9' }}
-                        className="text-sm md:text-base mt-4 leading-relaxed whitespace-pre-line border-t border-cyan-500/30 pt-4 font-normal text-justify"
+                      <div className="mt-2 flex items-center gap-3 font-mono text-xs text-slate-400 uppercase tracking-wider">
+                        {item.company && <span className="text-slate-300 font-medium">{item.company}</span>}
+                        {item.company && item.duration && <span>//</span>}
+                        {item.duration && <span>{item.duration}</span>}
+                      </div>
+                    </motion.div>
+                  </div>
+
+                  {/* Right: Narrative Description from Dashboard */}
+                  {item.description && (
+                    <div className="lg:col-span-7">
+                      <motion.p
+                        animate={{ opacity: isHovered ? 1 : 0.8 }}
+                        transition={{ duration: 0.25 }}
+                        className="text-base sm:text-lg text-slate-300 leading-relaxed font-light text-justify-editorial whitespace-pre-line"
                       >
                         {item.description}
-                      </p>
-                    )}
-                  </div>
+                      </motion.p>
+                    </div>
+                  )}
                 </div>
-              </div>
-            </Reveal>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

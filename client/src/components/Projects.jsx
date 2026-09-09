@@ -1,228 +1,250 @@
-import React, { useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
-import { FiX, FiGithub, FiExternalLink, FiLayers, FiEye } from 'react-icons/fi';
-import Reveal from './Reveal';
-import AnimatedHeading from './AnimatedHeading';
-import { scaleIn, modalVariant } from '../animations/variants';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowUpRight, X, ExternalLink } from 'lucide-react';
 import { formatExternalUrl } from '../utils/url';
 
+function GithubIcon({ size = 15, className = "" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+      <path d="M9 18c-4.51 2-5-2-7-2" />
+    </svg>
+  );
+}
+
 export default function Projects({ data }) {
-  const [active, setActive] = useState(null);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [activeProject, setActiveProject] = useState(null);
 
-  if (!data || data.visible === false || !data.items?.length) return null;
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setActiveProject(null);
+    };
+    if (activeProject) {
+      window.addEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'unset';
+    };
+  }, [activeProject]);
 
-  const handleOpenProject = (project) => {
-    setActive(project);
-    setSelectedImage(project.image || (project.gallery && project.gallery[0]) || null);
-  };
+  // Nothing hardcoded: Render strictly what is in data.items from the dashboard
+  if (!data || data.visible === false || !data.items || data.items.length === 0) {
+    return null;
+  }
+
+  const projects = data.items;
 
   return (
-    <section id="projects" className="relative py-28 px-6 bg-surface/30">
-      <div className="max-w-6xl mx-auto">
-        <Reveal>
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent2 text-xs font-mono mb-3">
-              <FiLayers size={13} />
-              <span>FEATURED WORK</span>
-            </div>
-            <AnimatedHeading
-              text="Projects"
-              className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight"
-              wordClassName="gradient-text"
-            />
+    <section id="projects" className="relative py-32 px-6 sm:px-10 border-t border-white/[0.04]">
+      <div className="max-w-7xl mx-auto">
+        {/* Section Heading */}
+        <div className="mb-20 sm:mb-24 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div>
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              className="font-mono text-xs sm:text-sm tracking-[0.25em] text-slate-400 uppercase"
+            >
+              PROJECTS
+            </motion.h2>
+            <p className="font-display text-2xl sm:text-3xl text-slate-200 font-medium mt-3">
+              Selected Systems & Engineering Case Studies
+            </p>
           </div>
-        </Reveal>
+          <span className="font-mono text-xs text-slate-400">
+            [ CLICK TO EXPLORE CASE STUDY ]
+          </span>
+        </div>
 
-        {/* Project Cards Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {data.items.map((p, i) => (
-            <Reveal key={p._id || i} custom={i} variants={scaleIn}>
-              <motion.div
-                whileHover={{ y: -6 }}
-                className="glass-card rounded-2xl overflow-hidden group border border-white/10 hover:border-accent/40 shadow-xl flex flex-col h-full cursor-pointer"
-                onClick={() => handleOpenProject(p)}
+        {/* Large Immersive Showcases */}
+        <div className="flex flex-col gap-24 sm:gap-36">
+          {projects.map((project, idx) => {
+            const isEven = idx % 2 === 0;
+
+            return (
+              <article
+                key={project._id || idx}
+                onClick={() => setActiveProject(project)}
+                data-cursor="view"
+                className="cursor-pointer group"
               >
-                {/* Project Image */}
-                {p.image ? (
-                  <div className="relative overflow-hidden h-52 bg-surface/90">
-                    <img
-                      src={p.image}
-                      alt={p.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-base via-transparent to-transparent opacity-60" />
-                    <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-full glass text-xs font-medium text-white flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity shadow-lg">
-                      <FiEye size={12} className="text-accent2" /> Details & Gallery
-                    </div>
-                  </div>
-                ) : (
-                  <div className="h-44 bg-surface/50 flex items-center justify-center border-b border-white/10">
-                    <FiLayers size={36} className="text-accent/50" />
-                  </div>
-                )}
-
-                <div className="p-6 flex flex-col flex-grow">
-                  <h3 className="font-display font-bold text-xl text-white group-hover:text-cyan-300 transition-colors">
-                    {p.title}
-                  </h3>
-                  <p className="text-slate-100 text-sm mt-2.5 line-clamp-2 leading-relaxed flex-grow opacity-95 text-justify">
-                    {p.shortDescription || p.details}
-                  </p>
-
-                  {/* Tech stack pills */}
-                  {p.techStack?.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 mt-5 pt-4 border-t border-white/[0.06]">
-                      {p.techStack.slice(0, 4).map((t, idx) => (
-                        <span
-                          key={idx}
-                          className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/[0.04] text-cyan-300 border border-white/10"
-                        >
-                          {t}
-                        </span>
-                      ))}
-                      {p.techStack.length > 4 && (
-                        <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-white/[0.02] text-slate-300">
-                          +{p.techStack.length - 4}
-                        </span>
+                <div className={`grid lg:grid-cols-12 gap-10 lg:gap-16 items-center ${isEven ? '' : 'lg:flex-row-reverse'}`}>
+                  {/* Visual Frame */}
+                  <div className={`lg:col-span-7 ${isEven ? 'order-1' : 'order-1 lg:order-2'}`}>
+                    <div className="relative aspect-[16/10] sm:aspect-[16/9] rounded-2xl overflow-hidden glass-panel border border-white/[0.08] group-hover:border-white/[0.2] transition-colors duration-300 shadow-xl bg-black/40 flex items-center justify-center">
+                      {project.image ? (
+                        <img
+                          src={project.image}
+                          alt={project.title}
+                          className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-300"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="font-mono text-xs text-slate-500 uppercase tracking-widest">
+                          [ SYSTEM VISUALIZATION ]
+                        </div>
                       )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#050508]/70 via-transparent to-transparent opacity-60 pointer-events-none" />
                     </div>
-                  )}
+                  </div>
+
+                  {/* Project Metadata */}
+                  <div className={`lg:col-span-5 flex flex-col justify-center ${isEven ? 'order-2' : 'order-2 lg:order-1'}`}>
+                    {Array.isArray(project.techStack) && project.techStack.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {project.techStack.map((tech) => (
+                          <span
+                            key={tech}
+                            className="font-mono text-[11px] text-slate-400 border border-white/[0.08] px-2.5 py-0.5 rounded-full bg-white/[0.02]"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    <h3 className="font-display text-2xl sm:text-3xl lg:text-4xl font-semibold text-white tracking-tight leading-snug group-hover:text-slate-200 transition-colors">
+                      {project.title}
+                    </h3>
+
+                    {project.shortDescription && (
+                      <p className="mt-4 text-slate-400 text-sm sm:text-base leading-relaxed text-justify-editorial font-light">
+                        {project.shortDescription}
+                      </p>
+                    )}
+
+                    <div className="mt-6 flex items-center gap-2 font-mono text-xs text-slate-300 group-hover:text-white transition-colors">
+                      <span className="tracking-wider uppercase font-medium">VIEW CASE STUDY</span>
+                      <ArrowUpRight size={15} className="text-slate-400 group-hover:text-white transition-colors" />
+                    </div>
+                  </div>
                 </div>
-              </motion.div>
-            </Reveal>
-          ))}
+              </article>
+            );
+          })}
         </div>
       </div>
 
-      {/* Project Detail Pop-up Modal (Content on Left, Images on Right) */}
+      {/* Case Study Modal */}
       <AnimatePresence>
-        {active && (
+        {activeProject && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md flex items-center justify-center p-4 md:p-8"
-            onClick={() => setActive(null)}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-[100] bg-[#050508]/95 backdrop-blur-xl flex items-center justify-center p-4 sm:p-8 overflow-y-auto"
+            onClick={() => setActiveProject(null)}
           >
             <motion.div
-              variants={modalVariant}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
+              initial={{ opacity: 0, scale: 0.97 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.97 }}
+              transition={{ duration: 0.25 }}
               onClick={(e) => e.stopPropagation()}
-              className="glass rounded-2xl w-full max-w-5xl max-h-[90vh] overflow-hidden border border-white/15 shadow-2xl flex flex-col md:grid md:grid-cols-12 relative"
+              className="relative w-full max-w-4xl max-h-[92vh] overflow-y-auto glass-panel rounded-2xl border border-white/[0.12] p-6 sm:p-12 shadow-2xl"
             >
-              {/* Close Button */}
               <button
-                onClick={() => setActive(null)}
-                className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full glass flex items-center justify-center text-white/80 hover:text-white hover:bg-white/10 transition-colors shadow-lg"
-                aria-label="Close modal"
+                onClick={() => setActiveProject(null)}
+                className="absolute top-6 right-6 p-2 rounded-full border border-white/10 bg-white/[0.04] text-slate-300 hover:text-white hover:bg-white/10 transition-colors z-20"
+                aria-label="Close Case Study"
               >
-                <FiX size={20} />
+                <X size={18} />
               </button>
 
-              {/* LEFT COLUMN: Project Details & Story */}
-              <div className="md:col-span-6 p-6 sm:p-8 md:p-10 overflow-y-auto max-h-[50vh] md:max-h-[85vh] flex flex-col justify-between order-2 md:order-1 border-t md:border-t-0 md:border-r border-white/10">
-                <div>
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent2 text-xs font-mono mb-3">
-                    PROJECT SHOWCASE
-                  </div>
-
-                  <h3 className="font-display text-2xl sm:text-3xl font-bold text-white mb-4">
-                    {active.title}
-                  </h3>
-
-                  {/* Tech stack badges */}
-                  {active.techStack?.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mb-6">
-                      {active.techStack.map((t, idx) => (
-                        <span
-                          key={idx}
-                          className="text-xs font-mono px-3 py-1 rounded-full bg-accent/10 text-cyan-300 border border-accent/20"
-                        >
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Detailed Description */}
-                  <div className="text-slate-100 text-sm sm:text-base leading-relaxed whitespace-pre-line space-y-4 font-normal opacity-95 text-justify">
-                    {active.details || active.shortDescription}
-                  </div>
-                </div>
-
-                {/* Live / Code CTA Buttons */}
-                <div className="flex flex-wrap items-center gap-3 pt-6 mt-6 border-t border-white/10">
-                  {active.liveUrl && (
-                    <a
-                      href={formatExternalUrl(active.liveUrl)}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-accent to-accent2 text-black font-semibold text-xs sm:text-sm shadow-glow-sm hover:shadow-glow-md transition-all"
-                    >
-                      <FiExternalLink size={15} /> Live Preview
-                    </a>
-                  )}
-
-                  {active.githubUrl && (
-                    <a
-                      href={formatExternalUrl(active.githubUrl)}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass text-white font-medium text-xs sm:text-sm hover:bg-white/10 transition-colors"
-                    >
-                      <FiGithub size={15} /> Source Code
-                    </a>
-                  )}
-                </div>
-              </div>
-
-              {/* RIGHT COLUMN: Interactive Image Gallery */}
-              <div className="md:col-span-6 p-6 sm:p-8 bg-surface/50 flex flex-col justify-center order-1 md:order-2">
-                {/* Main Selected Image */}
-                <div className="rounded-xl overflow-hidden border border-white/10 bg-black/40 shadow-xl max-h-[420px] flex items-center justify-center">
-                  {selectedImage ? (
-                    <img
-                      src={selectedImage}
-                      alt={active.title}
-                      className="w-full h-auto max-h-[400px] object-contain rounded-lg"
-                    />
-                  ) : (
-                    <div className="h-64 flex items-center justify-center text-slate-500">
-                      <FiLayers size={48} className="opacity-40" />
-                    </div>
-                  )}
-                </div>
-
-                {/* Thumbnails switcher if gallery has multiple photos */}
-                {((active.gallery && active.gallery.length > 0) || (active.image && active.gallery?.length)) && (
-                  <div className="flex gap-2.5 mt-4 overflow-x-auto pb-1">
-                    {active.image && (
-                      <button
-                        onClick={() => setSelectedImage(active.image)}
-                        className={`w-16 h-12 rounded-lg overflow-hidden border-2 flex-shrink-0 transition-all ${
-                          selectedImage === active.image ? 'border-cyan-400 scale-105 shadow-md' : 'border-white/10 opacity-60 hover:opacity-100'
-                        }`}
-                      >
-                        <img src={active.image} alt="Thumbnail Cover" className="w-full h-full object-cover" />
-                      </button>
-                    )}
-                    {active.gallery?.map((img, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => setSelectedImage(img)}
-                        className={`w-16 h-12 rounded-lg overflow-hidden border-2 flex-shrink-0 transition-all ${
-                          selectedImage === img ? 'border-cyan-400 scale-105 shadow-md' : 'border-white/10 opacity-60 hover:opacity-100'
-                        }`}
-                      >
-                        <img src={img} alt={`Thumbnail ${idx}`} className="w-full h-full object-cover" />
-                      </button>
-                    ))}
-                  </div>
+              <div className="mb-8">
+                <span className="font-mono text-xs tracking-widest text-emerald-400 uppercase">
+                  CASE STUDY
+                </span>
+                <h2 className="font-display text-2xl sm:text-4xl font-bold text-white tracking-tight mt-2">
+                  {activeProject.title}
+                </h2>
+                {activeProject.shortDescription && (
+                  <p className="font-display text-base sm:text-lg text-slate-400 mt-2 font-normal">
+                    {activeProject.shortDescription}
+                  </p>
                 )}
               </div>
+
+              {activeProject.image && (
+                <div className="rounded-xl overflow-hidden border border-white/[0.08] mb-10 max-h-[380px] bg-black">
+                  <img
+                    src={activeProject.image}
+                    alt={activeProject.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+
+              {/* Case Study Details from Dashboard */}
+              {activeProject.details && (
+                <div className="border-t border-white/[0.06] pt-8 mb-8">
+                  <h4 className="font-mono text-xs tracking-widest uppercase text-slate-400 mb-3">
+                    SYSTEM OVERVIEW & DETAILS
+                  </h4>
+                  <div className="text-sm sm:text-base text-slate-300 leading-relaxed font-light text-justify-editorial whitespace-pre-line space-y-4">
+                    {activeProject.details}
+                  </div>
+                </div>
+              )}
+
+              {/* Technologies from Dashboard */}
+              {Array.isArray(activeProject.techStack) && activeProject.techStack.length > 0 && (
+                <div className="border-t border-white/[0.06] pt-6 mb-6">
+                  <h4 className="font-mono text-xs tracking-widest uppercase text-slate-400 mb-3">
+                    TECHNOLOGIES
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                    {activeProject.techStack.map((tech) => (
+                      <span
+                        key={tech}
+                        className="font-mono text-xs px-3 py-1 rounded-full border border-white/[0.08] bg-white/[0.03] text-slate-200"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Action Links from Dashboard */}
+              {(activeProject.githubUrl || activeProject.liveUrl) && (
+                <div className="border-t border-white/[0.06] mt-8 pt-6 flex flex-wrap items-center gap-4">
+                  {activeProject.githubUrl && (
+                    <a
+                      href={formatExternalUrl(activeProject.githubUrl)}
+                      target="_blank"
+                      rel="noreferrer"
+                      data-cursor="open"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/20 bg-white/[0.05] hover:bg-white/10 text-white font-mono text-xs tracking-wider transition-colors"
+                    >
+                      <GithubIcon size={14} />
+                      <span>GITHUB REPOSITORY</span>
+                      <ArrowUpRight size={14} />
+                    </a>
+                  )}
+
+                  {activeProject.liveUrl && (
+                    <a
+                      href={formatExternalUrl(activeProject.liveUrl)}
+                      target="_blank"
+                      rel="noreferrer"
+                      data-cursor="open"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-black font-mono text-xs font-semibold tracking-wider hover:bg-slate-200 transition-colors"
+                    >
+                      <ExternalLink size={14} />
+                      <span>LIVE DEMO</span>
+                      <ArrowUpRight size={14} />
+                    </a>
+                  )}
+                </div>
+              )}
             </motion.div>
           </motion.div>
         )}

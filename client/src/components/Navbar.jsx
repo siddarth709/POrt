@@ -1,165 +1,175 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FiLock, FiMenu, FiX } from 'react-icons/fi';
+import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
+import { Menu, X, ArrowUpRight, Lock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const LINKS = [
-  { id: 'hero', label: 'Home' },
-  { id: 'about', label: 'About' },
-  { id: 'education', label: 'Education' },
-  { id: 'experience', label: 'Experience' },
-  { id: 'certifications', label: 'Certifications' },
-  { id: 'projects', label: 'Projects' },
-  { id: 'chronicles', label: 'Chronicles' },
-  { id: 'contact', label: 'Contact' },
+const NAV_LINKS = [
+  { id: 'home', label: 'HOME' },
+  { id: 'about', label: 'ABOUT' },
+  { id: 'education', label: 'EDUCATION' },
+  { id: 'experience', label: 'WORK EXPERIENCE' },
+  { id: 'projects', label: 'PROJECTS' },
+  { id: 'chronicles', label: 'CHRONICLES' },
+  { id: 'contact', label: 'CONTACT' },
 ];
 
 export default function Navbar({ visibility = {} }) {
   const [scrolled, setScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState('hero');
-  const [open, setOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 30, restDelta: 0.001 });
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 40);
+      setScrolled(window.scrollY > 30);
 
-      // Detect active section
-      const sections = LINKS.map(l => document.getElementById(l.id)).filter(Boolean);
-      const scrollPosition = window.scrollY + 200;
-
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const sec = sections[i];
-        if (sec && sec.offsetTop <= scrollPosition) {
-          setActiveSection(sec.id);
+      // Active section detection
+      const scrollPos = window.scrollY + 220;
+      for (let i = NAV_LINKS.length - 1; i >= 0; i--) {
+        const item = NAV_LINKS[i];
+        const el = document.getElementById(item.id);
+        if (el && el.offsetTop <= scrollPos) {
+          setActiveSection(item.id);
           break;
         }
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const links = LINKS.filter((l) => visibility[l.id] !== false);
+  const links = NAV_LINKS.filter((l) => visibility[l.id] !== false);
 
   const scrollTo = (id) => {
-    setOpen(false);
+    setMobileOpen(false);
     const element = document.getElementById(id);
     if (element) {
-      const yOffset = -80;
-      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
+      const yOffset = -70;
+      const yPos = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: yPos, behavior: 'smooth' });
     }
   };
 
   return (
-    <motion.header
-      initial={{ y: -80, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? 'py-3' : 'py-5'
-      }`}
-    >
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="glass rounded-full px-5 py-2.5 flex items-center justify-between shadow-2xl shadow-black/40 border border-white/10">
-          <button 
-            onClick={() => scrollTo('hero')} 
-            className="flex items-center gap-2.5 font-display font-bold text-lg tracking-tight group"
-          >
-            <span className="w-8 h-8 rounded-full bg-gradient-to-tr from-accent to-accent2 flex items-center justify-center text-white text-xs font-mono font-bold shadow-md shadow-accent/30 group-hover:scale-105 transition-transform">
-              NS
-            </span>
-            <span className="gradient-text font-semibold">N S Siddarth</span>
-          </button>
+    <>
+      {/* Ultra-thin Scroll Progress Indicator at very top */}
+      <motion.div
+        style={{ scaleX }}
+        className="fixed top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-emerald-400 via-cyan-400 to-sky-400 origin-left z-[100] pointer-events-none"
+      />
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1 bg-white/[0.03] p-1 rounded-full border border-white/[0.05]">
-            {links.map((l) => {
-              const isActive = activeSection === l.id;
+      <motion.header
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-400 ${
+          scrolled
+            ? 'py-3.5 bg-[#050508]/85 backdrop-blur-md border-b border-white/[0.06]'
+            : 'py-6 bg-transparent'
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-6 sm:px-10 flex items-center justify-between">
+          {/* Brand / Logo */}
+          <motion.button
+            onClick={() => scrollTo('home')}
+            initial={{ opacity: 0, x: -15 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            className="flex items-center gap-2 group text-left"
+          >
+            <span className="font-display font-bold text-sm sm:text-base tracking-widest uppercase text-white/95 group-hover:text-white transition-colors">
+              NS SIDDARTH
+            </span>
+          </motion.button>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center gap-7">
+            {links.map((link, idx) => {
+              const isActive = activeSection === link.id;
               return (
-                <button
-                  key={l.id}
-                  onClick={() => scrollTo(l.id)}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition-all duration-300 relative ${
-                    isActive 
-                      ? 'text-white bg-white/10 shadow-sm' 
-                      : 'text-muted hover:text-white hover:bg-white/[0.04]'
+                <motion.button
+                  key={link.id}
+                  onClick={() => scrollTo(link.id)}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.1 + idx * 0.05, ease: [0.16, 1, 0.3, 1] }}
+                  className={`relative font-mono text-[11px] tracking-widest transition-all duration-250 py-1 ${
+                    isActive ? 'text-white font-medium' : 'text-slate-400 hover:text-slate-200'
                   }`}
                 >
-                  {l.label}
+                  <span>{link.label}</span>
                   {isActive && (
-                    <motion.div
-                      layoutId="activePill"
-                      className="absolute inset-0 rounded-full bg-gradient-to-r from-accent/20 to-accent2/20 border border-accent/40 -z-10"
-                      transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+                    <motion.span
+                      layoutId="activeNavIndicator"
+                      className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-emerald-400 to-cyan-400"
+                      transition={{ type: 'spring', stiffness: 380, damping: 32 }}
                     />
                   )}
-                </button>
+                </motion.button>
               );
             })}
           </nav>
 
-          {/* Dashboard Direct Login Link */}
-          <div className="flex items-center gap-3">
+          {/* Discreet CMS Login & Mobile Toggle */}
+          <div className="flex items-center gap-4">
             <Link
               to="/dashboard/login"
-              className="flex items-center gap-1.5 text-xs font-medium text-muted px-3 py-1.5 rounded-full opacity-0 pointer-events-none select-none"
-              title="Owner Dashboard Login"
-              tabIndex={-1}
-              aria-hidden="true"
+              title="Dashboard CMS"
+              className="text-slate-600 hover:text-slate-400 transition-colors p-1"
+              aria-label="CMS Login"
             >
-              <FiLock size={13} />
-              <span className="hidden sm:inline">CMS</span>
+              <Lock size={12} className="opacity-40 hover:opacity-100 transition-opacity" />
             </Link>
 
-            <button 
-              className="md:hidden p-2 text-white/80 hover:text-white focus:outline-none" 
-              onClick={() => setOpen(!open)}
-              aria-label="Toggle Navigation"
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="lg:hidden p-1.5 text-slate-300 hover:text-white focus:outline-none transition-colors"
+              aria-label="Toggle navigation menu"
             >
-              {open ? <FiX size={20} /> : <FiMenu size={20} />}
+              {mobileOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
         </div>
-      </div>
 
-      {/* Mobile Drawer Menu */}
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, y: -10, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -10, scale: 0.98 }}
-            transition={{ duration: 0.2 }}
-            className="md:hidden max-w-6xl mx-auto px-6 mt-2"
-          >
-            <div className="glass rounded-2xl p-5 flex flex-col gap-2 border border-white/10 shadow-2xl">
-              {links.map((l) => (
-                <button
-                  key={l.id}
-                  onClick={() => scrollTo(l.id)}
-                  className={`text-left px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${
-                    activeSection === l.id
-                      ? 'bg-accent/20 text-white font-semibold'
-                      : 'text-muted hover:text-white hover:bg-white/5'
-                  }`}
-                >
-                  {l.label}
-                </button>
-              ))}
-              <div className="pt-2 mt-2 border-t border-white/10 flex justify-between items-center">
-                <Link
-                  to="/dashboard/login"
-                  className="flex items-center gap-2 text-xs text-accent2 py-1"
-                >
-                  <FiLock size={13} /> Owner Dashboard
-                </Link>
+        {/* Mobile Navigation Overlay */}
+        <AnimatePresence>
+          {mobileOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+              className="lg:hidden border-b border-white/[0.08] bg-[#07080f]/95 backdrop-blur-xl overflow-hidden px-6 py-6"
+            >
+              <div className="flex flex-col gap-3">
+                {links.map((link, idx) => {
+                  const isActive = activeSection === link.id;
+                  return (
+                    <motion.button
+                      key={link.id}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: idx * 0.04 }}
+                      onClick={() => scrollTo(link.id)}
+                      className={`text-left font-mono text-xs tracking-widest py-2 px-3 rounded-lg flex items-center justify-between transition-colors ${
+                        isActive
+                          ? 'text-white bg-white/[0.06] font-semibold'
+                          : 'text-slate-400 hover:text-white hover:bg-white/[0.02]'
+                      }`}
+                    >
+                      <span>{link.label}</span>
+                      {isActive && <ArrowUpRight size={14} className="text-emerald-400" />}
+                    </motion.button>
+                  );
+                })}
               </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.header>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.header>
+    </>
   );
 }

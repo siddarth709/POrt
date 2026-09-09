@@ -1,227 +1,200 @@
-import React from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { FiArrowDown, FiSend, FiBriefcase, FiDownload, FiUser, FiCode, FiCpu } from 'react-icons/fi';
-import { FaGithub, FaLinkedin, FaTwitter, FaInstagram, FaGlobe } from 'react-icons/fa6';
-import { formatExternalUrl } from '../utils/url';
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
+import { ArrowUpRight, Cpu, Code2 } from 'lucide-react';
 
-export default function Hero({ data = {} }) {
-  const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 600], [0, 100]);
-  const opacity = useTransform(scrollY, [0, 450], [1, 0]);
+// Tactical Magnetic Button component for hero CTAs
+function MagneticButton({ children, onClick, className = '', ...props }) {
+  const ref = useRef(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
 
-  const getSocialIcon = (platform = '') => {
-    const p = platform.toLowerCase();
-    if (p.includes('git')) return <FaGithub size={18} />;
-    if (p.includes('link')) return <FaLinkedin size={18} />;
-    if (p.includes('twit') || p.includes('x')) return <FaTwitter size={18} />;
-    if (p.includes('insta')) return <FaInstagram size={18} />;
-    return <FaGlobe size={18} />;
+  const springX = useSpring(x, { stiffness: 260, damping: 20 });
+  const springY = useSpring(y, { stiffness: 260, damping: 20 });
+
+  const handleMouseMove = (e) => {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    x.set((e.clientX - centerX) * 0.28);
+    y.set((e.clientY - centerY) * 0.28);
   };
 
-  const scrollTo = (id) => {
-    const el = document.getElementById(id);
-    if (el) {
-      const yOffset = -80;
-      const yPos = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: yPos, behavior: 'smooth' });
-    }
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
   };
 
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-28 pb-20 bg-grid-pattern">
-      {/* Animated ambient glow spheres */}
-      <motion.div
-        animate={{ scale: [1, 1.2, 1], x: [0, 40, 0], y: [0, -30, 0] }}
-        transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute top-1/4 left-10 w-[450px] h-[450px] bg-accent/20 rounded-full blur-[140px] pointer-events-none -z-10"
-      />
-      <motion.div
-        animate={{ scale: [1.2, 1, 1.2], x: [0, -40, 0], y: [0, 30, 0] }}
-        transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute bottom-1/4 right-10 w-[450px] h-[450px] bg-accent2/20 rounded-full blur-[150px] pointer-events-none -z-10"
-      />
+    <motion.button
+      ref={ref}
+      style={{ x: springX, y: springY }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      onClick={onClick}
+      className={className}
+      {...props}
+    >
+      {children}
+    </motion.button>
+  );
+}
 
-      <motion.div style={{ y, opacity }} className="relative z-10 max-w-6xl mx-auto px-6 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+export default function Hero({ data = {} }) {
+  const containerRef = useRef(null);
+
+  // Scroll driven subtle fade and scale
+  const { scrollY } = useScroll();
+  const heroOpacity = useTransform(scrollY, [0, 480], [1, 0]);
+  const heroScale = useTransform(scrollY, [0, 480], [1, 0.97]);
+  const heroTranslateY = useTransform(scrollY, [0, 480], [0, 60]);
+
+  // Subtle mouse parallax
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const parallaxX = useSpring(mouseX, { stiffness: 100, damping: 30 });
+  const parallaxY = useSpring(mouseY, { stiffness: 100, damping: 30 });
+
+  const handleMouseMove = (e) => {
+    const { innerWidth, innerHeight } = window;
+    mouseX.set((e.clientX - innerWidth / 2) / innerWidth * 16);
+    mouseY.set((e.clientY - innerHeight / 2) / innerHeight * 16);
+  };
+
+  const scrollTo = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+      const yOffset = -70;
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  };
+
+  const hasImage = Boolean(data.image);
+
+  return (
+    <section
+      id="home"
+      ref={containerRef}
+      onMouseMove={handleMouseMove}
+      className="relative min-h-[92vh] sm:min-h-screen flex items-center justify-center pt-28 pb-16 px-6 sm:px-10 overflow-hidden"
+    >
+      <motion.div
+        style={{
+          opacity: heroOpacity,
+          scale: heroScale,
+          y: heroTranslateY,
+        }}
+        className="max-w-7xl mx-auto w-full relative z-10"
+      >
+        <div className={hasImage ? "grid lg:grid-cols-12 gap-12 lg:gap-16 items-center" : "max-w-5xl text-left"}>
           
-          {/* LEFT COLUMN: Text, Tagline & Buttons */}
-          <div className="lg:col-span-7 text-left">
-            {/* Availability Badge */}
+          {/* Left Column: Name & Dynamic Tagline from Dashboard */}
+          <div className={hasImage ? "lg:col-span-7 flex flex-col items-start text-left" : "flex flex-col items-start text-left"}>
+            
+            {/* Status indicator */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/10 shadow-lg shadow-black/20 mb-6 backdrop-blur-md"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] backdrop-blur-md mb-8"
             >
-              <span className="relative flex h-2.5 w-2.5">
+              <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
               </span>
-              <span className="text-xs font-medium text-slate-300 tracking-wide uppercase font-mono">
-                Available for Opportunities
+              <span className="font-mono text-[11px] tracking-wider text-slate-300 uppercase">
+                Currently Available
               </span>
             </motion.div>
 
-            {/* Name Title */}
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-              className="font-display text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight mb-4 leading-[1.08]"
-            >
-              <span className="text-white">Hi, I'm </span>
-              <br className="hidden sm:inline" />
-              <span className="gradient-text">{data.name || 'N S Siddarth'}</span>
-            </motion.h1>
-
-            {/* Tagline / Subtitle */}
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="text-lg sm:text-xl md:text-2xl text-slate-300 font-normal leading-relaxed mb-8 max-w-xl"
-            >
-              {data.tagline || 'AIML Undergrad & Full-Stack Developer crafting intelligent, high-impact web applications.'}
-            </motion.p>
-
-            {/* Action Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
-              className="flex flex-wrap items-center gap-4 mb-8"
-            >
-              <button
-                onClick={() => scrollTo('projects')}
-                className="flex items-center gap-2 px-7 py-3.5 rounded-full bg-gradient-to-r from-accent to-accent2 text-black font-semibold text-sm shadow-glow-md hover:shadow-glow-lg hover:scale-105 transition-all duration-300"
-              >
-                <FiBriefcase size={16} /> Explore Projects
-              </button>
-
-              <button
-                onClick={() => scrollTo('contact')}
-                className="flex items-center gap-2 px-7 py-3.5 rounded-full glass text-white font-medium text-sm hover:bg-white/10 hover:border-white/20 transition-all duration-300"
-              >
-                <FiSend size={16} /> Contact Me
-              </button>
-            </motion.div>
-
-            {/* Social Icons */}
-            {data.socials?.filter(s => {
-              const p = (s.platform || '').toLowerCase();
-              return !p.includes('twit') && !p.includes('x') && !p.includes('git');
-            }).length > 0 && (
+            {/* Name from Dashboard */}
+            {data.name && (
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.6 }}
-                className="flex items-center gap-3"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                className="mb-4"
               >
-                <span className="text-xs font-mono text-slate-400 mr-1 uppercase">Connect:</span>
-                {data.socials
-                  .filter(s => {
-                    const p = (s.platform || '').toLowerCase();
-                    return !p.includes('twit') && !p.includes('x') && !p.includes('git');
-                  })
-                  .map((s, i) => (
-                    <a
-                      key={i}
-                      href={formatExternalUrl(s.url)}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="w-10 h-10 rounded-full glass flex items-center justify-center text-slate-300 hover:text-white hover:border-accent/50 hover:bg-accent/10 hover:scale-110 transition-all duration-300 shadow-sm"
-                      title={s.platform}
-                    >
-                      {getSocialIcon(s.platform)}
-                    </a>
-                  ))}
+                <h2 className="font-mono text-xs sm:text-sm tracking-[0.25em] text-slate-400 uppercase font-medium">
+                  {data.name}
+                </h2>
               </motion.div>
             )}
-          </div>
 
-          {/* RIGHT COLUMN: Interactive Animated Image Frame */}
-          <div className="lg:col-span-5 flex justify-center">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.85, x: 40 }}
-              animate={{ opacity: 1, scale: 1, x: 0 }}
-              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-full max-w-[380px] sm:max-w-[420px] aspect-[4/5] group"
-            >
-              {/* Outer Glowing Neon Halo that pulses and expands on hover */}
-              <div className="absolute -inset-4 rounded-3xl bg-gradient-to-tr from-accent via-accent2 to-accent3 opacity-40 blur-2xl group-hover:opacity-75 group-hover:blur-3xl transition-all duration-700 -z-10 animate-pulse-slow" />
-
-              {/* Animated Floating Geometric Cyber Card Frame */}
+            {/* Tagline Headline from Dashboard */}
+            {data.tagline && (
               <motion.div
-                whileHover={{ scale: 1.03, rotate: 1 }}
-                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                className="relative w-full h-full rounded-3xl p-3 glass-card border border-white/20 shadow-2xl overflow-hidden backdrop-blur-xl"
+                style={{ x: parallaxX, y: parallaxY }}
+                className={`font-display font-bold tracking-tight text-white leading-[1.08] sm:leading-[1.05] mb-8 ${
+                  hasImage ? "text-3xl sm:text-5xl lg:text-6xl" : "text-4xl sm:text-6xl md:text-7xl lg:text-[5.25rem]"
+                }`}
               >
-                {/* Decorative Cyber Corner Accents */}
-                <span className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-cyan-400 z-20" />
-                <span className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-cyan-400 z-20" />
-                <span className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-purple-500 z-20" />
-                <span className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-purple-500 z-20" />
-
-                {/* Inner Image Container */}
-                <div className="relative w-full h-full rounded-2xl overflow-hidden bg-surface/90 border border-white/10 flex items-center justify-center">
-                  {data.image ? (
-                    <>
-                      <img
-                        src={data.image}
-                        alt={data.name || 'Profile'}
-                        className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
-                      />
-                      {/* Subtle Glass Gradient Overlay & Shimmer */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-base via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
-                    </>
-                  ) : (
-                    <div className="text-center p-6 flex flex-col items-center justify-center gap-3">
-                      <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-accent/20 to-accent2/20 border border-white/10 flex items-center justify-center text-accent2 shadow-glow-sm">
-                        <FiUser size={42} className="opacity-80" />
-                      </div>
-                      <div>
-                        <h4 className="font-display font-bold text-white text-base">Photo Frame</h4>
-                        <p className="text-slate-400 text-xs mt-1">Upload your photo anytime via the CMS Dashboard</p>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Floating Interactive Badges on the Frame */}
-                  <motion.div
-                    animate={{ y: [0, -6, 0] }}
-                    transition={{ repeat: Infinity, duration: 3.5, ease: 'easeInOut' }}
-                    className="absolute top-4 right-4 z-20 px-3 py-1.5 rounded-full glass border border-white/15 text-[11px] font-mono font-medium text-white flex items-center gap-1.5 shadow-lg group-hover:scale-105 transition-transform backdrop-blur-md"
-                  >
-                    <FiCpu className="text-cyan-400" size={13} />
-                    <span>AI / ML</span>
-                  </motion.div>
-
-                  <motion.div
-                    animate={{ y: [0, 6, 0] }}
-                    transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut', delay: 0.8 }}
-                    className="absolute bottom-4 left-4 z-20 px-3 py-1.5 rounded-full glass border border-white/15 text-[11px] font-mono font-medium text-white flex items-center gap-1.5 shadow-lg group-hover:scale-105 transition-transform backdrop-blur-md"
-                  >
-                    <FiCode className="text-purple-400" size={13} />
-                    <span>Developer</span>
-                  </motion.div>
-                </div>
+                <motion.h1
+                  initial={{ opacity: 0, y: 24 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.65, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+                  className="whitespace-pre-line"
+                >
+                  {data.tagline}
+                </motion.h1>
               </motion.div>
+            )}
+
+            {/* CTAs */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-wrap items-center gap-4 sm:gap-6"
+            >
+              <MagneticButton
+                onClick={() => scrollTo('projects')}
+                className="group px-7 py-3.5 rounded-full bg-white text-[#050508] font-mono text-xs sm:text-sm font-semibold tracking-wider flex items-center gap-2 hover:bg-slate-200 transition-colors shadow-lg"
+              >
+                <span>VIEW MY WORK</span>
+                <ArrowUpRight
+                  size={16}
+                  className="transition-transform duration-250 group-hover:translate-x-1 group-hover:-translate-y-1"
+                />
+              </MagneticButton>
+
+              <MagneticButton
+                onClick={() => scrollTo('contact')}
+                className="group px-7 py-3.5 rounded-full border border-white/[0.15] bg-white/[0.03] backdrop-blur-md text-slate-200 font-mono text-xs sm:text-sm font-medium tracking-wider flex items-center gap-2 hover:border-white/[0.3] hover:text-white transition-all"
+              >
+                <span>GET IN TOUCH</span>
+                <ArrowUpRight
+                  size={16}
+                  className="text-slate-400 transition-all duration-250 group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1"
+                />
+              </MagneticButton>
             </motion.div>
           </div>
+
+          {/* Right Column: Hero Image Frame from Dashboard */}
+          {hasImage && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="lg:col-span-5 flex justify-center"
+            >
+              <div className="relative w-full max-w-sm sm:max-w-md aspect-[4/5] rounded-3xl overflow-hidden glass-panel border border-white/[0.1] p-3 shadow-2xl">
+                <div className="relative w-full h-full rounded-2xl overflow-hidden bg-black/40 border border-white/[0.06]">
+                  <img
+                    src={data.image}
+                    alt={data.name || 'Hero'}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#050508]/80 via-transparent to-transparent opacity-50" />
+                </div>
+              </div>
+            </motion.div>
+          )}
 
         </div>
       </motion.div>
-
-      {/* Scroll Down Indicator */}
-      <motion.button
-        onClick={() => scrollTo('about')}
-        animate={{ y: [0, 8, 0] }}
-        transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 p-2 text-slate-400 hover:text-white transition-colors"
-        aria-label="Scroll down"
-      >
-        <FiArrowDown size={20} />
-      </motion.button>
     </section>
   );
 }
