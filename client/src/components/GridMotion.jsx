@@ -1,62 +1,62 @@
-import React, { useMemo, useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useMemo, useRef } from 'react';
+import { gsap } from 'gsap';
 
-const LOOP_COPIES = 4;
+const TOTAL_ITEMS = 28;
 
+// React Bits Grid Motion, adapted to accept the portfolio's image records.
 export default function GridMotion({ items = [] }) {
-  const [pointer, setPointer] = useState({ x: 0, y: 0 });
-  const loopedItems = useMemo(() => Array.from({ length: LOOP_COPIES }, () => items).flat(), [items]);
+  const rowRefs = useRef([]);
+  const mouseXRef = useRef(typeof window === 'undefined' ? 0 : window.innerWidth / 2);
+  const images = useMemo(() => {
+    const validImages = items.filter((item) => item?.image);
+    if (!validImages.length) return [];
+    return Array.from({ length: TOTAL_ITEMS }, (_, index) => validImages[index % validImages.length]);
+  }, [items]);
 
-  if (!items.length) return null;
+  useEffect(() => {
+    gsap.ticker.lagSmoothing(0);
+    const handleMouseMove = (event) => { mouseXRef.current = event.clientX; };
+    const updateMotion = () => {
+      const maxMoveAmount = 300;
+      const inertiaFactors = [0.6, 0.4, 0.3, 0.2];
+      rowRefs.current.forEach((row, index) => {
+        if (!row) return;
+        const direction = index % 2 === 0 ? 1 : -1;
+        const moveAmount = ((mouseXRef.current / window.innerWidth) * maxMoveAmount - maxMoveAmount / 2) * direction;
+        gsap.to(row, { x: moveAmount, duration: 0.8 + inertiaFactors[index % inertiaFactors.length], ease: 'power3.out', overwrite: 'auto' });
+      });
+    };
+    gsap.ticker.add(updateMotion);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      gsap.ticker.remove(updateMotion);
+      rowRefs.current.forEach((row) => row && gsap.killTweensOf(row));
+    };
+  }, []);
 
-  const rows = [
-    { shift: 0, direction: -1, duration: 34 },
-    { shift: Math.ceil(items.length / 3), direction: 1, duration: 42 },
-    { shift: Math.ceil((items.length * 2) / 3), direction: -1, duration: 38 },
-  ];
+  if (!images.length) return null;
 
   return (
-    <section
-      id="grid-motion"
-      className="grid-motion-section relative py-3 sm:py-4"
-      onMouseMove={(event) => {
-        const rect = event.currentTarget.getBoundingClientRect();
-        setPointer({
-          x: ((event.clientX - rect.left) / rect.width - 0.5) * 26,
-          y: ((event.clientY - rect.top) / rect.height - 0.5) * 18,
-        });
-      }}
-      onMouseLeave={() => setPointer({ x: 0, y: 0 })}
-    >
-      <div className="grid-motion-viewport" aria-label="Moving visual archive">
-        <motion.div
-          className="grid-motion-canvas"
-          animate={{ x: pointer.x, y: pointer.y }}
-          transition={{ type: 'spring', stiffness: 85, damping: 22, mass: 0.5 }}
-        >
-          {rows.map((row, rowIndex) => {
-            const orderedItems = [...loopedItems.slice(row.shift), ...loopedItems.slice(0, row.shift)];
-            const travel = row.direction * (items.length * 310);
-
-            return (
-              <motion.div
-                key={rowIndex}
-                className="grid-motion-row"
-                animate={{ x: [0, travel] }}
-                transition={{ duration: row.duration, ease: 'linear', repeat: Infinity, repeatType: 'loop' }}
-              >
-                {orderedItems.map((item, itemIndex) => (
-                  <figure className="grid-motion-tile" key={`${rowIndex}-${item._id || itemIndex}-${itemIndex}`}>
-                    <img src={item.image} alt={item.title || 'Portfolio visual'} loading="lazy" />
-                    <figcaption>{item.title || 'Visual study'}</figcaption>
-                  </figure>
-                ))}
-              </motion.div>
-            );
-          })}
-        </motion.div>
-        <div className="grid-motion-fade grid-motion-fade-top" />
-        <div className="grid-motion-fade grid-motion-fade-bottom" />
+    <section id="grid-motion" className="grid-motion-section" aria-label="Moving visual archive">
+      <div className="grid-motion-shell">
+        <div className="grid-motion-intro">
+          <div className="grid-motion-container">
+            {Array.from({ length: 4 }, (_, rowIndex) => (
+              <div className="grid-motion-row" key={rowIndex} ref={(element) => { rowRefs.current[rowIndex] = element; }}>
+                {Array.from({ length: 7 }, (_, itemIndex) => {
+                  const image = images[rowIndex * 7 + itemIndex];
+                  return (
+                    <figure className="grid-motion-tile" key={`${rowIndex}-${itemIndex}`}>
+                      <img src={image.image} alt={image.title || 'Portfolio visual'} loading="lazy" />
+                      {image.title && <figcaption>{image.title}</figcaption>}
+                    </figure>
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );
