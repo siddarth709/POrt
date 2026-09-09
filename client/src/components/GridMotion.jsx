@@ -16,6 +16,7 @@ export default function GridMotion({ items = [] }) {
   }, [items]);
 
   useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
     gsap.ticker.lagSmoothing(0);
     const handleMouseMove = (event) => { mouseXRef.current = event.clientX; };
     const handleScroll = () => {

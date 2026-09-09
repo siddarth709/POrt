@@ -17,6 +17,41 @@ export default function Home() {
 
   useEffect(() => {
     const sections = [...document.querySelectorAll('main > section')];
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const animateSectionContents = (section) => {
+      if (reducedMotion) return;
+      if (section.id === 'grid-motion') {
+        const grid = section.querySelector('.grid-motion-shell');
+        if (grid && !grid.dataset.revealed) {
+          grid.dataset.revealed = 'true';
+          grid.animate(
+            [{ opacity: 0, transform: 'scale(.96)' }, { opacity: 1, transform: 'scale(1)' }],
+            { duration: 820, delay: 180, easing: 'cubic-bezier(.16, 1, .3, 1)', fill: 'both' }
+          );
+        }
+        return;
+      }
+
+      const targets = [...section.querySelectorAll('h2, h3, p, img, .glass-panel, .project-card, .experience-row, .chroma-card, form, input, textarea')]
+        .filter((element) => !element.dataset.revealed);
+
+      targets.forEach((element, index) => {
+        element.dataset.revealed = 'true';
+        const isImage = element.tagName === 'IMG';
+        const isField = ['INPUT', 'TEXTAREA'].includes(element.tagName);
+        const keyframes = isImage
+          ? [{ opacity: 0, transform: 'scale(.92)' }, { opacity: 1, transform: 'scale(1)' }]
+          : isField
+            ? [{ opacity: 0, transform: 'translateY(12px)' }, { opacity: 1, transform: 'translateY(0)' }]
+            : [{ opacity: 0, transform: 'translateY(22px)' }, { opacity: 1, transform: 'translateY(0)' }];
+        element.animate(keyframes, {
+          duration: isImage ? 720 : 620,
+          delay: 150 + Math.min(index * 58, 520),
+          easing: 'cubic-bezier(.16, 1, .3, 1)',
+          fill: 'both',
+        });
+      });
+    };
     const observer = new IntersectionObserver(
       (entries) => entries.forEach((entry) => {
         if (!entry.isIntersecting || entry.target.dataset.revealed === 'true') return;
@@ -24,13 +59,15 @@ export default function Home() {
         if (entry.target.id === 'home') return;
         const index = sections.indexOf(entry.target);
         const offset = index % 2 === 0 ? 32 : -32;
+        if (reducedMotion) return;
         entry.target.animate(
           [
-            { opacity: 0, transform: `translate3d(${offset}px, 42px, 0) scale(.985)`, filter: 'blur(8px)' },
-            { opacity: 1, transform: 'translate3d(0, 0, 0) scale(1)', filter: 'blur(0)' },
+            { opacity: 0, transform: `translate3d(${offset}px, 42px, 0) scale(.985)` },
+            { opacity: 1, transform: 'translate3d(0, 0, 0) scale(1)' },
           ],
           { duration: 780, delay: 40, easing: 'cubic-bezier(.16, 1, .3, 1)', fill: 'both' }
         );
+        animateSectionContents(entry.target);
       }),
       { threshold: 0.12 }
     );
