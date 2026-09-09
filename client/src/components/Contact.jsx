@@ -249,8 +249,6 @@ export default function Contact({ data = {}, heroSocials = [] }) {
         <footer className="mt-28 pt-10 border-t border-white/[0.04] flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-slate-500">
           <div className="flex items-center gap-2">
             <span className="text-slate-300 font-semibold uppercase">{data.name || 'NS SIDDARTH'}</span>
-            <span>//</span>
-            <span>CMS PORTFOLIO</span>
           </div>
 
           <div className="flex items-center gap-4">
