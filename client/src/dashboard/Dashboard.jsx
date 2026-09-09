@@ -338,6 +338,9 @@ export default function Dashboard() {
           <>
             <VisibilityToggle section="gridMotion" visible={content.gridMotion?.visible} onChanged={setContent} />
             <div className="mt-6">
+              <p className="mb-4 rounded-xl border border-cyan-300/10 bg-cyan-300/[0.04] px-4 py-3 font-mono text-[11px] leading-relaxed tracking-wide text-slate-400">
+                Add 6+ distinct images for the best moving-grid composition. Project, chronicle, and gallery images also feed the visual archive automatically.
+              </p>
               <ItemListEditor
                 section="gridMotion"
                 title="Grid Motion Images"

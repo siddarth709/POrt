@@ -77,7 +77,8 @@ export default function Projects({ data }) {
                 onClick={() => setActiveProject(project)}
                 data-cursor="view"
                 whileHover={{ y: -8 }}
-                className={`project-card cursor-pointer group relative overflow-hidden rounded-[1.65rem] border border-white/[0.08] bg-white/[0.025] p-3 sm:p-4 ${idx === 0 && projects.length > 2 ? 'lg:col-span-2' : ''}`}
+                whileTap={{ scale: 0.985 }}
+                className={`interactive-hit project-card cursor-pointer group relative overflow-hidden rounded-[1.65rem] border border-white/[0.08] bg-white/[0.025] p-3 sm:p-4 ${idx === 0 && projects.length > 2 ? 'lg:col-span-2' : ''}`}
               >
                 <div className={`grid gap-6 ${idx === 0 && projects.length > 2 ? 'lg:grid-cols-12 lg:items-center' : 'sm:grid-cols-2 sm:items-center'}`}>
                   {/* Visual Frame */}

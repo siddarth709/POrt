@@ -96,10 +96,12 @@ export default function Navbar({ visibility = {} }) {
                 <motion.button
                   key={link.id}
                   onClick={() => scrollTo(link.id)}
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.94 }}
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.1 + idx * 0.05, ease: [0.16, 1, 0.3, 1] }}
-                  className={`relative rounded-full px-3 py-2 font-mono text-[10px] tracking-[0.12em] transition-all duration-300 ${
+                  className={`interactive-hit relative rounded-full px-3 py-2 font-mono text-[10px] tracking-[0.12em] transition-all duration-300 ${
                     isActive ? 'text-white font-medium' : 'text-slate-500 hover:text-slate-200'
                   }`}
                 >

@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { MoveDiagonal2 } from 'lucide-react';
 
 const LOOP_COPIES = 4;
 
@@ -11,15 +10,15 @@ export default function GridMotion({ items = [] }) {
   if (!items.length) return null;
 
   const rows = [
-    { shift: 0, direction: -1, duration: 32 },
-    { shift: Math.ceil(items.length / 3), direction: 1, duration: 38 },
-    { shift: Math.ceil((items.length * 2) / 3), direction: -1, duration: 35 },
+    { shift: 0, direction: -1, duration: 34 },
+    { shift: Math.ceil(items.length / 3), direction: 1, duration: 42 },
+    { shift: Math.ceil((items.length * 2) / 3), direction: -1, duration: 38 },
   ];
 
   return (
     <section
       id="grid-motion"
-      className="grid-motion-section relative py-20 sm:py-28"
+      className="grid-motion-section relative py-3 sm:py-4"
       onMouseMove={(event) => {
         const rect = event.currentTarget.getBoundingClientRect();
         setPointer({
@@ -29,19 +28,7 @@ export default function GridMotion({ items = [] }) {
       }}
       onMouseLeave={() => setPointer({ x: 0, y: 0 })}
     >
-      <div className="relative z-20 mx-auto max-w-7xl px-5 sm:px-8">
-        <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
-          <div>
-            <p className="font-mono text-[11px] tracking-[0.24em] text-cyan-200/75">VISUAL INDEX</p>
-            <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight text-white sm:text-6xl">In motion.</h2>
-          </div>
-          <p className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.15em] text-slate-400">
-            <MoveDiagonal2 size={14} className="text-cyan-300" /> Move through the archive
-          </p>
-        </div>
-      </div>
-
-      <div className="grid-motion-viewport mt-12 sm:mt-16" aria-label="Moving visual archive">
+      <div className="grid-motion-viewport" aria-label="Moving visual archive">
         <motion.div
           className="grid-motion-canvas"
           animate={{ x: pointer.x, y: pointer.y }}
@@ -49,7 +36,7 @@ export default function GridMotion({ items = [] }) {
         >
           {rows.map((row, rowIndex) => {
             const orderedItems = [...loopedItems.slice(row.shift), ...loopedItems.slice(0, row.shift)];
-            const travel = row.direction * (items.length * 228);
+            const travel = row.direction * (items.length * 310);
 
             return (
               <motion.div

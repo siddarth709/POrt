@@ -35,6 +35,7 @@ function MagneticButton({ children, as: Component = motion.button, onClick, clas
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onClick={onClick}
+      whileTap={{ scale: 0.96 }}
       className={className}
       {...props}
     >
@@ -157,7 +158,7 @@ export default function Hero({ data = {} }) {
                 href={linkedinUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="group px-6 py-3.5 rounded-full bg-white text-[#050508] font-mono text-xs sm:text-sm font-semibold tracking-wider flex items-center gap-2 hover:bg-cyan-50 hover:shadow-[0_0_28px_rgba(255,255,255,0.22)] transition-all"
+                className="interactive-hit group px-6 py-3.5 rounded-full bg-white text-[#050508] font-mono text-xs sm:text-sm font-semibold tracking-wider flex items-center gap-2 hover:bg-cyan-50 hover:shadow-[0_0_28px_rgba(255,255,255,0.22)] transition-all"
               >
                 <span>LINKEDIN</span>
                 <ArrowUpRight
@@ -168,7 +169,7 @@ export default function Hero({ data = {} }) {
 
               <MagneticButton
                 onClick={() => scrollTo('contact')}
-                className="group px-6 py-3.5 rounded-full border border-white/[0.15] hover:border-white/50 bg-white/[0.03] hover:bg-white/[0.08] backdrop-blur-md text-slate-200 hover:text-white font-mono text-xs sm:text-sm font-medium tracking-wider flex items-center gap-2 transition-all hover:shadow-[0_0_20px_rgba(255,255,255,0.08)]"
+                className="interactive-hit group px-6 py-3.5 rounded-full border border-white/[0.15] hover:border-white/50 bg-white/[0.03] hover:bg-white/[0.08] backdrop-blur-md text-slate-200 hover:text-white font-mono text-xs sm:text-sm font-medium tracking-wider flex items-center gap-2 transition-all hover:shadow-[0_0_20px_rgba(255,255,255,0.08)]"
               >
                 <span>GET IN TOUCH</span>
                 <ArrowUpRight
