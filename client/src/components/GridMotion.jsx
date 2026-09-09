@@ -81,6 +81,10 @@ export default function GridMotion({ items = [] }) {
           </div>
         </div>
       </div>
+      <div className="grid-motion-exit" aria-hidden="true">
+        <span>CONTINUE TO CONTACT</span>
+        <i />
+      </div>
     </section>
   );
 }

@@ -29,7 +29,7 @@ export default function Contact({ data = {}, heroSocials = [] }) {
   const hasImage = Boolean(data.image);
 
   return (
-    <section id="contact" className="relative min-h-[600px] overflow-hidden pt-28 sm:pt-36 pb-16 sm:pb-20 px-5 sm:px-8 border-t border-white/[0.04]">
+    <section id="contact" className="contact-arrival relative min-h-[600px] overflow-hidden pt-28 sm:pt-36 pb-16 sm:pb-20 px-5 sm:px-8 border-t border-white/[0.04]">
       <div className="absolute inset-0" aria-hidden="true">
         <GradientWaves
           horizonColor="#5227FF"
