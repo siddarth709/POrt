@@ -3,9 +3,10 @@ import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'fram
 import { ArrowUpRight, Cpu, Code2 } from 'lucide-react';
 import AeroShards from './AeroShards';
 import AnimatedHeading from './AnimatedHeading';
+import { formatExternalUrl } from '../utils/url';
 
 // Tactical Magnetic Button component for hero CTAs
-function MagneticButton({ children, onClick, className = '', ...props }) {
+function MagneticButton({ children, as: Component = motion.button, onClick, className = '', ...props }) {
   const ref = useRef(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -28,7 +29,7 @@ function MagneticButton({ children, onClick, className = '', ...props }) {
   };
 
   return (
-    <motion.button
+    <Component
       ref={ref}
       style={{ x: springX, y: springY }}
       onMouseMove={handleMouseMove}
@@ -38,7 +39,7 @@ function MagneticButton({ children, onClick, className = '', ...props }) {
       {...props}
     >
       {children}
-    </motion.button>
+    </Component>
   );
 }
 
@@ -73,6 +74,8 @@ export default function Hero({ data = {} }) {
   };
 
   const hasImage = Boolean(data.image);
+  const linkedin = (data.socials || []).find((social) => social.platform?.toLowerCase().includes('linkedin'));
+  const linkedinUrl = formatExternalUrl(linkedin?.url || 'https://www.linkedin.com');
   const nameText = data.name || "NS SIDDARTH";
   const taglineText = data.tagline || "Building intelligent systems with code, models, and ideas. AI/ML engineer exploring complex computational systems.";
 
@@ -150,10 +153,13 @@ export default function Hero({ data = {} }) {
               className="flex flex-wrap items-center gap-4 sm:gap-6"
             >
               <MagneticButton
-                onClick={() => scrollTo('projects')}
+                as={motion.a}
+                href={linkedinUrl}
+                target="_blank"
+                rel="noreferrer"
                 className="group px-7 py-3.5 rounded-full bg-white text-[#050508] font-mono text-xs sm:text-sm font-semibold tracking-wider flex items-center gap-2 hover:bg-slate-200 hover:shadow-[0_0_25px_rgba(255,255,255,0.25)] transition-all"
               >
-                <span>VIEW MY WORK</span>
+                <span>LINKEDIN</span>
                 <ArrowUpRight
                   size={16}
                   className="transition-transform duration-300 group-hover:translate-x-1.5 group-hover:-translate-y-1.5"
