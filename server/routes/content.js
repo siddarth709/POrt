@@ -26,7 +26,7 @@ router.get('/', async (req, res) => {
 // PATCH /api/content/:section - PROTECTED. Updates one top-level section
 // e.g. /api/content/hero  body: { name, tagline, image, socials }
 router.patch('/:section', auth, async (req, res) => {
-  const allowed = ['hero', 'about', 'education', 'experience', 'certifications', 'projects', 'chronicles', 'contact'];
+  const allowed = ['hero', 'about', 'education', 'experience', 'certifications', 'projects', 'chronicles', 'gridMotion', 'contact'];
   const { section } = req.params;
   if (!allowed.includes(section)) return res.status(400).json({ message: 'Unknown section' });
 
@@ -43,7 +43,7 @@ router.patch('/:section', auth, async (req, res) => {
 // PATCH /api/content/:section/visibility - PROTECTED. Toggle show/hide for
 // education, experience, certifications, projects, chronicles
 router.patch('/:section/visibility', auth, async (req, res) => {
-  const toggleable = ['education', 'experience', 'certifications', 'projects', 'chronicles'];
+  const toggleable = ['education', 'experience', 'certifications', 'projects', 'chronicles', 'gridMotion'];
   const { section } = req.params;
   const { visible } = req.body;
   if (!toggleable.includes(section)) return res.status(400).json({ message: 'Section cannot be toggled' });

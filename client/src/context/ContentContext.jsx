@@ -9,6 +9,7 @@ const EMPTY_CONTENT = {
   certifications: { visible: true, items: [] },
   projects: { visible: true, items: [] },
   chronicles: { visible: true, items: [] },
+  gridMotion: { visible: true, items: [] },
   contact: { heading: '', email: '', phone: '', image: '', socials: [] },
 };
 

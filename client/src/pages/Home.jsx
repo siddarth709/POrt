@@ -10,6 +10,7 @@ import Experience from '../components/Experience';
 import Projects from '../components/Projects';
 import Chronicles from '../components/Chronicles';
 import Contact from '../components/Contact';
+import GridMotion from '../components/GridMotion';
 
 export default function Home() {
   const { content } = useContent();
@@ -37,6 +38,7 @@ export default function Home() {
         {visibility.experience && <Experience data={content?.experience} />}
         {visibility.projects && <Projects data={content?.projects} />}
         {visibility.chronicles && <Chronicles data={content?.chronicles} />}
+        <GridMotion items={content?.gridMotion?.visible !== false ? (content?.gridMotion?.items || []) : []} />
         <Contact data={content?.contact} heroSocials={content?.hero?.socials} />
       </main>
     </div>

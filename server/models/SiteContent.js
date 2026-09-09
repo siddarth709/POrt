@@ -54,6 +54,12 @@ const ChronicleSchema = new mongoose.Schema({
   order: { type: Number, default: 0 },
 });
 
+const GridMotionItemSchema = new mongoose.Schema({
+  title: String,
+  image: String,
+  order: { type: Number, default: 0 },
+});
+
 const SiteContentSchema = new mongoose.Schema({
   hero: {
     name: { type: String, default: 'Your Name' },
@@ -86,6 +92,10 @@ const SiteContentSchema = new mongoose.Schema({
   chronicles: {
     visible: { type: Boolean, default: true },
     items: [ChronicleSchema],
+  },
+  gridMotion: {
+    visible: { type: Boolean, default: true },
+    items: [GridMotionItemSchema],
   },
   contact: {
     heading: { type: String, default: "Let's Talk" },

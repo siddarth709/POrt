@@ -3,7 +3,7 @@ const SiteContent = require('../models/SiteContent');
 const auth = require('../middleware/auth');
 
 const router = express.Router();
-const ARRAY_SECTIONS = ['education', 'experience', 'certifications', 'projects', 'chronicles'];
+const ARRAY_SECTIONS = ['education', 'experience', 'certifications', 'projects', 'chronicles', 'gridMotion'];
 
 async function getContent() {
   let content = await SiteContent.findOne({});

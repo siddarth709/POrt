@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight, BookOpen, X, Image as ImageIcon, Calendar, Tag, Layers } from 'lucide-react';
+import ChromaGrid from './ChromaGrid';
 
 export default function Chronicles({ data }) {
   const [activeIdx, setActiveIdx] = useState(0);
@@ -42,66 +43,8 @@ export default function Chronicles({ data }) {
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
           
           {/* Left Column: Interactive Chronicle Index */}
-          <div className="lg:col-span-7 flex flex-col divide-y divide-white/[0.06] border-y border-white/[0.06]">
-            {chronicles.map((item, idx) => {
-              const isActive = activeIdx === idx;
-
-              return (
-                <div
-                  key={item._id || idx}
-                  onMouseEnter={() => setActiveIdx(idx)}
-                  onClick={() => setSelectedNote(item)}
-                  className={`py-8 sm:py-9 px-4 sm:px-6 rounded-2xl cursor-pointer transition-all duration-300 group ${
-                    isActive
-                      ? 'bg-white/[0.04] border-l-2 border-emerald-400 pl-6 sm:pl-8 shadow-sm'
-                      : 'hover:bg-white/[0.02] border-l-2 border-transparent hover:border-white/20'
-                  }`}
-                >
-                  <div className="flex items-center justify-between font-mono text-[11px] text-slate-400 tracking-wider mb-2.5">
-                    <div className="flex items-center gap-2">
-                      <span className={`px-2.5 py-0.5 rounded-full border text-[10px] transition-colors ${
-                        isActive
-                          ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-300'
-                          : 'border-white/10 bg-white/[0.02] group-hover:border-white/20 text-slate-400'
-                      }`}>
-                        {item.location || `LOG // ${String(idx + 1).padStart(2, '0')}`}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      {item.image && (
-                        <span className="inline-flex items-center gap-1 text-slate-500 group-hover:text-cyan-400 text-[10px] transition-colors">
-                          <ImageIcon size={11} /> PHOTO
-                        </span>
-                      )}
-                      {item.date && <span className="group-hover:text-slate-300 transition-colors">{item.date}</span>}
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between gap-4">
-                    <h3 className={`font-display text-xl sm:text-2xl font-semibold tracking-tight transition-all duration-300 ${
-                      isActive ? 'text-white translate-x-1' : 'text-slate-300 group-hover:text-white group-hover:translate-x-1'
-                    }`}>
-                      {item.title}
-                    </h3>
-                    <ArrowUpRight
-                      size={18}
-                      className={`shrink-0 transition-transform duration-300 ${
-                        isActive
-                          ? 'text-emerald-400 translate-x-1 -translate-y-1 opacity-100'
-                          : 'text-slate-600 opacity-40 group-hover:opacity-100 group-hover:text-emerald-400 group-hover:translate-x-1 group-hover:-translate-y-1'
-                      }`}
-                    />
-                  </div>
-
-                  {item.description && (
-                    <p className="text-slate-400 group-hover:text-slate-300 text-xs sm:text-sm leading-relaxed mt-2.5 line-clamp-2 font-light text-left transition-colors duration-300">
-                      {item.description}
-                    </p>
-                  )}
-                </div>
-              );
-            })}
+          <div className="lg:col-span-7">
+            <ChromaGrid items={chronicles} onSelect={(item) => { setActiveIdx(chronicles.indexOf(item)); setSelectedNote(item); }} />
           </div>
 
           {/* Right Column: Dynamic Live Preview Terminal Card (Sticky on Desktop) */}

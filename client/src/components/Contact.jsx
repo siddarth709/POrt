@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight, Send, CheckCircle2, AlertCircle } from 'lucide-react';
 import api from '../api/axios';
 import { formatExternalUrl } from '../utils/url';
+import GradientWaves from './GradientWaves';
 
 export default function Contact({ data = {}, heroSocials = [] }) {
   const [formOpen, setFormOpen] = useState(false);
@@ -29,6 +30,7 @@ export default function Contact({ data = {}, heroSocials = [] }) {
 
   return (
     <section id="contact" className="relative pt-36 pb-20 px-6 sm:px-10 border-t border-white/[0.04]">
+      <GradientWaves />
       <div className="max-w-7xl mx-auto">
         {/* Section Identifier */}
         <div className="mb-16 sm:mb-20">

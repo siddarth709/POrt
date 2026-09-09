@@ -1,6 +1,8 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
 import { ArrowUpRight, Cpu, Code2 } from 'lucide-react';
+import AeroShards from './AeroShards';
+import AnimatedHeading from './AnimatedHeading';
 
 // Tactical Magnetic Button component for hero CTAs
 function MagneticButton({ children, onClick, className = '', ...props }) {
@@ -81,6 +83,7 @@ export default function Hero({ data = {} }) {
       onMouseMove={handleMouseMove}
       className="relative min-h-[92vh] sm:min-h-screen flex items-center justify-center pt-32 pb-20 px-6 sm:px-10 overflow-hidden"
     >
+      <AeroShards />
       <motion.div
         style={{
           opacity: heroOpacity,
@@ -116,16 +119,12 @@ export default function Hero({ data = {} }) {
               style={{ x: parallaxX, y: parallaxY }}
               className="font-display font-extrabold tracking-tight text-white leading-[1.02] sm:leading-[1] mb-6 select-none group"
             >
-              <motion.h1
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+              <AnimatedHeading
+                as="h1"
+                text={nameText}
                 className={hasImage ? "text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem]" : "text-5xl sm:text-7xl md:text-8xl lg:text-[6.25rem]"}
-              >
-                <span className="editorial-gradient transition-all duration-500 group-hover:brightness-125 inline-block">
-                  {nameText}
-                </span>
-              </motion.h1>
+                wordClassName="editorial-gradient transition-all duration-500 group-hover:brightness-125"
+              />
             </motion.div>
 
             {/* ELEGANT TAGLINE ALIGNED BELOW IN REFINED SMALLER FONT */}

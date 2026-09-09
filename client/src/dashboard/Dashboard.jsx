@@ -16,6 +16,7 @@ import {
   Award,
   FolderGit2,
   BookOpen,
+  Images,
   Mail,
   MessageSquare,
   LogOut,
@@ -31,6 +32,7 @@ const TABS = [
   { id: 'Certifications', label: 'Certifications', icon: Award },
   { id: 'Projects', label: 'Projects', icon: FolderGit2 },
   { id: 'Chronicles', label: 'Chronicles', icon: BookOpen },
+  { id: 'Grid Motion', label: 'Grid Motion', icon: Images },
   { id: 'Contact', label: 'Contact', icon: Mail },
   { id: 'Messages', label: 'Messages', icon: MessageSquare },
 ];
@@ -69,6 +71,7 @@ export default function Dashboard() {
         certifications: { visible: true, items: [] },
         projects: { visible: true, items: [] },
         chronicles: { visible: true, items: [] },
+        gridMotion: { visible: true, items: [] },
         contact: { heading: '', email: '', phone: '', image: '', socials: [] },
       });
     }
@@ -326,6 +329,27 @@ export default function Dashboard() {
                   { name: 'location', label: 'Domain Category (e.g. SYSTEMS ARCHITECTURE)', type: 'text' },
                   { name: 'description', label: 'Synthesis / Detailed Note', type: 'textarea' },
                   { name: 'image', label: 'Visual Preview (Optional)', type: 'image' },
+                ]}
+              />
+            </div>
+          </>
+        )}
+        {tab === 'Grid Motion' && (
+          <>
+            <VisibilityToggle section="gridMotion" visible={content.gridMotion?.visible} onChanged={setContent} />
+            <div className="mt-6">
+              <ItemListEditor
+                section="gridMotion"
+                title="Grid Motion Images"
+                items={content.gridMotion?.items || []}
+                onChange={(items) => {
+                  const next = { ...content, gridMotion: { ...content.gridMotion, items } };
+                  setContent(next);
+                  try { localStorage.setItem('portfolio_content', JSON.stringify(next)); } catch {}
+                }}
+                fields={[
+                  { name: 'title', label: 'Image Label (Optional)', type: 'text' },
+                  { name: 'image', label: 'Grid Image', type: 'image' },
                 ]}
               />
             </div>
