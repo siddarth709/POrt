@@ -29,11 +29,11 @@ export default function Contact({ data = {}, heroSocials = [] }) {
   const hasImage = Boolean(data.image);
 
   return (
-    <section id="contact" className="relative pt-36 pb-20 px-6 sm:px-10 border-t border-white/[0.04]">
+    <section id="contact" className="relative pt-28 sm:pt-36 pb-16 sm:pb-20 px-5 sm:px-8 border-t border-white/[0.04]">
       <GradientWaves />
       <div className="max-w-7xl mx-auto">
         {/* Section Identifier */}
-        <div className="mb-16 sm:mb-20">
+        <div className="section-heading mb-14 sm:mb-16">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

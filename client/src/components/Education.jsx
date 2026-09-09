@@ -19,10 +19,10 @@ export default function Education({ data }) {
   const items = data.items;
 
   return (
-    <section id="education" ref={containerRef} className="relative py-32 px-6 sm:px-10 border-t border-white/[0.04]">
+    <section id="education" ref={containerRef} className="relative py-28 sm:py-36 px-5 sm:px-8 border-t border-white/[0.04]">
       <div className="max-w-7xl mx-auto">
         {/* Section Heading */}
-        <div className="mb-20">
+        <div className="section-heading mb-14 sm:mb-16">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

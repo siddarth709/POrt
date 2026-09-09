@@ -39,10 +39,10 @@ export default function Projects({ data }) {
   const projects = data.items;
 
   return (
-    <section id="projects" className="relative py-32 px-6 sm:px-10 border-t border-white/[0.04]">
+    <section id="projects" className="relative py-28 sm:py-36 px-5 sm:px-8 border-t border-white/[0.04]">
       <div className="max-w-7xl mx-auto">
         {/* Section Heading */}
-        <div className="mb-20 sm:mb-24 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div className="section-heading mb-14 sm:mb-16 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
@@ -54,16 +54,16 @@ export default function Projects({ data }) {
               PROJECTS
             </motion.h2>
             <p className="font-display text-2xl sm:text-3xl text-slate-200 font-medium mt-3">
-              Selected Systems & Engineering Case Studies
+              Selected systems, made tangible.
             </p>
           </div>
           <span className="font-mono text-xs text-slate-400">
-            [ CLICK TO EXPLORE CASE STUDY ]
+            Click any project to open the full case study
           </span>
         </div>
 
         {/* Large Immersive Showcases */}
-        <div className="flex flex-col gap-24 sm:gap-36">
+        <div className="grid gap-5 lg:grid-cols-2">
           {projects.map((project, idx) => {
             const isEven = idx % 2 === 0;
 
@@ -76,12 +76,13 @@ export default function Projects({ data }) {
                 transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
                 onClick={() => setActiveProject(project)}
                 data-cursor="view"
-                className="cursor-pointer group relative"
+                whileHover={{ y: -8 }}
+                className={`project-card cursor-pointer group relative overflow-hidden rounded-[1.65rem] border border-white/[0.08] bg-white/[0.025] p-3 sm:p-4 ${idx === 0 && projects.length > 2 ? 'lg:col-span-2' : ''}`}
               >
-                <div className={`grid lg:grid-cols-12 gap-10 lg:gap-16 items-center ${isEven ? '' : 'lg:flex-row-reverse'}`}>
+                <div className={`grid gap-6 ${idx === 0 && projects.length > 2 ? 'lg:grid-cols-12 lg:items-center' : 'sm:grid-cols-2 sm:items-center'}`}>
                   {/* Visual Frame */}
-                  <div className={`lg:col-span-7 ${isEven ? 'order-1' : 'order-1 lg:order-2'}`}>
-                    <div className="relative aspect-[16/10] sm:aspect-[16/9] rounded-2xl overflow-hidden glass-panel border border-white/[0.08] group-hover:border-white/[0.25] group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.6)] transition-all duration-500 bg-black/40 flex items-center justify-center">
+                  <div className={idx === 0 && projects.length > 2 ? `lg:col-span-7 ${isEven ? 'order-1' : 'order-1 lg:order-2'}` : ''}>
+                    <div className="relative aspect-[16/10] rounded-[1.1rem] overflow-hidden border border-white/[0.07] group-hover:border-cyan-200/25 group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.45)] transition-all duration-500 bg-black/40 flex items-center justify-center">
                       {project.image ? (
                         <img
                           src={project.image}
@@ -99,7 +100,7 @@ export default function Projects({ data }) {
                   </div>
 
                   {/* Project Metadata */}
-                  <div className={`lg:col-span-5 flex flex-col justify-center ${isEven ? 'order-2' : 'order-2 lg:order-1'}`}>
+                  <div className={`${idx === 0 && projects.length > 2 ? `lg:col-span-5 ${isEven ? 'order-2' : 'order-2 lg:order-1'}` : ''} flex flex-col justify-center px-2 pb-3 sm:px-3 sm:pb-2`}>
                     {Array.isArray(project.techStack) && project.techStack.length > 0 && (
                       <div className="flex flex-wrap gap-2 mb-4">
                         {project.techStack.map((tech) => (
@@ -113,7 +114,7 @@ export default function Projects({ data }) {
                       </div>
                     )}
 
-                    <h3 className="font-display text-2xl sm:text-3xl lg:text-4xl font-semibold text-white tracking-tight leading-snug group-hover:text-cyan-200 transition-colors duration-300">
+                    <h3 className="font-display text-2xl sm:text-3xl lg:text-4xl font-semibold text-white tracking-tight leading-snug group-hover:text-cyan-100 transition-colors duration-300">
                       {project.title}
                     </h3>
 

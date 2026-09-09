@@ -15,7 +15,7 @@
 
 html { 
   scroll-behavior: smooth;
-  background-color: #030511;
+  background-color: #050610;
   color: #f3f4f8;
   hyphens: none !important;
   -webkit-hyphens: none !important;
@@ -24,9 +24,9 @@ html {
 body {
   margin: 0;
   background:
-    radial-gradient(circle at 12% 8%, rgba(44, 91, 168, 0.14), transparent 28rem),
-    radial-gradient(circle at 88% 42%, rgba(104, 45, 171, 0.12), transparent 32rem),
-    #030511;
+    radial-gradient(circle at 13% 5%, rgba(22, 130, 164, 0.13), transparent 30rem),
+    radial-gradient(circle at 88% 44%, rgba(84, 59, 160, 0.13), transparent 36rem),
+    #050610;
   color: #f3f4f8;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   overflow-x: hidden;
@@ -35,6 +35,28 @@ body {
   hyphens: none !important;
   -webkit-hyphens: none !important;
 }
+
+:focus-visible {
+  outline: 2px solid rgb(103 232 249 / 0.9);
+  outline-offset: 4px;
+}
+
+.skip-link {
+  position: fixed;
+  z-index: 200;
+  top: 1rem;
+  left: 1rem;
+  transform: translateY(-180%);
+  border-radius: 9999px;
+  background: white;
+  color: #050610;
+  padding: 0.7rem 1rem;
+  font: 700 0.75rem/1 'JetBrains Mono', monospace;
+  letter-spacing: .08em;
+  transition: transform .2s ease;
+}
+
+.skip-link:focus { transform: translateY(0); }
 
 /* Custom editorial scrollbar */
 ::-webkit-scrollbar { 
@@ -76,11 +98,11 @@ body {
 
 /* Glassmorphism with technical precision */
 .glass-panel {
-  background: linear-gradient(135deg, rgba(13, 20, 43, 0.72), rgba(7, 11, 27, 0.56));
+  background: linear-gradient(135deg, rgba(17, 25, 48, 0.78), rgba(8, 12, 28, 0.62));
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(155, 181, 255, 0.13);
-  box-shadow: inset 0 1px rgba(255, 255, 255, 0.06), 0 24px 70px rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(155, 201, 255, 0.14);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.07), 0 24px 70px rgba(0, 0, 0, 0.24);
 }
 
 .glass-card {
@@ -104,15 +126,103 @@ main > section:not(#home) {
   isolation: isolate;
 }
 
+/* Every portfolio chapter sits inside the same deliberate editorial frame. */
+.portfolio-shell main > section {
+  width: min(calc(100% - 2rem), 1480px);
+  margin: 0 auto 1rem;
+  border: 1px solid rgba(180, 220, 255, 0.07);
+  border-radius: 1.75rem;
+  overflow: clip;
+  background: linear-gradient(135deg, rgba(12, 18, 37, 0.36), rgba(4, 6, 16, 0.18));
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+  transition: border-color .45s ease, background .45s ease, transform .45s cubic-bezier(.16,1,.3,1), box-shadow .45s ease;
+}
+
+.portfolio-shell main > section:hover {
+  border-color: rgba(165, 243, 252, 0.15);
+  background: linear-gradient(135deg, rgba(16, 27, 51, 0.48), rgba(4, 7, 19, 0.24));
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.14);
+}
+
+.portfolio-shell main > #home {
+  min-height: calc(100vh - 2rem);
+  margin-top: 1rem;
+  background: radial-gradient(circle at 82% 35%, rgba(56, 189, 248, 0.08), transparent 27rem), linear-gradient(135deg, rgba(11, 17, 36, 0.55), rgba(3, 5, 15, 0.2));
+}
+
 main > section:not(#home)::before {
   content: '';
   position: absolute;
-  inset: 12% 6% auto;
+  inset: 8% 8% auto;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(127, 211, 255, 0.22), transparent);
+  background: linear-gradient(90deg, transparent, rgba(127, 211, 255, 0.16), transparent);
   pointer-events: none;
   z-index: -1;
 }
+
+.portfolio-shell::before {
+  content: '';
+  position: fixed;
+  z-index: 1;
+  inset: 0;
+  pointer-events: none;
+  opacity: .28;
+  background-image: linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size: min(12vw, 168px) min(12vw, 168px);
+  mask-image: linear-gradient(to bottom, black, transparent 24%, transparent 84%, black);
+}
+
+.portfolio-shell main { counter-reset: section; }
+.portfolio-shell main > section:not(#home) { counter-increment: section; }
+
+.section-heading h2 {
+  display: inline-flex;
+  align-items: center;
+  gap: .75rem;
+}
+
+.section-heading h2::before {
+  content: '0' counter(section);
+  color: rgb(103 232 249 / .75);
+  font-size: .65rem;
+  letter-spacing: .08em;
+}
+
+.hero-portrait::before {
+  content: '';
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(125deg, rgba(255,255,255,.17), transparent 20%, transparent 72%, rgba(103,232,249,.12));
+}
+
+.project-card {
+  transition: border-color .35s ease, background .35s ease, box-shadow .35s ease;
+}
+
+.project-card:hover {
+  border-color: rgba(165, 243, 252, .24);
+  background: linear-gradient(145deg, rgba(26, 42, 68, .48), rgba(10, 15, 34, .54));
+  box-shadow: 0 24px 70px rgba(0, 0, 0, .2);
+}
+
+.experience-row { position: relative; }
+.experience-row::before {
+  content: '';
+  position: absolute;
+  top: 28px;
+  bottom: 28px;
+  left: 0;
+  width: 2px;
+  border-radius: 99px;
+  background: linear-gradient(#67e8f9, #818cf8);
+  opacity: 0;
+  transform: scaleY(.4);
+  transition: opacity .3s ease, transform .35s cubic-bezier(.16,1,.3,1);
+}
+.experience-row:hover::before { opacity: .85; transform: scaleY(1); }
 
 .space-ring {
   border: 1px solid rgba(126, 211, 255, 0.15);
@@ -172,7 +282,7 @@ main > section:not(#home)::before {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  opacity: 0.022;
+  opacity: 0.018;
   z-index: 999;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
@@ -205,3 +315,16 @@ main > section:not(#home)::before {
   overflow-wrap: break-word;
 }
 
+@media (max-width: 640px) {
+  .portfolio-shell::before { background-size: 72px 72px; opacity: .18; }
+  .experience-row::before { top: 16px; bottom: 16px; }
+  .portfolio-shell main > section {
+    width: calc(100% - 1rem);
+    margin-bottom: .5rem;
+    border-radius: 1.15rem;
+  }
+  .portfolio-shell main > #home {
+    min-height: calc(100vh - 1rem);
+    margin-top: .5rem;
+  }
+}

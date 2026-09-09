@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
-import { Menu, X, ArrowUpRight, Lock } from 'lucide-react';
+import { Menu, X, ArrowUpRight, Lock, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const NAV_LINKS = [
@@ -65,28 +65,31 @@ export default function Navbar({ visibility = {} }) {
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-400 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           scrolled
-            ? 'py-3.5 bg-[#050508]/85 backdrop-blur-md border-b border-white/[0.06]'
-            : 'py-6 bg-transparent'
+            ? 'py-3 bg-[#070812]/78 backdrop-blur-xl border-b border-white/[0.07] shadow-[0_12px_40px_rgba(2,3,10,0.22)]'
+            : 'py-5 sm:py-7 bg-transparent'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 sm:px-10 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 flex items-center justify-between">
           {/* Brand / Logo */}
           <motion.button
             onClick={() => scrollTo('home')}
             initial={{ opacity: 0, x: -15 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="flex items-center gap-2 group text-left"
+            className="flex items-center gap-3 group text-left"
           >
-            <span className="font-display font-bold text-sm sm:text-base tracking-widest uppercase text-white/95 group-hover:text-white transition-colors">
+            <span className="grid h-8 w-8 place-items-center rounded-full border border-white/[0.12] bg-white/[0.04] text-cyan-200 transition-all duration-300 group-hover:border-cyan-300/40 group-hover:bg-cyan-300/10 group-hover:rotate-12">
+              <Sparkles size={14} aria-hidden="true" />
+            </span>
+            <span className="font-display font-bold text-sm sm:text-base tracking-[0.16em] uppercase text-white/95 group-hover:text-white transition-colors">
               NS SIDDARTH
             </span>
           </motion.button>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-7">
+          <nav className="hidden xl:flex items-center gap-1 rounded-full border border-white/[0.07] bg-white/[0.025] p-1.5 backdrop-blur-md">
             {links.map((link, idx) => {
               const isActive = activeSection === link.id;
               return (
@@ -96,15 +99,15 @@ export default function Navbar({ visibility = {} }) {
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.1 + idx * 0.05, ease: [0.16, 1, 0.3, 1] }}
-                  className={`relative font-mono text-[11px] tracking-widest transition-all duration-250 py-1 ${
-                    isActive ? 'text-white font-medium' : 'text-slate-400 hover:text-slate-200'
+                  className={`relative rounded-full px-3 py-2 font-mono text-[10px] tracking-[0.12em] transition-all duration-300 ${
+                    isActive ? 'text-white font-medium' : 'text-slate-500 hover:text-slate-200'
                   }`}
                 >
                   <span>{link.label}</span>
                   {isActive && (
                     <motion.span
                       layoutId="activeNavIndicator"
-                      className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-emerald-400 to-cyan-400"
+                      className="absolute inset-0 -z-10 rounded-full border border-white/[0.12] bg-white/[0.07]"
                       transition={{ type: 'spring', stiffness: 380, damping: 32 }}
                     />
                   )}
@@ -126,7 +129,7 @@ export default function Navbar({ visibility = {} }) {
 
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="lg:hidden p-1.5 text-slate-300 hover:text-white focus:outline-none transition-colors"
+              className="xl:hidden grid h-9 w-9 place-items-center rounded-full border border-white/[0.1] bg-white/[0.03] text-slate-300 hover:border-white/30 hover:text-white transition-colors"
               aria-label="Toggle navigation menu"
             >
               {mobileOpen ? <X size={20} /> : <Menu size={20} />}
@@ -142,7 +145,7 @@ export default function Navbar({ visibility = {} }) {
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-              className="lg:hidden border-b border-white/[0.08] bg-[#07080f]/95 backdrop-blur-xl overflow-hidden px-6 py-6"
+              className="xl:hidden border-b border-white/[0.08] bg-[#070812]/95 backdrop-blur-xl overflow-hidden px-5 py-5"
             >
               <div className="flex flex-col gap-3">
                 {links.map((link, idx) => {

@@ -13,10 +13,10 @@ export default function Experience({ data }) {
   const items = data.items;
 
   return (
-    <section id="experience" className="relative py-32 px-6 sm:px-10 border-t border-white/[0.04]">
+    <section id="experience" className="relative py-28 sm:py-36 px-5 sm:px-8 border-t border-white/[0.04]">
       <div className="max-w-7xl mx-auto">
         {/* Section Heading */}
-        <div className="mb-20">
+        <div className="section-heading mb-14 sm:mb-16">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -41,7 +41,7 @@ export default function Experience({ data }) {
                 transition={{ duration: 0.6, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
                 onMouseEnter={() => setHoveredId(item._id || idx)}
                 onMouseLeave={() => setHoveredId(null)}
-                className={`py-12 sm:py-16 px-4 sm:px-8 -mx-4 sm:-mx-8 rounded-2xl transition-all duration-300 group cursor-default ${
+                className={`experience-row py-10 sm:py-14 px-4 sm:px-8 -mx-4 sm:-mx-8 rounded-2xl transition-all duration-300 group cursor-default ${
                   isHovered ? 'bg-white/[0.02] shadow-inner' : 'hover:bg-white/[0.01]'
                 }`}
               >

@@ -31,7 +31,7 @@ export default function About({ data = {} }) {
     <section id="about" className="relative py-32 px-6 sm:px-10 border-t border-white/[0.04]">
       <div className="max-w-7xl mx-auto">
         {/* Section Heading */}
-        <div className="mb-16 sm:mb-24">
+        <div className="section-heading mb-14 sm:mb-20">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

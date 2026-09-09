@@ -14,10 +14,10 @@ export default function Chronicles({ data }) {
   const chronicles = data.items;
 
   return (
-    <section id="chronicles" className="relative py-32 px-6 sm:px-10 border-t border-white/[0.04]">
+    <section id="chronicles" className="relative py-28 sm:py-36 px-5 sm:px-8 border-t border-white/[0.04]">
       <div className="max-w-7xl mx-auto">
         {/* Section Heading */}
-        <div className="mb-16 sm:mb-24 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div className="section-heading mb-14 sm:mb-16 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
