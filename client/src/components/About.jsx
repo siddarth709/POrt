@@ -29,7 +29,7 @@ export default function About({ data = {} }) {
 
   return (
     <section id="about" className="relative py-32 px-6 sm:px-10 border-t border-white/[0.04]">
-      <div className="max-w-[1600px] mx-auto">
+      <div className="max-w-7xl mx-auto">
         {/* Section Heading */}
         <div className="mb-16 sm:mb-24">
           <motion.h2
@@ -49,7 +49,7 @@ export default function About({ data = {} }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-10 w-full font-display text-3xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-white leading-[1.05] hover:text-slate-100 transition-colors"
+            className="mb-10 w-full font-display text-3xl sm:text-4xl lg:text-6xl font-semibold tracking-tight text-white leading-[1.08] hover:text-slate-100 transition-colors"
           >
             {data.heading}
           </motion.h3>
