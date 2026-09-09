@@ -1,7 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { motion, useMotionValue, useSpring, useScroll, useTransform } from 'framer-motion';
 
 export default function BackgroundFX() {
+  const stars = useMemo(() => Array.from({ length: 34 }, (_, index) => ({
+    id: index,
+    left: `${(index * 37) % 100}%`,
+    top: `${(index * 61) % 100}%`,
+    size: index % 5 === 0 ? 3 : 1 + (index % 2),
+    delay: `${(index % 9) * 0.45}s`,
+    duration: `${3.5 + (index % 5)}s`,
+  })), []);
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
@@ -25,9 +33,22 @@ export default function BackgroundFX() {
   }, [mouseX, mouseY]);
 
   return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 bg-[#050508]">
+    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 bg-[#030511]">
       {/* Noise Texture layer */}
       <div className="noise-overlay" />
+
+      <div className="absolute inset-0 star-field opacity-60" />
+      <div className="absolute -top-1/4 left-1/2 h-[42rem] w-[42rem] -translate-x-1/2 rounded-full border border-cyan-300/[0.08] shadow-[0_0_120px_rgba(80,140,255,0.08)]" />
+      <div className="absolute -top-1/4 left-1/2 h-[31rem] w-[31rem] -translate-x-1/2 rounded-full border border-fuchsia-300/[0.06]" />
+      {stars.map((star) => (
+        <motion.span
+          key={star.id}
+          className="absolute rounded-full bg-sky-100"
+          style={{ left: star.left, top: star.top, width: star.size, height: star.size, boxShadow: '0 0 10px rgba(150, 220, 255, 0.9)' }}
+          animate={{ opacity: [0.2, 0.9, 0.2], scale: [0.7, 1.25, 0.7] }}
+          transition={{ duration: star.duration, delay: star.delay, repeat: Infinity, ease: 'easeInOut' }}
+        />
+      ))}
 
       {/* 1. Subtle Precision Technical Grid */}
       <motion.div
@@ -73,9 +94,9 @@ export default function BackgroundFX() {
           x: useTransform(smoothMouseX, (v) => v * 40),
           y: useTransform(smoothMouseY, (v) => v * 40),
         }}
-        className="absolute top-10 left-1/3 -translate-x-1/2 w-[700px] h-[500px] rounded-full bg-gradient-to-br from-cyan-500/[0.035] via-emerald-500/[0.02] to-transparent blur-[140px] pointer-events-none"
+        className="absolute top-10 left-1/3 -translate-x-1/2 w-[700px] h-[500px] rounded-full bg-gradient-to-br from-cyan-400/[0.09] via-indigo-500/[0.05] to-transparent blur-[140px] pointer-events-none"
       />
-      <div className="absolute bottom-10 right-10 w-[600px] h-[500px] rounded-full bg-gradient-to-tl from-indigo-500/[0.025] to-transparent blur-[160px] pointer-events-none" />
+      <div className="absolute bottom-10 right-10 w-[600px] h-[500px] rounded-full bg-gradient-to-tl from-fuchsia-500/[0.07] via-indigo-500/[0.04] to-transparent blur-[160px] pointer-events-none" />
     </div>
   );
 }

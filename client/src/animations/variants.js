@@ -1,10 +1,11 @@
 // Shared framer-motion variants used across sections for a consistent "premium" scroll feel.
 
 export const fadeUp = {
-  hidden: { opacity: 0, y: 50 },
+  hidden: { opacity: 0, y: 50, filter: 'blur(5px)' },
   visible: (i = 0) => ({
     opacity: 1,
     y: 0,
+    filter: 'blur(0px)',
     transition: { duration: 0.75, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] },
   }),
 };
