@@ -108,7 +108,7 @@ export default function About({ data = {} }) {
                 style={{ x: springX, y: springY }}
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.4 }}
-                  className="w-full h-full min-h-[22rem] rounded-3xl overflow-hidden glass-panel border border-white/[0.1] group-hover:border-white/[0.25] p-3 shadow-2xl relative transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.6)]"
+                  className="image-surface w-full h-full min-h-[22rem] rounded-3xl overflow-hidden glass-panel border border-white/[0.1] group-hover:border-white/[0.25] p-3 shadow-2xl relative transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.6)]"
               >
                 <div className="relative w-full h-full rounded-2xl overflow-hidden bg-black/40 border border-white/[0.06]">
                   <img

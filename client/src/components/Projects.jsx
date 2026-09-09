@@ -83,7 +83,7 @@ export default function Projects({ data }) {
                 <div className={`grid gap-6 ${idx === 0 && projects.length > 2 ? 'lg:grid-cols-12 lg:items-center' : 'sm:grid-cols-2 sm:items-center'}`}>
                   {/* Visual Frame */}
                   <div className={idx === 0 && projects.length > 2 ? `lg:col-span-7 ${isEven ? 'order-1' : 'order-1 lg:order-2'}` : ''}>
-                    <div className="relative aspect-[16/10] rounded-[1.1rem] overflow-hidden border border-white/[0.07] group-hover:border-cyan-200/25 group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.45)] transition-all duration-500 bg-black/40 flex items-center justify-center">
+                    <div className="image-surface relative aspect-[16/10] rounded-[1.1rem] overflow-hidden border border-white/[0.07] group-hover:border-cyan-200/25 group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.45)] transition-all duration-500 bg-black/40 flex items-center justify-center">
                       {project.image ? (
                         <img
                           src={project.image}

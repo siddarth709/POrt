@@ -23,7 +23,7 @@ export default function ChromaGrid({ items = [], onSelect }) {
           transition={{ type: 'spring', stiffness: 260, damping: 22 }}
           className="chroma-card group text-left"
         >
-          <div className="relative h-40 overflow-hidden rounded-xl border border-white/10 bg-slate-950/70">
+          <div className="image-surface relative h-40 overflow-hidden rounded-xl border border-white/10 bg-slate-950/70">
             {item.image ? (
               <img src={item.image} alt={item.title || 'Chronicle visual'} className="h-full w-full object-cover transition duration-700 group-hover:scale-110" loading="lazy" />
             ) : (

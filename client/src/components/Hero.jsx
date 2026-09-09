@@ -203,7 +203,7 @@ export default function Hero({ data = {} }) {
               <motion.div
                 whileHover={{ y: -6, scale: 1.01 }}
                 transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                className="hero-portrait relative w-full max-w-sm sm:max-w-md aspect-[4/5] rounded-[2rem] overflow-hidden glass-panel border border-white/[0.1] group-hover:border-white/[0.25] p-3 shadow-2xl transition-colors duration-500"
+                className="image-surface hero-portrait relative w-full max-w-sm sm:max-w-md aspect-[4/5] rounded-[2rem] overflow-hidden glass-panel border border-white/[0.1] group-hover:border-white/[0.25] p-3 shadow-2xl transition-colors duration-500"
               >
                 <div className="relative w-full h-full rounded-2xl overflow-hidden bg-black/40 border border-white/[0.06]">
                   <img
