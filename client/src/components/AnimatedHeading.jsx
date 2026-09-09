@@ -9,14 +9,15 @@ export default function AnimatedHeading({
   text = '',
   className = '',
   wordClassName = '',
+  animateOnView = true,
 }) {
   const words = String(text).split(' ');
   const MotionTag = motion[Tag] || motion.h2;
 
   return (
     <MotionTag
-      initial="hidden"
-      whileInView="visible"
+      initial={animateOnView ? 'hidden' : false}
+      whileInView={animateOnView ? 'visible' : undefined}
       viewport={viewportOnce}
       variants={wordContainer}
       className={className}

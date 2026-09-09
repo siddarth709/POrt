@@ -126,6 +126,7 @@ export default function Hero({ data = {} }) {
               <AnimatedHeading
                 as="h1"
                 text={nameText}
+                animateOnView={false}
                 className={hasImage ? "text-5xl sm:text-6xl md:text-7xl lg:text-[5.7rem]" : "text-5xl sm:text-7xl md:text-8xl lg:text-[6.6rem]"}
                 wordClassName="editorial-gradient transition-all duration-500 group-hover:brightness-125"
               />

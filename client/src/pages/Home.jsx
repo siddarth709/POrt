@@ -19,7 +19,18 @@ export default function Home() {
     const sections = [...document.querySelectorAll('main > section')];
     const observer = new IntersectionObserver(
       (entries) => entries.forEach((entry) => {
-        if (entry.isIntersecting) entry.target.dataset.revealed = 'true';
+        if (!entry.isIntersecting || entry.target.dataset.revealed === 'true') return;
+        entry.target.dataset.revealed = 'true';
+        if (entry.target.id === 'home') return;
+        const index = sections.indexOf(entry.target);
+        const offset = index % 2 === 0 ? 32 : -32;
+        entry.target.animate(
+          [
+            { opacity: 0, transform: `translate3d(${offset}px, 42px, 0) scale(.985)`, filter: 'blur(8px)' },
+            { opacity: 1, transform: 'translate3d(0, 0, 0) scale(1)', filter: 'blur(0)' },
+          ],
+          { duration: 780, delay: 40, easing: 'cubic-bezier(.16, 1, .3, 1)', fill: 'both' }
+        );
       }),
       { threshold: 0.12 }
     );

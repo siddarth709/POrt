@@ -173,22 +173,6 @@ main > section:not(#home) {
   to { transform: translate(-50%, -50%) scale(20); opacity: 0; }
 }
 
-/* Each section has a subtle two-stage arrival; content is never hidden without JS. */
-.portfolio-shell main > section[data-revealed='true'] .section-heading,
-.portfolio-shell main > section[data-revealed='true'] > div > h3 {
-  animation: section-rise .8s cubic-bezier(.16,1,.3,1) both;
-}
-.portfolio-shell main > section[data-revealed='true'] .glass-panel,
-.portfolio-shell main > section[data-revealed='true'] .project-card,
-.portfolio-shell main > section[data-revealed='true'] .experience-row {
-  animation: section-rise .9s .09s cubic-bezier(.16,1,.3,1) both;
-}
-
-@keyframes section-rise {
-  from { opacity: 0; transform: translateY(28px); filter: blur(7px); }
-  to { opacity: 1; transform: translateY(0); filter: blur(0); }
-}
-
 .portfolio-shell main > #home {
   min-height: calc(100vh - 2rem);
   margin-top: 1rem;
