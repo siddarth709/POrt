@@ -7,8 +7,8 @@ export default function BackgroundFX() {
     left: `${(index * 37) % 100}%`,
     top: `${(index * 61) % 100}%`,
     size: index % 5 === 0 ? 3 : 1 + (index % 2),
-    delay: `${(index % 9) * 0.45}s`,
-    duration: `${3.5 + (index % 5)}s`,
+    delay: (index % 9) * 0.45,
+    duration: 3.5 + (index % 5),
   })), []);
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
