@@ -5,6 +5,8 @@ const TOTAL_ITEMS = 28;
 
 // React Bits Grid Motion, adapted to accept the portfolio's image records.
 export default function GridMotion({ items = [] }) {
+  const shellRef = useRef(null);
+  const canvasRef = useRef(null);
   const rowRefs = useRef([]);
   const mouseXRef = useRef(typeof window === 'undefined' ? 0 : window.innerWidth / 2);
   const images = useMemo(() => {
@@ -16,6 +18,18 @@ export default function GridMotion({ items = [] }) {
   useEffect(() => {
     gsap.ticker.lagSmoothing(0);
     const handleMouseMove = (event) => { mouseXRef.current = event.clientX; };
+    const handleScroll = () => {
+      if (!shellRef.current || !canvasRef.current) return;
+      const bounds = shellRef.current.getBoundingClientRect();
+      const progress = Math.max(0, Math.min(1, (window.innerHeight - bounds.top) / (window.innerHeight + bounds.height)));
+      gsap.to(canvasRef.current, {
+        y: (progress - 0.5) * 112,
+        rotation: -15 + (progress - 0.5) * 3.5,
+        duration: 0.85,
+        ease: 'power3.out',
+        overwrite: 'auto',
+      });
+    };
     const updateMotion = () => {
       const maxMoveAmount = 300;
       const inertiaFactors = [0.6, 0.4, 0.3, 0.2];
@@ -28,10 +42,14 @@ export default function GridMotion({ items = [] }) {
     };
     gsap.ticker.add(updateMotion);
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('scroll', handleScroll);
       gsap.ticker.remove(updateMotion);
       rowRefs.current.forEach((row) => row && gsap.killTweensOf(row));
+      if (canvasRef.current) gsap.killTweensOf(canvasRef.current);
     };
   }, []);
 
@@ -39,9 +57,9 @@ export default function GridMotion({ items = [] }) {
 
   return (
     <section id="grid-motion" className="grid-motion-section" aria-label="Moving visual archive">
-      <div className="grid-motion-shell">
+      <div className="grid-motion-shell" ref={shellRef}>
         <div className="grid-motion-intro">
-          <div className="grid-motion-container">
+          <div className="grid-motion-container" ref={canvasRef}>
             {Array.from({ length: 4 }, (_, rowIndex) => (
               <div className="grid-motion-row" key={rowIndex} ref={(element) => { rowRefs.current[rowIndex] = element; }}>
                 {Array.from({ length: 7 }, (_, itemIndex) => {
