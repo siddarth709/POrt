@@ -54,6 +54,11 @@ export default function Experience({ data }) {
                       className="flex flex-col"
                     >
                       <div className="flex items-center gap-3">
+                        {item.logo && (
+                          <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-cyan-300/20 bg-white p-2 shadow-[0_0_20px_rgba(103,232,249,0.12)]">
+                            <img src={item.logo} alt={`${item.company || 'Company'} logo`} className="h-full w-full object-contain" loading="lazy" />
+                          </div>
+                        )}
                         <h3 className="font-display text-2xl sm:text-3xl font-semibold text-white tracking-tight group-hover:text-cyan-200 transition-colors">
                           {item.role}
                         </h3>

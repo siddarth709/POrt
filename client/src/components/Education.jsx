@@ -69,6 +69,11 @@ export default function Education({ data }) {
 
                   <div className="max-w-4xl">
                     <div className="flex flex-wrap items-center gap-3 font-mono text-xs text-slate-400 mb-3 tracking-wider">
+                      {item.logo && (
+                        <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-cyan-300/20 bg-white p-2 shadow-[0_0_20px_rgba(103,232,249,0.12)]">
+                          <img src={item.logo} alt={`${item.institution || 'Institution'} logo`} className="h-full w-full object-contain" loading="lazy" />
+                        </div>
+                      )}
                       {item.year && (
                         <span className="px-2 py-0.5 rounded bg-white/[0.03] border border-white/[0.08] text-slate-300">
                           {item.year}
