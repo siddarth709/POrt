@@ -140,6 +140,10 @@ main > section:not(#home)::before {
 
 .chroma-card:hover { border-color: rgba(103, 232, 249, 0.42); }
 
+#grid-motion { perspective: 1200px; }
+
+#grid-motion figure { transform-style: preserve-3d; }
+
 @media (max-width: 640px) {
   .chroma-grid { grid-template-columns: 1fr; }
 }
