@@ -305,18 +305,18 @@ main > section:not(#home)::before {
 
 #grid-motion { perspective: 1200px; }
 
-.grid-motion-section { min-height: unset; padding: .75rem; }
-.grid-motion-shell { height: min(64vw, 690px); min-height: 430px; overflow: hidden; border-radius: 1.45rem; background: #090811; }
+.grid-motion-section { min-height: 155vh; padding: .5rem; background: #060710 !important; }
+.grid-motion-shell { height: min(64vw, 690px); min-height: 430px; overflow: hidden; border-radius: 1.25rem; background: #060710; }
+.grid-motion-section .grid-motion-shell { position: sticky; top: 11vh; }
 .grid-motion-intro { position: relative; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; overflow: hidden; }
-.grid-motion-intro::after { content: ''; position: absolute; inset: 0; z-index: 4; pointer-events: none; box-shadow: inset 0 0 90px rgba(9, 8, 17, .28); }
-.grid-motion-container { position: relative; z-index: 2; display: grid; grid-template-rows: repeat(4, 1fr); gap: 1rem; width: 150vw; height: 150vh; transform: rotate(-15deg); transform-origin: center; }
-.grid-motion-row { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1rem; will-change: transform; }
-.grid-motion-tile { position: relative; min-width: 0; overflow: hidden; border: 1px solid rgba(255, 255, 255, .16); border-radius: 18px; background: #10182c; box-shadow: 0 18px 38px rgba(0, 0, 0, .34); transition: transform .42s cubic-bezier(.16,1,.3,1), border-color .42s ease, box-shadow .42s ease; }
-.grid-motion-tile:hover { z-index: 3; border-color: rgba(165, 243, 252, .7); box-shadow: 0 26px 55px rgba(0, 0, 0, .5), 0 0 34px rgba(103, 232, 249, .16); transform: scale(1.065); }
-.grid-motion-tile::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 48%, rgba(2, 4, 13, .78)); pointer-events: none; }
-.grid-motion-tile img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.88) contrast(1.04); transition: transform .7s cubic-bezier(.16,1,.3,1), filter .5s ease; }
-.grid-motion-tile:hover img { transform: scale(1.1); filter: saturate(1.18) contrast(1.04); }
-.grid-motion-tile figcaption { position: absolute; z-index: 2; right: 13px; bottom: 11px; left: 13px; overflow: hidden; color: rgba(255,255,255,.9); font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: .08em; text-overflow: ellipsis; text-transform: uppercase; white-space: nowrap; }
+.grid-motion-intro::after { content: ''; position: absolute; inset: 0; z-index: 4; pointer-events: none; box-shadow: inset 0 0 96px rgba(6, 7, 16, .42); }
+.grid-motion-container { position: relative; z-index: 2; display: grid; grid-template-rows: repeat(4, minmax(0, 1fr)); gap: .85rem; width: 150vw; height: 150vh; transform: rotate(-15deg); transform-origin: center; }
+.grid-motion-row { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: .85rem; will-change: transform; }
+.grid-motion-tile { position: relative; min-width: 0; overflow: hidden; border: 1px solid rgba(255, 255, 255, .1); border-radius: 14px; background: #11121a; transition: transform .45s cubic-bezier(.16,1,.3,1), border-color .45s ease, opacity .45s ease; }
+.grid-motion-tile:hover { z-index: 3; border-color: rgba(255, 255, 255, .64); transform: scale(1.055); }
+.grid-motion-container:has(.grid-motion-tile:hover) .grid-motion-tile:not(:hover) { opacity: .44; }
+.grid-motion-tile img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.78) contrast(1.03); transition: transform .75s cubic-bezier(.16,1,.3,1), filter .45s ease; }
+.grid-motion-tile:hover img { transform: scale(1.08); filter: saturate(1.08) contrast(1.04); }
 
 @media (max-width: 640px) {
   .chroma-grid { grid-template-columns: 1fr; }
@@ -401,9 +401,10 @@ main > section:not(#home)::before {
     min-height: calc(100vh - 1rem);
     margin-top: .5rem;
   }
-  .grid-motion-section { padding: .45rem; }
+  .grid-motion-section { min-height: 105vh; padding: .35rem; }
   .grid-motion-shell { height: 420px; min-height: unset; border-radius: .9rem; }
-  .grid-motion-container { gap: .65rem; width: 180vw; height: 155vh; transform: rotate(-12deg); }
-  .grid-motion-row { gap: .65rem; }
+  .grid-motion-section .grid-motion-shell { top: 16vh; }
+  .grid-motion-container { gap: .55rem; width: 180vw; height: 155vh; transform: rotate(-12deg); }
+  .grid-motion-row { gap: .55rem; }
   .grid-motion-tile { border-radius: 11px; }
 }

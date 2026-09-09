@@ -22,10 +22,15 @@ export default function GridMotion({ items = [] }) {
     const handleScroll = () => {
       if (!shellRef.current || !canvasRef.current) return;
       const bounds = shellRef.current.getBoundingClientRect();
-      const progress = Math.max(0, Math.min(1, (window.innerHeight - bounds.top) / (window.innerHeight + bounds.height)));
+      const sectionBounds = shellRef.current.parentElement?.getBoundingClientRect();
+      const sectionHeight = sectionBounds?.height || bounds.height;
+      const scrollDistance = Math.max(sectionHeight - window.innerHeight, 1);
+      const progress = Math.max(0, Math.min(1, -(sectionBounds?.top || 0) / scrollDistance));
       gsap.to(canvasRef.current, {
-        y: (progress - 0.5) * 112,
-        rotation: -15 + (progress - 0.5) * 3.5,
+        x: (progress - 0.5) * -180,
+        y: (progress - 0.5) * 260,
+        rotation: -15 + (progress - 0.5) * 7,
+        scale: 1.08 + progress * 0.08,
         duration: 0.85,
         ease: 'power3.out',
         overwrite: 'auto',
@@ -68,7 +73,6 @@ export default function GridMotion({ items = [] }) {
                   return (
                     <figure className="grid-motion-tile" key={`${rowIndex}-${itemIndex}`}>
                       <img src={image.image} alt={image.title || 'Portfolio visual'} loading="lazy" />
-                      {image.title && <figcaption>{image.title}</figcaption>}
                     </figure>
                   );
                 })}

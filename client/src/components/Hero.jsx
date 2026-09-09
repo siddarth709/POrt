@@ -103,8 +103,7 @@ export default function Hero({ data = {} }) {
             
             {/* Status indicator */}
             <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={false}
               whileHover={{ scale: 1.02, y: -1 }}
               transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
               className="inline-flex items-center gap-2.5 px-3.5 py-2 rounded-full border border-white/[0.1] hover:border-cyan-300/40 bg-white/[0.035] hover:bg-cyan-300/[0.07] backdrop-blur-md mb-7 transition-all cursor-default shadow-sm hover:shadow-[0_0_24px_rgba(34,211,238,0.12)]"
@@ -135,8 +134,7 @@ export default function Hero({ data = {} }) {
             {/* ELEGANT TAGLINE ALIGNED BELOW IN REFINED SMALLER FONT */}
             {taglineText && (
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={false}
                 whileHover={{ x: 4 }}
                 transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                 className="max-w-2xl mb-9 group"
@@ -149,9 +147,7 @@ export default function Hero({ data = {} }) {
 
             {/* Action Buttons */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
+              initial={false}
               className="flex flex-wrap items-center gap-3 sm:gap-4"
             >
               <MagneticButton
@@ -180,9 +176,7 @@ export default function Hero({ data = {} }) {
               </MagneticButton>
             </motion.div>
             <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
+              initial={false}
               className="mt-12 flex flex-wrap items-center gap-x-6 gap-y-3 font-mono text-[10px] uppercase tracking-[0.14em] text-slate-500"
             >
               <span className="flex items-center gap-2"><Orbit size={13} className="text-cyan-300" /> AI systems</span>
@@ -195,9 +189,7 @@ export default function Hero({ data = {} }) {
           {/* Right Column: Hero Image Frame from Dashboard */}
           {hasImage && (
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              initial={false}
               className="lg:col-span-5 flex justify-center group"
             >
               <motion.div
