@@ -29,7 +29,7 @@ export default function About({ data = {} }) {
 
   return (
     <section id="about" className="relative py-32 px-6 sm:px-10 border-t border-white/[0.04]">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-[1600px] mx-auto">
         {/* Section Heading */}
         <div className="mb-16 sm:mb-24">
           <motion.h2
@@ -44,9 +44,9 @@ export default function About({ data = {} }) {
         </div>
 
         {/* Split Editorial Layout */}
-        <div className="grid lg:grid-cols-12 gap-16 lg:gap-24 items-center">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-stretch">
           {/* Narrative Column */}
-          <div className="lg:col-span-7 flex flex-col justify-start">
+          <div className="flex h-full flex-col justify-center">
             {data.heading && (
               <motion.h3
                 initial={{ opacity: 0, y: 24 }}
@@ -65,7 +65,7 @@ export default function About({ data = {} }) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-                className="glass-panel rounded-2xl border border-white/[0.1] p-6 sm:p-8 text-slate-300 text-base sm:text-lg leading-relaxed space-y-4 text-left font-light whitespace-pre-line hover:border-cyan-300/30 transition-colors duration-300 shadow-[0_20px_60px_rgba(0,0,0,0.2)]"
+                className="glass-panel h-full min-h-[22rem] rounded-2xl border border-white/[0.1] p-6 sm:p-10 flex items-center text-slate-300 text-base sm:text-lg leading-relaxed space-y-4 text-left font-light whitespace-pre-line hover:border-cyan-300/30 transition-colors duration-300 shadow-[0_20px_60px_rgba(0,0,0,0.2)]"
               >
                 {data.bio}
               </motion.div>
@@ -101,14 +101,14 @@ export default function About({ data = {} }) {
           <div
             ref={visualRef}
             onMouseMove={handleMouseMove}
-            className="lg:col-span-5 flex items-center justify-center relative group"
+            className="flex items-center justify-center relative group"
           >
             {hasImage ? (
               <motion.div
                 style={{ x: springX, y: springY }}
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.4 }}
-                className="w-full max-w-sm sm:max-w-md aspect-[4/5] rounded-3xl overflow-hidden glass-panel border border-white/[0.1] group-hover:border-white/[0.25] p-3 shadow-2xl relative transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.6)]"
+                  className="w-full h-full min-h-[22rem] rounded-3xl overflow-hidden glass-panel border border-white/[0.1] group-hover:border-white/[0.25] p-3 shadow-2xl relative transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.6)]"
               >
                 <div className="relative w-full h-full rounded-2xl overflow-hidden bg-black/40 border border-white/[0.06]">
                   <img
@@ -123,7 +123,7 @@ export default function About({ data = {} }) {
               <motion.div
                 style={{ x: springX, y: springY }}
                 whileHover={{ scale: 1.02 }}
-                className="w-full max-w-md aspect-square rounded-2xl glass-panel p-8 relative flex flex-col justify-between overflow-hidden group border border-white/[0.08] hover:border-white/20 transition-all duration-300"
+                className="w-full h-full min-h-[22rem] rounded-2xl glass-panel p-8 relative flex flex-col justify-between overflow-hidden group border border-white/[0.08] hover:border-white/20 transition-all duration-300"
               >
                 <svg
                   className="absolute inset-0 w-full h-full opacity-20 stroke-white group-hover:opacity-30 transition-opacity duration-500"
