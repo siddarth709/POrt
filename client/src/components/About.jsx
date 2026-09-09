@@ -43,22 +43,22 @@ export default function About({ data = {} }) {
           </motion.h2>
         </div>
 
+        {data.heading && (
+          <motion.h3
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            className="mb-10 w-full font-display text-3xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-white leading-[1.05] hover:text-slate-100 transition-colors"
+          >
+            {data.heading}
+          </motion.h3>
+        )}
+
         {/* Split Editorial Layout */}
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-stretch">
           {/* Narrative Column */}
           <div className="flex h-full flex-col justify-center">
-            {data.heading && (
-              <motion.h3
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                className="font-display text-2xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-white leading-tight mb-10 hover:text-slate-100 transition-colors"
-              >
-                {data.heading}
-              </motion.h3>
-            )}
-
             {data.bio && (
               <motion.div
                 initial={{ opacity: 0, y: 24 }}
