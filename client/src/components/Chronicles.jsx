@@ -1,23 +1,24 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, BookOpen, X, Image as ImageIcon } from 'lucide-react';
+import { ArrowUpRight, BookOpen, X, Image as ImageIcon, Calendar, Tag, Layers } from 'lucide-react';
 
 export default function Chronicles({ data }) {
-  const [hoveredId, setHoveredId] = useState(null);
+  const [activeIdx, setActiveIdx] = useState(0);
   const [selectedNote, setSelectedNote] = useState(null);
 
-  // Nothing hardcoded: Render strictly what is in data.items from the dashboard
+  // If no items or section is hidden, return null
   if (!data || data.visible === false || !data.items || data.items.length === 0) {
     return null;
   }
 
   const chronicles = data.items;
+  const currentItem = chronicles[activeIdx] || chronicles[0];
 
   return (
     <section id="chronicles" className="relative py-32 px-6 sm:px-10 border-t border-white/[0.04]">
       <div className="max-w-7xl mx-auto">
         {/* Section Heading */}
-        <div className="mb-20 sm:mb-24 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div className="mb-16 sm:mb-24 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
@@ -28,38 +29,46 @@ export default function Chronicles({ data }) {
             >
               CHRONICLES
             </motion.h2>
-            <p className="font-display text-2xl sm:text-3xl text-slate-200 font-medium mt-3">
+            <p className="font-display text-2xl sm:text-3xl lg:text-4xl text-slate-100 font-medium mt-3 tracking-tight">
               Research Notes, Experiments & Technical Explorations
             </p>
           </div>
-          <span className="font-mono text-xs text-slate-400">
-            [ RESEARCH NOTEBOOK ]
+          <span className="font-mono text-xs text-slate-500">
+            [ {chronicles.length} {chronicles.length === 1 ? 'LOG' : 'LOGS'} RECORDED ]
           </span>
         </div>
 
-        {/* Large Editorial Text Rows */}
-        <div className="divide-y divide-white/[0.06] border-y border-white/[0.06]">
-          {chronicles.map((item, idx) => {
-            const isHovered = hoveredId === (item._id || idx);
+        {/* Redesigned Dual Interactive Showcase Layout */}
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+          
+          {/* Left Column: Interactive Chronicle Index */}
+          <div className="lg:col-span-7 flex flex-col divide-y divide-white/[0.06] border-y border-white/[0.06]">
+            {chronicles.map((item, idx) => {
+              const isActive = activeIdx === idx;
 
-            return (
-              <motion.div
-                key={item._id || idx}
-                layout
-                initial={{ opacity: 0, y: 25 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.5, delay: idx * 0.06 }}
-                onMouseEnter={() => setHoveredId(item._id || idx)}
-                onMouseLeave={() => setHoveredId(null)}
-                onClick={() => setSelectedNote(item)}
-                className="py-10 sm:py-12 group cursor-pointer transition-colors duration-300"
-              >
-                <div className="flex flex-col gap-3">
-                  {/* Category & Date from Dashboard */}
-                  <div className="flex items-center justify-between font-mono text-[11px] text-slate-400 tracking-wider">
-                    {item.location && <span className="text-emerald-400 uppercase">{item.location}</span>}
-                    <div className="flex items-center gap-3 ml-auto">
+              return (
+                <div
+                  key={item._id || idx}
+                  onMouseEnter={() => setActiveIdx(idx)}
+                  onClick={() => setSelectedNote(item)}
+                  className={`py-8 sm:py-9 px-3 sm:px-4 rounded-xl cursor-pointer transition-all duration-300 group ${
+                    isActive
+                      ? 'bg-white/[0.03] border-l-2 border-emerald-400 pl-5'
+                      : 'hover:bg-white/[0.015] border-l-2 border-transparent'
+                  }`}
+                >
+                  <div className="flex items-center justify-between font-mono text-[11px] text-slate-400 tracking-wider mb-2.5">
+                    <div className="flex items-center gap-2">
+                      <span className={`px-2 py-0.5 rounded-full border text-[10px] ${
+                        isActive
+                          ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-300'
+                          : 'border-white/10 bg-white/[0.02] text-slate-400'
+                      }`}>
+                        {item.location || `LOG // ${String(idx + 1).padStart(2, '0')}`}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-3">
                       {item.image && (
                         <span className="inline-flex items-center gap-1 text-slate-500 text-[10px]">
                           <ImageIcon size={11} /> PHOTO
@@ -69,56 +78,85 @@ export default function Chronicles({ data }) {
                     </div>
                   </div>
 
-                  {/* Title Row with Smooth Hover Shift */}
-                  <div className="flex items-center justify-between gap-6">
-                    <motion.h3
-                      animate={{ x: isHovered ? 8 : 0 }}
-                      transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                      className="font-display text-2xl sm:text-3xl lg:text-4xl font-semibold text-white tracking-tight group-hover:text-cyan-200 transition-colors"
-                    >
+                  <div className="flex items-center justify-between gap-4">
+                    <h3 className={`font-display text-xl sm:text-2xl font-semibold tracking-tight transition-colors ${
+                      isActive ? 'text-white' : 'text-slate-300 group-hover:text-white'
+                    }`}>
                       {item.title}
-                    </motion.h3>
-
-                    <motion.div
-                      animate={{
-                        x: isHovered ? 4 : 0,
-                        y: isHovered ? -4 : 0,
-                        opacity: isHovered ? 1 : 0.4,
-                      }}
-                      transition={{ duration: 0.2 }}
-                      className="text-white"
-                    >
-                      <ArrowUpRight size={22} />
-                    </motion.div>
+                    </h3>
+                    <ArrowUpRight
+                      size={18}
+                      className={`shrink-0 transition-transform duration-250 ${
+                        isActive
+                          ? 'text-emerald-400 translate-x-1 -translate-y-1 opacity-100'
+                          : 'text-slate-600 opacity-40 group-hover:opacity-100 group-hover:text-slate-300'
+                      }`}
+                    />
                   </div>
 
-                  {/* Description Preview & Thumbnail on Hover */}
-                  <AnimatePresence>
-                    {isHovered && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                        className="pt-2 flex flex-col sm:flex-row gap-4 sm:items-start"
-                      >
-                        {item.image && (
-                          <div className="w-24 h-16 sm:w-28 sm:h-20 rounded-xl overflow-hidden border border-white/15 shrink-0 bg-black/40">
-                            <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
-                          </div>
-                        )}
-                        {item.description && (
-                          <p className="text-slate-400 text-sm sm:text-base leading-relaxed max-w-3xl font-light text-justify-editorial line-clamp-2">
-                            {item.description}
-                          </p>
-                        )}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  {item.description && (
+                    <p className="text-slate-400 text-xs sm:text-sm leading-relaxed mt-2 line-clamp-2 font-light text-justify-editorial">
+                      {item.description}
+                    </p>
+                  )}
                 </div>
-              </motion.div>
-            );
-          })}
+              );
+            })}
+          </div>
+
+          {/* Right Column: Dynamic Live Preview Terminal Card (Sticky on Desktop) */}
+          <div className="lg:col-span-5 sticky top-28">
+            <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/[0.08] shadow-2xl relative overflow-hidden">
+              <div className="flex items-center justify-between pb-4 mb-5 border-b border-white/[0.06] font-mono text-[11px] text-slate-400">
+                <span className="text-emerald-400 flex items-center gap-1.5">
+                  <BookOpen size={13} />
+                  <span>PREVIEW LOG</span>
+                </span>
+                <span>{currentItem?.date || 'CHRONICLE'}</span>
+              </div>
+
+              {/* Preview Image if present */}
+              {currentItem?.image ? (
+                <div className="w-full aspect-[16/10] rounded-2xl overflow-hidden border border-white/10 mb-5 bg-black/40">
+                  <img
+                    src={currentItem.image}
+                    alt={currentItem.title}
+                    className="w-full h-full object-cover grayscale-[15%] hover:grayscale-0 transition-all duration-300"
+                  />
+                </div>
+              ) : (
+                <div className="w-full aspect-[16/10] rounded-2xl border border-white/[0.08] mb-5 bg-white/[0.02] flex flex-col items-center justify-center p-6 text-center">
+                  <Layers size={32} className="text-slate-600 mb-2" />
+                  <span className="font-mono text-xs text-slate-400">TECHNICAL RESEARCH MEMO</span>
+                </div>
+              )}
+
+              <h4 className="font-display text-xl sm:text-2xl font-bold text-white tracking-tight mb-3">
+                {currentItem?.title}
+              </h4>
+
+              {currentItem?.location && (
+                <div className="mb-4 inline-block font-mono text-[10px] px-2.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300">
+                  {currentItem.location}
+                </div>
+              )}
+
+              {currentItem?.description && (
+                <p className="text-slate-300 text-xs sm:text-sm leading-relaxed font-light text-justify-editorial line-clamp-4 mb-6">
+                  {currentItem.description}
+                </p>
+              )}
+
+              <button
+                onClick={() => setSelectedNote(currentItem)}
+                className="w-full py-3 rounded-full bg-white text-[#050508] font-mono text-xs font-semibold tracking-wider flex items-center justify-center gap-2 hover:bg-slate-200 transition-colors shadow-md"
+              >
+                <span>OPEN FULL ENTRY</span>
+                <ArrowUpRight size={14} />
+              </button>
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -134,9 +172,9 @@ export default function Chronicles({ data }) {
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.96, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.96, y: 20 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.25 }}
               onClick={(e) => e.stopPropagation()}
               className="relative w-full max-w-2xl max-h-[88vh] overflow-y-auto glass-panel rounded-2xl border border-white/[0.12] p-6 sm:p-10 shadow-2xl"
             >
@@ -164,7 +202,7 @@ export default function Chronicles({ data }) {
               </h3>
 
               {selectedNote.image && (
-                <div className="w-full max-h-[260px] rounded-xl overflow-hidden border border-white/10 mb-6 bg-black/40">
+                <div className="w-full max-h-[280px] rounded-xl overflow-hidden border border-white/10 mb-6 bg-black/40">
                   <img src={selectedNote.image} alt={selectedNote.title} className="w-full h-full object-cover" />
                 </div>
               )}
