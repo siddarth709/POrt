@@ -29,9 +29,33 @@ export default function Contact({ data = {}, heroSocials = [] }) {
   const hasImage = Boolean(data.image);
 
   return (
-    <section id="contact" className="relative pt-28 sm:pt-36 pb-16 sm:pb-20 px-5 sm:px-8 border-t border-white/[0.04]">
-      <GradientWaves />
-      <div className="max-w-7xl mx-auto">
+    <section id="contact" className="relative min-h-[600px] overflow-hidden pt-28 sm:pt-36 pb-16 sm:pb-20 px-5 sm:px-8 border-t border-white/[0.04]">
+      <div className="absolute inset-0" aria-hidden="true">
+        <GradientWaves
+          horizonColor="#5227FF"
+          waveColor="#FF9FFC"
+          crestColor="#FFFFFF"
+          speed={0.4}
+          amplitude={2.5}
+          waveScale={0.6}
+          waveRatio={0.9}
+          swell={35}
+          turbulence={20}
+          tilt={1.11}
+          zoom={1.0}
+          height={5.5}
+          fogDepth={15}
+          detail="medium"
+          brightness={1.0}
+          opacity={1.0}
+          mouseInteraction={true}
+          parallaxStrength={0.5}
+          grain={true}
+          grainIntensity={0.05}
+        />
+      </div>
+      <div className="pointer-events-none absolute inset-0 z-[1] bg-[#050508]/35" aria-hidden="true" />
+      <div className="relative z-10 max-w-7xl mx-auto">
         {/* Section Identifier */}
         <div className="section-heading mb-14 sm:mb-16">
           <motion.h2
@@ -69,7 +93,7 @@ export default function Contact({ data = {}, heroSocials = [] }) {
             >
               <button
                 onClick={() => setFormOpen(!formOpen)}
-                className="group px-8 py-4 rounded-full bg-white text-[#050508] font-mono text-xs sm:text-sm font-semibold tracking-wider flex items-center gap-2 hover:bg-slate-200 hover:shadow-[0_0_25px_rgba(255,255,255,0.25)] transition-all active:scale-[0.98]"
+                className="contact-cta group px-8 py-4 rounded-full bg-white text-[#050508] font-mono text-xs sm:text-sm font-semibold tracking-wider flex items-center gap-2 hover:bg-slate-200 hover:shadow-[0_0_25px_rgba(255,255,255,0.25)] transition-all active:scale-[0.98]"
               >
                 <span>GET IN TOUCH</span>
                 <ArrowUpRight

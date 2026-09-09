@@ -87,7 +87,46 @@ export default function Hero({ data = {} }) {
       onMouseMove={handleMouseMove}
       className="relative min-h-[94vh] sm:min-h-screen flex items-center justify-center pt-28 pb-16 px-5 sm:px-8 overflow-hidden"
     >
-      <AeroShards />
+      <div className="absolute inset-0" aria-hidden="true">
+        <AeroShards
+          backgroundColor="#120F17"
+          shardColor="#896ABD"
+          accentColor="#A855F7"
+          placement="full"
+          flow="stream"
+          material="pearl"
+          detail="balanced"
+          effect="none"
+          scale={1}
+          spread={1}
+          depth={1}
+          speed={1}
+          spin={1}
+          interaction="repel"
+          density={1.5}
+          shardSize={1.1}
+          stretch={1}
+          turbulence={1}
+          glow={1}
+          edgeSoftness={2}
+          bloom={0.5}
+          grain={0.05}
+          chromaticAberration={0.0075}
+          transitionDuration={1}
+          interactionRadius={1.5}
+          interactionStrength={0.5}
+          rippleIntensity={1}
+          holdToGather={true}
+        />
+      </div>
+      <div
+        className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-r from-[#120F17]/95 via-[#120F17]/78 to-[#120F17]/12"
+        aria-hidden="true"
+      />
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-1/3 bg-gradient-to-t from-[#120F17]/72 to-transparent"
+        aria-hidden="true"
+      />
       <motion.div
         style={{
           opacity: heroOpacity,
@@ -112,8 +151,8 @@ export default function Hero({ data = {} }) {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
               </span>
-              <span className="font-mono text-[11px] tracking-wider text-slate-300 uppercase">
-                Available for select engineering work
+              <span className="font-mono text-[11px] tracking-wider text-slate-100 uppercase">
+                Open to collaborations
               </span>
             </motion.div>
 
@@ -139,7 +178,7 @@ export default function Hero({ data = {} }) {
                 transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                 className="max-w-2xl mb-9 group"
               >
-                <p className="text-base sm:text-lg md:text-xl text-slate-300 font-normal leading-relaxed text-left whitespace-pre-line border-l-2 border-cyan-300/40 group-hover:border-cyan-300 pl-4 py-0.5 transition-colors duration-300">
+                <p className="text-base sm:text-lg md:text-xl text-slate-100 font-normal leading-relaxed text-left whitespace-pre-line border-l-2 border-cyan-300/60 group-hover:border-cyan-300 pl-4 py-0.5 transition-colors duration-300 [text-shadow:0_2px_18px_rgba(18,15,23,0.9)]">
                   {taglineText}
                 </p>
               </motion.div>
@@ -177,12 +216,12 @@ export default function Hero({ data = {} }) {
             </motion.div>
             <motion.div
               initial={false}
-              className="mt-12 flex flex-wrap items-center gap-x-6 gap-y-3 font-mono text-[10px] uppercase tracking-[0.14em] text-slate-500"
+              className="mt-12 flex flex-wrap items-center gap-x-6 gap-y-3 font-mono text-[10px] uppercase tracking-[0.14em] text-slate-300 [text-shadow:0_2px_14px_rgba(18,15,23,0.95)]"
             >
               <span className="flex items-center gap-2"><Orbit size={13} className="text-cyan-300" /> AI systems</span>
               <span className="h-1 w-1 rounded-full bg-slate-600" />
               <span>Research × product</span>
-              <button onClick={() => scrollTo('about')} className="ml-1 flex items-center gap-2 text-slate-400 transition-colors hover:text-white">Scroll to explore <ArrowDown size={13} /></button>
+              <button onClick={() => scrollTo('about')} className="ml-1 flex items-center gap-2 text-slate-200 transition-colors hover:text-white">Scroll to explore <ArrowDown size={13} /></button>
             </motion.div>
           </div>
 

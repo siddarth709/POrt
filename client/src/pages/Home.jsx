@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useContent } from '../context/ContentContext';
 import CustomCursor from '../components/CustomCursor';
-import BackgroundFX from '../components/BackgroundFX';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import About from '../components/About';
@@ -118,7 +117,6 @@ export default function Home() {
     <div className="portfolio-shell relative isolate min-h-screen overflow-x-clip bg-[#050508] text-slate-100 selection:bg-cyan-500/20 selection:text-cyan-100">
       <a className="skip-link" href="#main-content">Skip to content</a>
       <CustomCursor />
-      <BackgroundFX />
       <Navbar visibility={visibility} />
 
       <main

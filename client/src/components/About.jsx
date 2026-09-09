@@ -65,7 +65,7 @@ export default function About({ data = {} }) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-                className="glass-panel h-full min-h-[22rem] rounded-2xl border border-white/[0.1] p-6 sm:p-10 flex items-center text-slate-300 text-base sm:text-lg leading-relaxed space-y-4 text-left font-light whitespace-pre-line hover:border-cyan-300/30 transition-colors duration-300 shadow-[0_20px_60px_rgba(0,0,0,0.2)]"
+                className="about-copy glass-panel h-full min-h-[22rem] rounded-2xl border border-white/[0.1] p-6 sm:p-10 flex items-center text-slate-300 text-base sm:text-lg leading-relaxed space-y-4 text-left font-light whitespace-pre-line hover:border-cyan-300/30 transition-colors duration-300 shadow-[0_20px_60px_rgba(0,0,0,0.2)]"
               >
                 {data.bio}
               </motion.div>
