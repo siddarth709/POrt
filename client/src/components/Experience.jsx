@@ -41,7 +41,9 @@ export default function Experience({ data }) {
                 transition={{ duration: 0.6, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
                 onMouseEnter={() => setHoveredId(item._id || idx)}
                 onMouseLeave={() => setHoveredId(null)}
-                className="py-12 sm:py-16 transition-colors duration-300 group cursor-default"
+                className={`py-12 sm:py-16 px-4 sm:px-8 -mx-4 sm:-mx-8 rounded-2xl transition-all duration-300 group cursor-default ${
+                  isHovered ? 'bg-white/[0.02] shadow-inner' : 'hover:bg-white/[0.01]'
+                }`}
               >
                 <div className="grid lg:grid-cols-12 gap-8 lg:gap-16 items-start">
                   {/* Left: Role, Company, Duration */}
@@ -66,10 +68,13 @@ export default function Experience({ data }) {
                         </motion.span>
                       </div>
 
-                      <div className="mt-2 flex items-center gap-3 font-mono text-xs text-slate-400 uppercase tracking-wider">
-                        {item.company && <span className="text-slate-300 font-medium">{item.company}</span>}
-                        {item.company && item.duration && <span>//</span>}
-                        {item.duration && <span>{item.duration}</span>}
+                      <div className="mt-2.5 flex items-center gap-2.5 font-mono text-xs text-slate-400 uppercase tracking-wider">
+                        {item.company && (
+                          <span className="text-slate-300 font-medium px-2 py-0.5 rounded bg-white/[0.03] border border-white/[0.08] group-hover:border-cyan-500/30 group-hover:text-cyan-300 transition-colors">
+                            {item.company}
+                          </span>
+                        )}
+                        {item.duration && <span className="text-slate-500 group-hover:text-slate-400 transition-colors">{item.duration}</span>}
                       </div>
                     </motion.div>
                   </div>
@@ -80,7 +85,7 @@ export default function Experience({ data }) {
                       <motion.p
                         animate={{ opacity: isHovered ? 1 : 0.8 }}
                         transition={{ duration: 0.25 }}
-                        className="text-base sm:text-lg text-slate-300 leading-relaxed font-light text-justify-editorial whitespace-pre-line"
+                        className="text-base sm:text-lg text-slate-300 leading-relaxed font-light text-left whitespace-pre-line border-l border-white/[0.06] group-hover:border-white/20 pl-5 transition-colors duration-300"
                       >
                         {item.description}
                       </motion.p>

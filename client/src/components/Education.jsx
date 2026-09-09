@@ -55,22 +55,28 @@ export default function Education({ data }) {
                   transition={{ duration: 0.7, delay: idx * 0.15, ease: [0.16, 1, 0.3, 1] }}
                   onMouseEnter={() => setHoveredIdx(idx)}
                   onMouseLeave={() => setHoveredIdx(null)}
-                  className="relative group cursor-default"
+                  className={`relative group cursor-default p-4 sm:p-6 -ml-4 sm:-ml-6 rounded-2xl transition-all duration-300 ${
+                    isHovered ? 'bg-white/[0.02]' : 'hover:bg-white/[0.01]'
+                  }`}
                 >
                   <div
-                    className={`absolute -left-[27px] sm:-left-[51px] top-2.5 w-2 h-2 rounded-full transition-all duration-300 ${
+                    className={`absolute -left-[11px] sm:-left-[35px] top-7 w-2 h-2 rounded-full transition-all duration-300 ${
                       isHovered
-                        ? 'bg-cyan-400 scale-150 shadow-[0_0_12px_rgba(34,211,238,0.8)]'
+                        ? 'bg-cyan-400 scale-150 shadow-[0_0_15px_rgba(34,211,238,0.9)] ring-4 ring-cyan-400/20'
                         : 'bg-white/40 group-hover:bg-white'
                     }`}
                   />
 
                   <div className="max-w-4xl">
                     <div className="flex flex-wrap items-center gap-3 font-mono text-xs text-slate-400 mb-3 tracking-wider">
-                      {item.year && <span>{item.year}</span>}
-                      {item.year && item.institution && <span>•</span>}
+                      {item.year && (
+                        <span className="px-2 py-0.5 rounded bg-white/[0.03] border border-white/[0.08] text-slate-300">
+                          {item.year}
+                        </span>
+                      )}
+                      {item.year && item.institution && <span className="text-slate-600">•</span>}
                       {item.institution && (
-                        <span className="text-slate-300 font-medium">
+                        <span className="text-slate-300 font-medium group-hover:text-cyan-300 transition-colors">
                           {item.institution}
                         </span>
                       )}
@@ -86,7 +92,7 @@ export default function Education({ data }) {
                           opacity: isHovered ? 1 : 0.8,
                         }}
                         transition={{ duration: 0.3 }}
-                        className="mt-4 pt-4 border-t border-white/[0.06] text-sm sm:text-base text-slate-400 leading-relaxed max-w-3xl text-justify-editorial font-light whitespace-pre-line"
+                        className="mt-4 pt-4 border-t border-white/[0.06] text-sm sm:text-base text-slate-400 group-hover:text-slate-300 leading-relaxed max-w-3xl text-left font-light whitespace-pre-line transition-colors duration-300"
                       >
                         <p>{item.description}</p>
                       </motion.div>

@@ -67,12 +67,12 @@ export default function Contact({ data = {}, heroSocials = [] }) {
             >
               <button
                 onClick={() => setFormOpen(!formOpen)}
-                className="group px-8 py-4 rounded-full bg-white text-[#050508] font-mono text-xs sm:text-sm font-semibold tracking-wider flex items-center gap-2 hover:bg-slate-200 transition-colors shadow-lg"
+                className="group px-8 py-4 rounded-full bg-white text-[#050508] font-mono text-xs sm:text-sm font-semibold tracking-wider flex items-center gap-2 hover:bg-slate-200 hover:shadow-[0_0_25px_rgba(255,255,255,0.25)] transition-all active:scale-[0.98]"
               >
                 <span>GET IN TOUCH</span>
                 <ArrowUpRight
                   size={16}
-                  className="transition-transform duration-250 group-hover:translate-x-1 group-hover:-translate-y-1"
+                  className="transition-transform duration-300 group-hover:translate-x-1.5 group-hover:-translate-y-1.5"
                 />
               </button>
 
@@ -80,7 +80,7 @@ export default function Contact({ data = {}, heroSocials = [] }) {
                 <a
                   href={`mailto:${data.email}`}
                   data-cursor="open"
-                  className="font-mono text-xs sm:text-sm text-slate-400 hover:text-white transition-colors"
+                  className="font-mono text-xs sm:text-sm text-slate-400 hover:text-white px-4 py-2 rounded-full border border-white/[0.08] hover:border-white/30 bg-white/[0.02] hover:bg-white/[0.06] transition-all"
                 >
                   {data.email}
                 </a>
@@ -95,13 +95,17 @@ export default function Contact({ data = {}, heroSocials = [] }) {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="lg:col-span-5 flex justify-center"
+              className="lg:col-span-5 flex justify-center group"
             >
-              <div className="w-full max-w-sm aspect-[4/3] rounded-2xl overflow-hidden glass-panel border border-white/[0.1] p-2 shadow-xl">
+              <motion.div
+                whileHover={{ y: -6, scale: 1.02 }}
+                transition={{ duration: 0.4 }}
+                className="w-full max-w-sm aspect-[4/3] rounded-2xl overflow-hidden glass-panel border border-white/[0.1] group-hover:border-white/[0.25] p-2 shadow-xl hover:shadow-[0_20px_50px_rgba(0,0,0,0.6)] transition-all duration-500"
+              >
                 <div className="w-full h-full rounded-xl overflow-hidden bg-black/40">
-                  <img src={data.image} alt="Contact" className="w-full h-full object-cover" />
+                  <img src={data.image} alt="Contact" className="w-full h-full object-cover grayscale-[15%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" />
                 </div>
-              </div>
+              </motion.div>
             </motion.div>
           )}
         </div>
@@ -118,7 +122,7 @@ export default function Contact({ data = {}, heroSocials = [] }) {
             >
               <form
                 onSubmit={handleSubmit}
-                className="glass-panel p-8 sm:p-10 rounded-2xl border border-white/[0.1] flex flex-col gap-6"
+                className="glass-panel p-8 sm:p-10 rounded-2xl border border-white/[0.1] hover:border-white/[0.2] transition-colors duration-300 flex flex-col gap-6 shadow-2xl"
               >
                 <div className="flex items-center justify-between border-b border-white/[0.06] pb-4">
                   <span className="font-mono text-xs tracking-widest text-emerald-400 uppercase">
@@ -135,7 +139,7 @@ export default function Contact({ data = {}, heroSocials = [] }) {
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                     placeholder="Your Name"
-                    className="bg-white/[0.03] border border-white/[0.08] focus:border-cyan-400 rounded-lg px-4 py-3 text-sm text-white focus:outline-none transition-colors"
+                    className="bg-white/[0.03] border border-white/[0.08] focus:border-cyan-400 focus:bg-white/[0.05] rounded-lg px-4 py-3 text-sm text-white focus:outline-none transition-all duration-200"
                   />
                 </div>
 
@@ -147,7 +151,7 @@ export default function Contact({ data = {}, heroSocials = [] }) {
                     value={form.email}
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
                     placeholder="your@email.com"
-                    className="bg-white/[0.03] border border-white/[0.08] focus:border-cyan-400 rounded-lg px-4 py-3 text-sm text-white focus:outline-none transition-colors"
+                    className="bg-white/[0.03] border border-white/[0.08] focus:border-cyan-400 focus:bg-white/[0.05] rounded-lg px-4 py-3 text-sm text-white focus:outline-none transition-all duration-200"
                   />
                 </div>
 
@@ -159,7 +163,7 @@ export default function Contact({ data = {}, heroSocials = [] }) {
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
                     placeholder="Briefly describe your project or inquiry..."
-                    className="bg-white/[0.03] border border-white/[0.08] focus:border-cyan-400 rounded-lg px-4 py-3 text-sm text-white focus:outline-none transition-colors resize-none"
+                    className="bg-white/[0.03] border border-white/[0.08] focus:border-cyan-400 focus:bg-white/[0.05] rounded-lg px-4 py-3 text-sm text-white focus:outline-none transition-all duration-200 resize-none"
                   />
                 </div>
 
@@ -167,7 +171,7 @@ export default function Contact({ data = {}, heroSocials = [] }) {
                   <button
                     type="submit"
                     disabled={status === 'sending'}
-                    className="px-6 py-3 rounded-full bg-white text-[#050508] font-mono text-xs font-semibold tracking-wider flex items-center gap-2 hover:bg-slate-200 transition-colors disabled:opacity-50"
+                    className="px-6 py-3 rounded-full bg-white text-[#050508] font-mono text-xs font-semibold tracking-wider flex items-center gap-2 hover:bg-slate-200 hover:shadow-[0_0_20px_rgba(255,255,255,0.25)] transition-all disabled:opacity-50 active:scale-[0.98]"
                   >
                     <Send size={14} />
                     <span>{status === 'sending' ? 'TRANSMITTING...' : 'SEND MESSAGE'}</span>
@@ -201,14 +205,14 @@ export default function Contact({ data = {}, heroSocials = [] }) {
                 target="_blank"
                 rel="noreferrer"
                 data-cursor="open"
-                className="group flex items-center justify-between py-4 border-b border-white/[0.06] hover:border-white/40 transition-colors"
+                className="group flex items-center justify-between py-4 px-3 rounded-xl border-b border-white/[0.06] hover:border-emerald-400/40 hover:bg-white/[0.02] transition-all duration-300"
               >
-                <span className="font-mono text-xs tracking-wider text-slate-300 group-hover:text-white uppercase">
+                <span className="font-mono text-xs tracking-wider text-slate-300 group-hover:text-emerald-300 uppercase transition-colors">
                   {social.platform}
                 </span>
                 <ArrowUpRight
                   size={14}
-                  className="text-slate-500 group-hover:text-cyan-400 transition-transform duration-250 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  className="text-slate-500 group-hover:text-emerald-400 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
                 />
               </a>
             ))}
@@ -226,7 +230,7 @@ export default function Contact({ data = {}, heroSocials = [] }) {
           <div className="flex items-center gap-4">
             {socials.map((s, idx) => (
               <React.Fragment key={idx}>
-                <a href={formatExternalUrl(s.url)} target="_blank" rel="noreferrer" className="hover:text-slate-300 transition-colors">
+                <a href={formatExternalUrl(s.url)} target="_blank" rel="noreferrer" className="hover:text-slate-200 transition-colors">
                   {s.platform}
                 </a>
                 <span>·</span>

@@ -51,18 +51,18 @@ export default function Chronicles({ data }) {
                   key={item._id || idx}
                   onMouseEnter={() => setActiveIdx(idx)}
                   onClick={() => setSelectedNote(item)}
-                  className={`py-8 sm:py-9 px-3 sm:px-4 rounded-xl cursor-pointer transition-all duration-300 group ${
+                  className={`py-8 sm:py-9 px-4 sm:px-6 rounded-2xl cursor-pointer transition-all duration-300 group ${
                     isActive
-                      ? 'bg-white/[0.03] border-l-2 border-emerald-400 pl-5'
-                      : 'hover:bg-white/[0.015] border-l-2 border-transparent'
+                      ? 'bg-white/[0.04] border-l-2 border-emerald-400 pl-6 sm:pl-8 shadow-sm'
+                      : 'hover:bg-white/[0.02] border-l-2 border-transparent hover:border-white/20'
                   }`}
                 >
                   <div className="flex items-center justify-between font-mono text-[11px] text-slate-400 tracking-wider mb-2.5">
                     <div className="flex items-center gap-2">
-                      <span className={`px-2 py-0.5 rounded-full border text-[10px] ${
+                      <span className={`px-2.5 py-0.5 rounded-full border text-[10px] transition-colors ${
                         isActive
                           ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-300'
-                          : 'border-white/10 bg-white/[0.02] text-slate-400'
+                          : 'border-white/10 bg-white/[0.02] group-hover:border-white/20 text-slate-400'
                       }`}>
                         {item.location || `LOG // ${String(idx + 1).padStart(2, '0')}`}
                       </span>
@@ -70,32 +70,32 @@ export default function Chronicles({ data }) {
 
                     <div className="flex items-center gap-3">
                       {item.image && (
-                        <span className="inline-flex items-center gap-1 text-slate-500 text-[10px]">
+                        <span className="inline-flex items-center gap-1 text-slate-500 group-hover:text-cyan-400 text-[10px] transition-colors">
                           <ImageIcon size={11} /> PHOTO
                         </span>
                       )}
-                      {item.date && <span>{item.date}</span>}
+                      {item.date && <span className="group-hover:text-slate-300 transition-colors">{item.date}</span>}
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between gap-4">
-                    <h3 className={`font-display text-xl sm:text-2xl font-semibold tracking-tight transition-colors ${
-                      isActive ? 'text-white' : 'text-slate-300 group-hover:text-white'
+                    <h3 className={`font-display text-xl sm:text-2xl font-semibold tracking-tight transition-all duration-300 ${
+                      isActive ? 'text-white translate-x-1' : 'text-slate-300 group-hover:text-white group-hover:translate-x-1'
                     }`}>
                       {item.title}
                     </h3>
                     <ArrowUpRight
                       size={18}
-                      className={`shrink-0 transition-transform duration-250 ${
+                      className={`shrink-0 transition-transform duration-300 ${
                         isActive
                           ? 'text-emerald-400 translate-x-1 -translate-y-1 opacity-100'
-                          : 'text-slate-600 opacity-40 group-hover:opacity-100 group-hover:text-slate-300'
+                          : 'text-slate-600 opacity-40 group-hover:opacity-100 group-hover:text-emerald-400 group-hover:translate-x-1 group-hover:-translate-y-1'
                       }`}
                     />
                   </div>
 
                   {item.description && (
-                    <p className="text-slate-400 text-xs sm:text-sm leading-relaxed mt-2 line-clamp-2 font-light text-justify-editorial">
+                    <p className="text-slate-400 group-hover:text-slate-300 text-xs sm:text-sm leading-relaxed mt-2.5 line-clamp-2 font-light text-left transition-colors duration-300">
                       {item.description}
                     </p>
                   )}
@@ -106,13 +106,13 @@ export default function Chronicles({ data }) {
 
           {/* Right Column: Dynamic Live Preview Terminal Card (Sticky on Desktop) */}
           <div className="lg:col-span-5 sticky top-28">
-            <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/[0.08] shadow-2xl relative overflow-hidden">
+            <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/[0.08] hover:border-white/[0.2] transition-all duration-500 shadow-2xl relative overflow-hidden group">
               <div className="flex items-center justify-between pb-4 mb-5 border-b border-white/[0.06] font-mono text-[11px] text-slate-400">
-                <span className="text-emerald-400 flex items-center gap-1.5">
-                  <BookOpen size={13} />
+                <span className="text-emerald-400 flex items-center gap-1.5 font-medium">
+                  <BookOpen size={13} className="animate-pulse" />
                   <span>PREVIEW LOG</span>
                 </span>
-                <span>{currentItem?.date || 'CHRONICLE'}</span>
+                <span className="text-slate-400">{currentItem?.date || 'CHRONICLE'}</span>
               </div>
 
               {/* Preview Image if present */}
@@ -121,12 +121,12 @@ export default function Chronicles({ data }) {
                   <img
                     src={currentItem.image}
                     alt={currentItem.title}
-                    className="w-full h-full object-cover grayscale-[15%] hover:grayscale-0 transition-all duration-300"
+                    className="w-full h-full object-cover grayscale-[15%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
                   />
                 </div>
               ) : (
                 <div className="w-full aspect-[16/10] rounded-2xl border border-white/[0.08] mb-5 bg-white/[0.02] flex flex-col items-center justify-center p-6 text-center">
-                  <Layers size={32} className="text-slate-600 mb-2" />
+                  <Layers size={32} className="text-slate-600 group-hover:text-emerald-400 mb-2 transition-colors duration-300" />
                   <span className="font-mono text-xs text-slate-400">TECHNICAL RESEARCH MEMO</span>
                 </div>
               )}
@@ -142,17 +142,17 @@ export default function Chronicles({ data }) {
               )}
 
               {currentItem?.description && (
-                <p className="text-slate-300 text-xs sm:text-sm leading-relaxed font-light text-justify-editorial line-clamp-4 mb-6">
+                <p className="text-slate-300 text-xs sm:text-sm leading-relaxed font-light text-left line-clamp-4 mb-6">
                   {currentItem.description}
                 </p>
               )}
 
               <button
                 onClick={() => setSelectedNote(currentItem)}
-                className="w-full py-3 rounded-full bg-white text-[#050508] font-mono text-xs font-semibold tracking-wider flex items-center justify-center gap-2 hover:bg-slate-200 transition-colors shadow-md"
+                className="w-full py-3.5 rounded-full bg-white text-[#050508] font-mono text-xs font-semibold tracking-wider flex items-center justify-center gap-2 hover:bg-slate-200 hover:shadow-[0_0_25px_rgba(255,255,255,0.25)] transition-all shadow-md active:scale-[0.98]"
               >
                 <span>OPEN FULL ENTRY</span>
-                <ArrowUpRight size={14} />
+                <ArrowUpRight size={14} className="transition-transform duration-250 hover:translate-x-0.5 hover:-translate-y-0.5" />
               </button>
             </div>
           </div>
@@ -180,7 +180,7 @@ export default function Chronicles({ data }) {
             >
               <button
                 onClick={() => setSelectedNote(null)}
-                className="absolute top-6 right-6 p-2 rounded-full border border-white/10 bg-white/[0.04] text-slate-300 hover:text-white transition-colors"
+                className="absolute top-6 right-6 p-2 rounded-full border border-white/10 bg-white/[0.04] text-slate-300 hover:text-white hover:bg-white/10 transition-colors"
                 aria-label="Close Note"
               >
                 <X size={18} />
@@ -208,7 +208,7 @@ export default function Chronicles({ data }) {
               )}
 
               {selectedNote.description && (
-                <div className="text-slate-300 text-base leading-relaxed whitespace-pre-line space-y-4 font-light text-justify-editorial border-t border-white/[0.08] pt-6">
+                <div className="text-slate-300 text-base leading-relaxed whitespace-pre-line space-y-4 font-light text-left border-t border-white/[0.08] pt-6">
                   {selectedNote.description}
                 </div>
               )}

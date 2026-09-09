@@ -68,25 +68,29 @@ export default function Projects({ data }) {
             const isEven = idx % 2 === 0;
 
             return (
-              <article
+              <motion.article
                 key={project._id || idx}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
                 onClick={() => setActiveProject(project)}
                 data-cursor="view"
-                className="cursor-pointer group"
+                className="cursor-pointer group relative"
               >
                 <div className={`grid lg:grid-cols-12 gap-10 lg:gap-16 items-center ${isEven ? '' : 'lg:flex-row-reverse'}`}>
                   {/* Visual Frame */}
                   <div className={`lg:col-span-7 ${isEven ? 'order-1' : 'order-1 lg:order-2'}`}>
-                    <div className="relative aspect-[16/10] sm:aspect-[16/9] rounded-2xl overflow-hidden glass-panel border border-white/[0.08] group-hover:border-white/[0.2] transition-colors duration-300 shadow-xl bg-black/40 flex items-center justify-center">
+                    <div className="relative aspect-[16/10] sm:aspect-[16/9] rounded-2xl overflow-hidden glass-panel border border-white/[0.08] group-hover:border-white/[0.25] group-hover:shadow-[0_20px_50px_rgba(0,0,0,0.6)] transition-all duration-500 bg-black/40 flex items-center justify-center">
                       {project.image ? (
                         <img
                           src={project.image}
                           alt={project.title}
-                          className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-300"
+                          className="w-full h-full object-cover grayscale-[15%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
                           loading="lazy"
                         />
                       ) : (
-                        <div className="font-mono text-xs text-slate-500 uppercase tracking-widest">
+                        <div className="font-mono text-xs text-slate-500 uppercase tracking-widest group-hover:text-slate-300 transition-colors">
                           [ SYSTEM VISUALIZATION ]
                         </div>
                       )}
@@ -101,7 +105,7 @@ export default function Projects({ data }) {
                         {project.techStack.map((tech) => (
                           <span
                             key={tech}
-                            className="font-mono text-[11px] text-slate-400 border border-white/[0.08] px-2.5 py-0.5 rounded-full bg-white/[0.02]"
+                            className="font-mono text-[11px] text-slate-400 hover:text-emerald-300 border border-white/[0.08] hover:border-emerald-500/40 px-2.5 py-0.5 rounded-full bg-white/[0.02] hover:bg-emerald-500/10 transition-all duration-200"
                           >
                             {tech}
                           </span>
@@ -109,23 +113,23 @@ export default function Projects({ data }) {
                       </div>
                     )}
 
-                    <h3 className="font-display text-2xl sm:text-3xl lg:text-4xl font-semibold text-white tracking-tight leading-snug group-hover:text-slate-200 transition-colors">
+                    <h3 className="font-display text-2xl sm:text-3xl lg:text-4xl font-semibold text-white tracking-tight leading-snug group-hover:text-cyan-200 transition-colors duration-300">
                       {project.title}
                     </h3>
 
                     {project.shortDescription && (
-                      <p className="mt-4 text-slate-400 text-sm sm:text-base leading-relaxed text-justify-editorial font-light">
+                      <p className="mt-4 text-slate-400 group-hover:text-slate-300 text-sm sm:text-base leading-relaxed text-left font-light transition-colors duration-300">
                         {project.shortDescription}
                       </p>
                     )}
 
-                    <div className="mt-6 flex items-center gap-2 font-mono text-xs text-slate-300 group-hover:text-white transition-colors">
+                    <div className="mt-6 flex items-center gap-2 font-mono text-xs text-slate-300 group-hover:text-white transition-all">
                       <span className="tracking-wider uppercase font-medium">VIEW CASE STUDY</span>
-                      <ArrowUpRight size={15} className="text-slate-400 group-hover:text-white transition-colors" />
+                      <ArrowUpRight size={15} className="text-slate-400 group-hover:text-emerald-400 transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
                     </div>
                   </div>
                 </div>
-              </article>
+              </motion.article>
             );
           })}
         </div>
@@ -188,7 +192,7 @@ export default function Projects({ data }) {
                   <h4 className="font-mono text-xs tracking-widest uppercase text-slate-400 mb-3">
                     SYSTEM OVERVIEW & DETAILS
                   </h4>
-                  <div className="text-sm sm:text-base text-slate-300 leading-relaxed font-light text-justify-editorial whitespace-pre-line space-y-4">
+                  <div className="text-sm sm:text-base text-slate-300 leading-relaxed font-light text-left whitespace-pre-line space-y-4">
                     {activeProject.details}
                   </div>
                 </div>
@@ -204,7 +208,7 @@ export default function Projects({ data }) {
                     {activeProject.techStack.map((tech) => (
                       <span
                         key={tech}
-                        className="font-mono text-xs px-3 py-1 rounded-full border border-white/[0.08] bg-white/[0.03] text-slate-200"
+                        className="font-mono text-xs px-3 py-1 rounded-full border border-white/[0.08] hover:border-emerald-400/40 bg-white/[0.03] hover:bg-emerald-500/10 text-slate-200 transition-all cursor-default"
                       >
                         {tech}
                       </span>
@@ -222,11 +226,11 @@ export default function Projects({ data }) {
                       target="_blank"
                       rel="noreferrer"
                       data-cursor="open"
-                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/20 bg-white/[0.05] hover:bg-white/10 text-white font-mono text-xs tracking-wider transition-colors"
+                      className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/20 hover:border-white/50 bg-white/[0.05] hover:bg-white/10 text-white font-mono text-xs tracking-wider transition-all"
                     >
                       <GithubIcon size={14} />
                       <span>GITHUB REPOSITORY</span>
-                      <ArrowUpRight size={14} />
+                      <ArrowUpRight size={14} className="transition-transform duration-250 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 text-slate-400 group-hover:text-white" />
                     </a>
                   )}
 
@@ -236,11 +240,11 @@ export default function Projects({ data }) {
                       target="_blank"
                       rel="noreferrer"
                       data-cursor="open"
-                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-black font-mono text-xs font-semibold tracking-wider hover:bg-slate-200 transition-colors"
+                      className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-black font-mono text-xs font-semibold tracking-wider hover:bg-slate-200 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all"
                     >
                       <ExternalLink size={14} />
                       <span>LIVE DEMO</span>
-                      <ArrowUpRight size={14} />
+                      <ArrowUpRight size={14} className="transition-transform duration-250 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                     </a>
                   )}
                 </div>
