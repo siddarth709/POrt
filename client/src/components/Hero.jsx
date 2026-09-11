@@ -1,5 +1,6 @@
-import React, { useRef } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
+import { gsap } from 'gsap';
 import { ArrowDown, ArrowUpRight, Cpu, Code2, Orbit } from 'lucide-react';
 import AeroShards from './AeroShards';
 import AnimatedHeading from './AnimatedHeading';
@@ -46,6 +47,8 @@ function MagneticButton({ children, as: Component = motion.button, onClick, clas
 
 export default function Hero({ data = {} }) {
   const containerRef = useRef(null);
+  const textLayerRef = useRef(null);
+  const portraitLayerRef = useRef(null);
 
   // Scroll driven subtle fade and scale
   const { scrollY } = useScroll();
@@ -53,17 +56,25 @@ export default function Hero({ data = {} }) {
   const heroScale = useTransform(scrollY, [0, 480], [1, 0.97]);
   const heroTranslateY = useTransform(scrollY, [0, 480], [0, 60]);
 
-  // Subtle mouse parallax
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const parallaxX = useSpring(mouseX, { stiffness: 100, damping: 30 });
-  const parallaxY = useSpring(mouseY, { stiffness: 100, damping: 30 });
-
-  const handleMouseMove = (e) => {
-    const { innerWidth, innerHeight } = window;
-    mouseX.set((e.clientX - innerWidth / 2) / innerWidth * 16);
-    mouseY.set((e.clientY - innerHeight / 2) / innerHeight * 16);
-  };
+  useLayoutEffect(() => {
+    const container = containerRef.current;
+    if (!container || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    let handleParallax;
+    const ctx = gsap.context(() => {
+      const moveText = gsap.quickTo(textLayerRef.current, 'x', { duration: 0.55, ease: 'power3.out' });
+      const movePortrait = gsap.quickTo(portraitLayerRef.current, 'x', { duration: 0.7, ease: 'power3.out' });
+      handleParallax = (event) => {
+        const center = window.innerWidth / 2;
+        moveText((event.clientX - center) * -0.018);
+        movePortrait((event.clientX - center) * 0.035);
+      };
+    }, container);
+    container.addEventListener('mousemove', handleParallax, { passive: true });
+    return () => {
+      container.removeEventListener('mousemove', handleParallax);
+      ctx.revert();
+    };
+  }, []);
 
   const scrollTo = (id) => {
     const element = document.getElementById(id);
@@ -84,10 +95,9 @@ export default function Hero({ data = {} }) {
     <section
       id="home"
       ref={containerRef}
-      onMouseMove={handleMouseMove}
       className="relative min-h-[94vh] sm:min-h-screen flex items-center justify-center pt-28 pb-16 px-5 sm:px-8 overflow-hidden"
     >
-      <div className="absolute inset-0" aria-hidden="true">
+      <div className="absolute inset-0 z-0 pointer-events-none" aria-hidden="true">
         <AeroShards
           backgroundColor="#120F17"
           shardColor="#896ABD"
@@ -133,7 +143,7 @@ export default function Hero({ data = {} }) {
           scale: heroScale,
           y: heroTranslateY,
         }}
-        className="max-w-7xl mx-auto w-full relative z-10"
+        className="max-w-7xl mx-auto w-full relative"
       >
         <div className={hasImage ? "grid lg:grid-cols-12 gap-12 lg:gap-16 items-center" : "max-w-6xl text-left"}>
           
@@ -145,7 +155,7 @@ export default function Hero({ data = {} }) {
               initial={false}
               whileHover={{ scale: 1.02, y: -1 }}
               transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="inline-flex items-center gap-2.5 px-3.5 py-2 rounded-full border border-white/[0.1] hover:border-cyan-300/40 bg-white/[0.035] hover:bg-cyan-300/[0.07] backdrop-blur-md mb-7 transition-all cursor-default shadow-sm hover:shadow-[0_0_24px_rgba(34,211,238,0.12)]"
+              className="relative z-30 inline-flex items-center gap-2.5 px-3.5 py-2 rounded-full border border-white/[0.1] hover:border-cyan-300/40 bg-white/[0.035] hover:bg-cyan-300/[0.07] backdrop-blur-md mb-7 transition-all cursor-default shadow-sm hover:shadow-[0_0_24px_rgba(34,211,238,0.12)]"
             >
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -158,8 +168,8 @@ export default function Hero({ data = {} }) {
 
             {/* BIG NAME (Headline) */}
             <motion.div
-              style={{ x: parallaxX, y: parallaxY }}
-              className="font-display font-extrabold tracking-tight text-white leading-[1.02] sm:leading-[1] mb-6 select-none group"
+              ref={textLayerRef}
+              className="relative z-10 font-display font-extrabold tracking-tight text-white leading-[1.02] sm:leading-[1] mb-6 select-none group"
             >
               <AnimatedHeading
                 as="h1"
@@ -176,7 +186,7 @@ export default function Hero({ data = {} }) {
                 initial={false}
                 whileHover={{ x: 4 }}
                 transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                className="max-w-2xl mb-9 group"
+                className="relative z-30 max-w-2xl mb-9 group"
               >
                 <p className="text-base sm:text-lg md:text-xl text-slate-100 font-normal leading-relaxed text-left whitespace-pre-line border-l-2 border-cyan-300/60 group-hover:border-cyan-300 pl-4 py-0.5 transition-colors duration-300 [text-shadow:0_2px_18px_rgba(18,15,23,0.9)]">
                   {taglineText}
@@ -187,7 +197,7 @@ export default function Hero({ data = {} }) {
             {/* Action Buttons */}
             <motion.div
               initial={false}
-              className="flex flex-wrap items-center gap-3 sm:gap-4"
+              className="relative z-30 flex flex-wrap items-center gap-3 sm:gap-4"
             >
               <MagneticButton
                 as={motion.a}
@@ -216,7 +226,7 @@ export default function Hero({ data = {} }) {
             </motion.div>
             <motion.div
               initial={false}
-              className="mt-12 flex flex-wrap items-center gap-x-6 gap-y-3 font-mono text-[10px] uppercase tracking-[0.14em] text-slate-300 [text-shadow:0_2px_14px_rgba(18,15,23,0.95)]"
+              className="relative z-30 mt-12 flex flex-wrap items-center gap-x-6 gap-y-3 font-mono text-[10px] uppercase tracking-[0.14em] text-slate-300 [text-shadow:0_2px_14px_rgba(18,15,23,0.95)]"
             >
               <span className="flex items-center gap-2"><Orbit size={13} className="text-cyan-300" /> AI systems</span>
               <span className="h-1 w-1 rounded-full bg-slate-600" />
@@ -229,7 +239,8 @@ export default function Hero({ data = {} }) {
           {hasImage && (
             <motion.div
               initial={false}
-              className="lg:col-span-5 flex justify-center group"
+              ref={portraitLayerRef}
+              className="relative z-20 lg:col-span-5 flex justify-center group"
             >
               <motion.div
                 whileHover={{ y: -6, scale: 1.01 }}
