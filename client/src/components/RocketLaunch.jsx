@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Cloud, Rocket } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 
-export default function RocketLaunch() {
+export default function RocketLaunch({ className = '' }) {
   const [launched, setLaunched] = useState(false);
   const reducedMotion = useReducedMotion();
 
@@ -14,12 +14,12 @@ export default function RocketLaunch() {
   };
 
   return (
-    <div className="rocket-launch-dock">
+    <div className={`rocket-launch-dock ${className}`}>
       <motion.button
         type="button"
         onClick={launch}
         disabled={launched}
-        className="education-launch-button interactive-hit"
+        className="education-launch-button rocket-launch-button interactive-hit"
         whileHover={launched ? undefined : { y: -3, scale: 1.03 }}
         whileTap={launched ? undefined : { scale: .97 }}
         aria-label="Launch back to the hero portrait"
@@ -34,8 +34,8 @@ export default function RocketLaunch() {
           <motion.div
             className="rocket-flight__vehicle"
             initial={{ x: 0, y: 0, rotate: 0, opacity: 1 }}
-            animate={{ x: [0, -72, 58, 0, 0], y: [0, '-20vh', '-48vh', '-78vh', '-125vh'], rotate: [0, -8, 8, 0, 0], opacity: [1, 1, 1, 1, 0] }}
-            transition={{ duration: 3.2, ease: [0.16, 1, 0.3, 1], times: [0, .18, .46, .72, 1] }}
+            animate={{ x: 0, y: [0, '-24vh', '-55vh', '-90vh', '-125vh'], rotate: 0, opacity: [1, 1, 1, 1, 0] }}
+            transition={{ duration: 3.2, ease: [0.16, 1, 0.3, 1], times: [0, .2, .48, .74, 1] }}
             onAnimationComplete={() => setLaunched(false)}
           >
             <span className="rocket-flight__flame" />

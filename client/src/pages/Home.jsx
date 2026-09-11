@@ -11,7 +11,6 @@ import Chronicles from '../components/Chronicles';
 import Contact from '../components/Contact';
 import GridMotion from '../components/GridMotion';
 import ScrollScene3D from '../components/ScrollScene3D';
-import RocketLaunch from '../components/RocketLaunch';
 
 export default function Home() {
   const { content } = useContent();
@@ -141,7 +140,6 @@ export default function Home() {
         {visibility.chronicles && <Chronicles data={content?.chronicles} />}
         {content?.gridMotion?.visible !== false && <GridMotion items={visualItems} />}
         <Contact data={content?.contact} heroSocials={content?.hero?.socials} />
-        <RocketLaunch />
       </main>
     </div>
   );

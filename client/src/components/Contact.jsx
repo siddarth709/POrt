@@ -4,6 +4,7 @@ import { ArrowUpRight, Send, CheckCircle2, AlertCircle } from 'lucide-react';
 import api from '../api/axios';
 import { formatExternalUrl } from '../utils/url';
 import GradientWaves from './GradientWaves';
+import RocketLaunch from './RocketLaunch';
 
 export default function Contact({ data = {}, heroSocials = [] }) {
   const [formOpen, setFormOpen] = useState(false);
@@ -225,22 +226,24 @@ export default function Contact({ data = {}, heroSocials = [] }) {
         {socials.length > 0 && (
           <div className="border-t border-white/[0.08] pt-12 grid sm:grid-cols-2 md:grid-cols-4 gap-6">
             {socials.map((social, idx) => (
-              <a
-                key={idx}
-                href={formatExternalUrl(social.url)}
-                target="_blank"
-                rel="noreferrer"
-                data-cursor="open"
-                className="group flex items-center justify-between py-4 px-3 rounded-xl border-b border-white/[0.06] hover:border-emerald-400/40 hover:bg-white/[0.02] transition-all duration-300"
-              >
-                <span className="font-mono text-xs tracking-wider text-slate-300 group-hover:text-emerald-300 uppercase transition-colors">
-                  {social.platform}
-                </span>
-                <ArrowUpRight
-                  size={14}
-                  className="text-slate-500 group-hover:text-emerald-400 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
-                />
-              </a>
+              <React.Fragment key={idx}>
+                <a
+                  href={formatExternalUrl(social.url)}
+                  target="_blank"
+                  rel="noreferrer"
+                  data-cursor="open"
+                  className="group flex items-center justify-between py-4 px-3 rounded-xl border-b border-white/[0.06] hover:border-emerald-400/40 hover:bg-white/[0.02] transition-all duration-300"
+                >
+                  <span className="font-mono text-xs tracking-wider text-slate-300 group-hover:text-emerald-300 uppercase transition-colors">
+                    {social.platform}
+                  </span>
+                  <ArrowUpRight
+                    size={14}
+                    className="text-slate-500 group-hover:text-emerald-400 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
+                  />
+                </a>
+                {social.platform?.toLowerCase().includes('linkedin') && <RocketLaunch className="contact-rocket-launch" />}
+              </React.Fragment>
             ))}
           </div>
         )}
