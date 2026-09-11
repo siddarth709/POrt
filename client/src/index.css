@@ -460,6 +460,28 @@ main > section:not(#home) {
 }
 .contact-cta:hover::after { animation: cta-sheen .62s cubic-bezier(.16,1,.3,1); }
 
+.contact-connect-illustration {
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  width: min(100%, 24rem);
+  margin-top: 2rem;
+}
+
+.contact-connect-illustration img {
+  width: 8.5rem;
+  height: 8.5rem;
+  object-fit: contain;
+  filter: drop-shadow(0 16px 28px rgba(0, 0, 0, .34));
+}
+
+.contact-connect-illustration figcaption {
+  padding-bottom: .8rem;
+  color: rgba(148, 163, 184, .68);
+  font: .55rem/1.4 'JetBrains Mono', monospace;
+  letter-spacing: .14em;
+}
+
 @keyframes cta-sheen {
   0% { opacity: 0; transform: translateX(-110%); }
   18% { opacity: .7; }

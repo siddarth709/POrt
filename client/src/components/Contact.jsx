@@ -113,6 +113,21 @@ export default function Contact({ data = {}, heroSocials = [] }) {
                 </a>
               )}
             </motion.div>
+
+            <motion.figure
+              initial={{ opacity: 0, y: 18, scale: .96 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.7, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="contact-connect-illustration"
+              aria-label="Developer illustration"
+            >
+              <img
+                src="/doodle-color-680-avatar-man-it-developer-hover-pinch.gif"
+                alt="Animated developer illustration"
+              />
+              <figcaption>READY TO BUILD // LET'S CONNECT</figcaption>
+            </motion.figure>
           </div>
 
           {/* Optional Contact Image Column */}
