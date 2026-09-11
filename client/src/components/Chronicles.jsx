@@ -14,10 +14,10 @@ export default function Chronicles({ data }) {
   const chronicles = data.items;
 
   return (
-    <section id="chronicles" className="relative py-28 sm:py-36 px-5 sm:px-8 border-t border-white/[0.04]">
-      <div className="max-w-7xl mx-auto">
+    <section id="chronicles" className="relative py-20 sm:py-32 px-5 sm:px-8 border-t border-white/[0.04] w-full min-h-0 h-auto overflow-visible">
+      <div className="max-w-7xl mx-auto w-full">
         {/* Section Heading */}
-        <div className="section-heading mb-14 sm:mb-16 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div className="section-heading mb-12 sm:mb-16 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
@@ -48,7 +48,7 @@ export default function Chronicles({ data }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-[#050508]/95 backdrop-blur-xl flex items-center justify-center p-6 sm:p-10"
+            className="fixed inset-0 z-[100] bg-[#050508]/95 backdrop-blur-xl flex items-center justify-center p-4 sm:p-8"
             onClick={() => setSelectedNote(null)}
           >
             <motion.div
@@ -57,7 +57,7 @@ export default function Chronicles({ data }) {
               exit={{ opacity: 0, scale: 0.96, y: 20 }}
               transition={{ duration: 0.25 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-2xl max-h-[88vh] overflow-y-auto glass-panel rounded-2xl border border-white/[0.12] p-6 sm:p-10 shadow-2xl"
+              className="relative w-full max-w-3xl max-h-[88vh] overflow-y-auto glass-panel rounded-2xl border border-white/[0.12] p-6 sm:p-10 shadow-2xl"
             >
               <button
                 onClick={() => setSelectedNote(null)}
@@ -83,8 +83,8 @@ export default function Chronicles({ data }) {
               </h3>
 
               {selectedNote.image && (
-                <div className="w-full max-h-[280px] rounded-xl overflow-hidden border border-white/10 mb-6 bg-black/40">
-                  <img src={selectedNote.image} alt={selectedNote.title} className="w-full h-full object-cover" />
+                <div className="w-full max-h-[420px] rounded-xl overflow-hidden border border-white/10 mb-6 bg-black/60 flex items-center justify-center p-2">
+                  <img src={selectedNote.image} alt={selectedNote.title} className="w-full h-full max-h-[400px] object-contain rounded-lg" />
                 </div>
               )}
 
