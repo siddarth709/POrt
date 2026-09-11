@@ -19,6 +19,8 @@ export default function About({ data = {} }) {
   });
   const orbitRotate = useTransform(scrollYProgress, [0, 1], [-18, 22]);
   const orbitY = useTransform(scrollYProgress, [0, 1], [42, -42]);
+  const orbitTiltX = useTransform(mouseY, [-16, 16], [7, -7]);
+  const orbitTiltY = useTransform(mouseX, [-16, 16], [-9, 9]);
   const signalScale = useTransform(scrollYProgress, [0.08, 0.5, 0.92], [0.12, 1, 0.12]);
 
   const handleMouseMove = (e) => {
@@ -144,8 +146,8 @@ export default function About({ data = {} }) {
             className="flex items-center justify-center relative group"
           >
             <motion.div
-              className="about-orbit pointer-events-none absolute inset-[8%] z-0"
-              style={reducedMotion ? undefined : { rotate: orbitRotate, y: orbitY }}
+              className="about-orbit pointer-events-none absolute inset-[8%] z-20"
+              style={reducedMotion ? undefined : { rotate: orbitRotate, rotateX: orbitTiltX, rotateY: orbitTiltY, y: orbitY }}
               aria-hidden="true"
             >
               <span className="about-orbit__core" />
