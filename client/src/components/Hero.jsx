@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useRef } from 'react';
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
 import { gsap } from 'gsap';
-import { ArrowDown, ArrowUpRight, Cpu, Code2, Orbit } from 'lucide-react';
+import { ArrowDown, ArrowUpRight, Orbit } from 'lucide-react';
 import AeroShards from './AeroShards';
 import AnimatedHeading from './AnimatedHeading';
 import { formatExternalUrl } from '../utils/url';
@@ -256,28 +256,6 @@ export default function Hero({ data = {} }) {
                     className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-[1.02]"
                   />
 
-                  {/* Badges */}
-                  <motion.div
-                    initial={{ opacity: 0, y: -12, scale: 0.9 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    transition={{ duration: 0.65, delay: 0.95, ease: [0.16, 1, 0.3, 1] }}
-                    whileHover={{ scale: 1.08 }}
-                    className="hero-image-tag hero-image-tag--ai absolute top-4 right-4 px-3 py-1 rounded-full glass-panel border border-white/10 hover:border-cyan-400/40 font-mono text-[10px] text-slate-300 flex items-center gap-1.5 shadow-md cursor-default transition-all"
-                  >
-                    <Cpu size={12} className="text-cyan-400 animate-pulse" />
-                    <span>AI / ML</span>
-                  </motion.div>
-
-                  <motion.div
-                    initial={{ opacity: 0, y: 12, scale: 0.9 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    transition={{ duration: 0.65, delay: 1.1, ease: [0.16, 1, 0.3, 1] }}
-                    whileHover={{ scale: 1.08 }}
-                    className="hero-image-tag hero-image-tag--systems absolute bottom-4 left-4 px-3 py-1 rounded-full glass-panel border border-white/10 hover:border-emerald-400/40 font-mono text-[10px] text-slate-300 flex items-center gap-1.5 shadow-md cursor-default transition-all"
-                  >
-                    <Code2 size={12} className="text-emerald-400 animate-pulse" />
-                    <span>SYSTEMS</span>
-                  </motion.div>
                 </div>
               </motion.div>
             </motion.div>

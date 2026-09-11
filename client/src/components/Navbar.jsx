@@ -83,13 +83,13 @@ export default function Navbar({ visibility = {} }) {
             <span className="grid h-8 w-8 place-items-center rounded-full border border-white/[0.12] bg-white/[0.04] text-cyan-200 transition-all duration-300 group-hover:border-cyan-300/40 group-hover:bg-cyan-300/10 group-hover:rotate-12">
               <Sparkles size={14} aria-hidden="true" />
             </span>
-            <span className="font-display font-bold text-sm sm:text-base tracking-[0.16em] uppercase text-white group-hover:text-white transition-colors">
+            <span className="navbar-brand-name font-display font-semibold text-sm sm:text-base tracking-[0.16em] uppercase text-white group-hover:text-white transition-colors">
               NS SIDDARTH
             </span>
           </motion.button>
 
           {/* Desktop Navigation */}
-          <nav className="hidden xl:flex items-center gap-1 rounded-full border border-white/[0.07] bg-white/[0.025] p-1.5 backdrop-blur-md">
+          <nav className="navbar-desktop-nav hidden xl:flex items-center gap-1 rounded-full border border-white/[0.07] bg-white/[0.025] p-1.5 backdrop-blur-md">
             {links.map((link, idx) => {
               const isActive = activeSection === link.id;
               return (
