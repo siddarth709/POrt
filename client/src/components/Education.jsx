@@ -1,5 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 export default function Education({ data }) {
   const containerRef = useRef(null);
@@ -10,6 +12,31 @@ export default function Education({ data }) {
     offset: ['start 75%', 'end 70%'],
   });
   const lineHeight = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
+
+  useLayoutEffect(() => {
+    if (!containerRef.current || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    gsap.registerPlugin(ScrollTrigger);
+    const ctx = gsap.context(() => {
+      gsap.utils.toArray('.timeline-card').forEach((card) => {
+        gsap.fromTo(card,
+          { rotationX: -35, z: -250, opacity: 0, transformPerspective: 1000 },
+          {
+            rotationX: 0,
+            z: 0,
+            opacity: 1,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: card,
+              start: 'top 88%',
+              end: 'top 42%',
+              scrub: 1.2,
+            },
+          }
+        );
+      });
+    }, containerRef);
+    return () => ctx.revert();
+  }, []);
 
   // Nothing hardcoded: Render strictly what is in data.items from the dashboard
   if (!data || data.visible === false || !data.items || data.items.length === 0) {
@@ -71,7 +98,7 @@ export default function Education({ data }) {
                     />
                   </div>
 
-                  <div className="education-timeline__card max-w-4xl">
+                  <div className="education-timeline__card timeline-card timeline-box max-w-4xl">
                     <div className="flex flex-wrap items-center gap-3 font-mono text-xs text-slate-400 mb-4 tracking-wider">
                       {item.logo && (
                         <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-cyan-300/20 bg-white p-2 shadow-[0_0_20px_rgba(103,232,249,0.12)]">

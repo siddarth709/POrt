@@ -305,6 +305,15 @@ main > section:not(#home) {
 }
 
 .experience-row { position: relative; }
+.experience-row,
+.experience-row > div,
+.timeline-box,
+.education-timeline__item {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+}
 .experience-row::before {
   content: '';
   position: absolute;

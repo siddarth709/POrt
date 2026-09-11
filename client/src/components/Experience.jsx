@@ -1,9 +1,37 @@
-import React, { useState } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 export default function Experience({ data }) {
   const [hoveredId, setHoveredId] = useState(null);
+  const sectionRef = useRef(null);
+
+  useLayoutEffect(() => {
+    if (!sectionRef.current || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    gsap.registerPlugin(ScrollTrigger);
+    const ctx = gsap.context(() => {
+      gsap.utils.toArray('.experience-item').forEach((item) => {
+        gsap.fromTo(item,
+          { rotationX: -35, z: -250, opacity: 0, transformPerspective: 1000 },
+          {
+            rotationX: 0,
+            z: 0,
+            opacity: 1,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: item,
+              start: 'top 88%',
+              end: 'top 42%',
+              scrub: 1.2,
+            },
+          }
+        );
+      });
+    }, sectionRef);
+    return () => ctx.revert();
+  }, []);
 
   // Nothing hardcoded: Render strictly what is in data.items from the dashboard
   if (!data || data.visible === false || !data.items || data.items.length === 0) {
@@ -13,7 +41,7 @@ export default function Experience({ data }) {
   const items = data.items;
 
   return (
-    <section id="experience" className="relative py-28 sm:py-36 px-5 sm:px-8 border-t border-white/[0.04]">
+    <section id="experience" ref={sectionRef} className="relative py-28 sm:py-36 px-5 sm:px-8 border-t border-white/[0.04]">
       <div className="max-w-7xl mx-auto">
         {/* Section Heading */}
         <div className="section-heading mb-14 sm:mb-16">
@@ -41,7 +69,7 @@ export default function Experience({ data }) {
                 transition={{ duration: 0.6, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
                 onMouseEnter={() => setHoveredId(item._id || idx)}
                 onMouseLeave={() => setHoveredId(null)}
-                className={`experience-row py-10 sm:py-14 px-4 sm:px-8 -mx-4 sm:-mx-8 rounded-2xl transition-all duration-300 group cursor-default ${
+                className={`experience-row experience-item py-10 sm:py-14 px-4 sm:px-8 -mx-4 sm:-mx-8 rounded-2xl transition-all duration-300 group cursor-default ${
                   isHovered ? 'bg-white/[0.02] shadow-inner' : 'hover:bg-white/[0.01]'
                 }`}
               >
