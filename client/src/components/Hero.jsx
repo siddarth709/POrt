@@ -119,20 +119,6 @@ export default function Hero({ data = {} }) {
           holdToGather={true}
         />
       </div>
-      <div className="hero-floating-system pointer-events-none absolute inset-0 z-[2] hidden md:block" aria-hidden="true">
-        <div className="hero-floating-node hero-floating-node--ai">
-          <span className="hero-floating-node__dot" />
-          <span className="hero-floating-node__line" />
-          <span className="hero-floating-node__label">AI / ML</span>
-          <span className="hero-floating-node__meta">MODEL LAYER</span>
-        </div>
-        <div className="hero-floating-node hero-floating-node--systems">
-          <span className="hero-floating-node__dot" />
-          <span className="hero-floating-node__line" />
-          <span className="hero-floating-node__label">SYSTEMS</span>
-          <span className="hero-floating-node__meta">RUNTIME CORE</span>
-        </div>
-      </div>
       <div
         className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-r from-[#120F17]/95 via-[#120F17]/78 to-[#120F17]/12"
         aria-hidden="true"
@@ -261,7 +247,7 @@ export default function Hero({ data = {} }) {
                   {/* Badges */}
                   <motion.div
                     whileHover={{ scale: 1.08 }}
-                    className="absolute top-4 right-4 px-3 py-1 rounded-full glass-panel border border-white/10 hover:border-cyan-400/40 font-mono text-[10px] text-slate-300 flex items-center gap-1.5 shadow-md cursor-default transition-all"
+                    className="hero-image-tag hero-image-tag--ai absolute top-4 right-4 px-3 py-1 rounded-full glass-panel border border-white/10 hover:border-cyan-400/40 font-mono text-[10px] text-slate-300 flex items-center gap-1.5 shadow-md cursor-default transition-all"
                   >
                     <Cpu size={12} className="text-cyan-400 animate-pulse" />
                     <span>AI / ML</span>
@@ -269,7 +255,7 @@ export default function Hero({ data = {} }) {
 
                   <motion.div
                     whileHover={{ scale: 1.08 }}
-                    className="absolute bottom-4 left-4 px-3 py-1 rounded-full glass-panel border border-white/10 hover:border-emerald-400/40 font-mono text-[10px] text-slate-300 flex items-center gap-1.5 shadow-md cursor-default transition-all"
+                    className="hero-image-tag hero-image-tag--systems absolute bottom-4 left-4 px-3 py-1 rounded-full glass-panel border border-white/10 hover:border-emerald-400/40 font-mono text-[10px] text-slate-300 flex items-center gap-1.5 shadow-md cursor-default transition-all"
                   >
                     <Code2 size={12} className="text-emerald-400 animate-pulse" />
                     <span>SYSTEMS</span>
