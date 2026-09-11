@@ -20,53 +20,38 @@ export default function GridMotion({ items = [] }) {
       <div className="relative z-10 max-w-7xl mx-auto w-full">
         {/* Header — Section Badge & Clean Title */}
         <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 backdrop-blur-md mb-3"
-          >
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 backdrop-blur-md mb-3">
             <Sparkles size={14} className="text-indigo-400" />
             <span className="font-mono text-xs text-indigo-300 uppercase tracking-widest">Visual Archive</span>
-          </motion.div>
+          </div>
 
-          <motion.h2
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-3xl sm:text-5xl font-black font-display tracking-tight text-white uppercase"
-          >
+          <h2 className="text-3xl sm:text-5xl font-black font-display tracking-tight text-white uppercase">
             Visual <span className="bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400 bg-clip-text text-transparent">Collage</span>
-          </motion.h2>
+          </h2>
         </div>
 
-        {/* ── Masonry Collage Layout (No Image Labels) ── */}
-        <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 sm:gap-6 space-y-4 sm:space-y-6">
+        {/* ── Stable Fixed-Grid Collage (No Position Jumps, No Reflow Glitches) ── */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
           {validItems.map((item, index) => (
-            <motion.div
+            <div
               key={item._id || `${item.image}-${index}`}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.05 }}
               onClick={() => setSelectedItem(item)}
-              className="group relative rounded-2xl border border-white/10 bg-slate-900/40 backdrop-blur-md overflow-hidden cursor-pointer break-inside-avoid shadow-lg hover:border-indigo-500/60 hover:shadow-[0_12px_40px_rgba(99,102,241,0.25)] transition-all duration-500 hover:-translate-y-1"
+              className="group relative w-full aspect-[4/3] rounded-2xl border border-white/10 bg-slate-900/50 overflow-hidden cursor-pointer shadow-lg hover:border-indigo-500/60 hover:shadow-[0_12px_40px_rgba(99,102,241,0.25)] transition-all duration-300"
             >
               <img
                 src={item.image}
                 alt="Collage item"
-                className="w-full h-auto object-cover group-hover:scale-[1.03] transition-transform duration-700 ease-out"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                 loading="lazy"
               />
 
-              {/* Hover Zoom Overlay — No Text Labels */}
+              {/* Hover Overlay */}
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center pointer-events-none">
-                <span className="p-3 rounded-full bg-indigo-600/90 text-white shadow-xl backdrop-blur-md scale-95 group-hover:scale-100 transition-transform duration-300">
+                <span className="p-3 rounded-full bg-indigo-600/90 text-white shadow-xl backdrop-blur-md scale-90 group-hover:scale-100 transition-transform duration-300">
                   <ZoomIn size={18} />
                 </span>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

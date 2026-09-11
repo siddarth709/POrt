@@ -57,7 +57,7 @@ export default function Home() {
         if (!entry.isIntersecting || entry.target.dataset.revealed === 'true') return;
         if (document.documentElement.classList.contains('rocket-launching')) return;
         entry.target.dataset.revealed = 'true';
-        if (entry.target.id === 'home') return;
+        if (entry.target.id === 'home' || entry.target.id === 'grid-motion') return;
         const index = sections.indexOf(entry.target);
         const offset = index % 2 === 0 ? 32 : -32;
         if (reducedMotion) return;
