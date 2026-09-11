@@ -358,6 +358,53 @@ main > section:not(#home) {
 }
 .about-copy:hover::after { transform: scaleY(1); opacity: .9; }
 
+.education-timeline { padding: 1rem 0 0; }
+.education-timeline__track,
+.education-timeline__progress {
+  position: absolute;
+  top: 1.5rem;
+  bottom: 1.5rem;
+  left: 50%;
+  width: 1px;
+  transform: translateX(-50%);
+}
+.education-timeline__track { background: linear-gradient(to bottom, transparent, rgba(148,163,184,.28) 8%, rgba(148,163,184,.12) 92%, transparent); }
+.education-timeline__progress { z-index: 1; width: 2px; transform-origin: top; background: linear-gradient(to bottom, #34d399, #67e8f9 50%, #818cf8); box-shadow: 0 0 18px rgba(103,232,249,.65); }
+.education-timeline__item { display: grid; grid-template-columns: minmax(0, 1fr) 2.5rem minmax(0, 1fr); align-items: start; min-height: 9rem; }
+.education-timeline__item .education-timeline__card { grid-column: 1; grid-row: 1; justify-self: end; width: min(100%, 34rem); margin-right: 2.5rem; }
+.education-timeline__item--reverse .education-timeline__card { grid-column: 3; justify-self: start; margin-right: 0; margin-left: 2.5rem; }
+.education-timeline__node { grid-column: 2; grid-row: 1; z-index: 2; display: flex; justify-content: center; padding-top: 1.3rem; }
+.education-timeline__dot { display: block; width: .8rem; height: .8rem; border: 2px solid #050508; border-radius: 50%; box-shadow: 0 0 0 1px rgba(148,163,184,.42); }
+.education-timeline__node--active .education-timeline__dot { transform: scale(1.35); box-shadow: 0 0 0 5px rgba(34,211,238,.12), 0 0 18px rgba(34,211,238,.75); }
+.education-timeline__card { padding: 1.25rem 1.35rem; border: 1px solid rgba(255,255,255,.08); border-radius: 1rem; background: linear-gradient(135deg, rgba(255,255,255,.045), rgba(255,255,255,.012)); transition: border-color .35s ease, transform .35s cubic-bezier(.16,1,.3,1), background .35s ease, box-shadow .35s ease; }
+.education-timeline__item:hover .education-timeline__card { border-color: rgba(103,232,249,.35); background: linear-gradient(135deg, rgba(103,232,249,.1), rgba(255,255,255,.018)); transform: translateY(-4px); box-shadow: 0 18px 45px rgba(0,0,0,.22), 0 0 24px rgba(103,232,249,.06); }
+.education-launchpad { position: relative; display: flex; flex-direction: column; align-items: center; gap: .7rem; margin: 3rem auto 0; padding-top: 1.5rem; }
+.education-launchpad__signal { width: 1px; height: 2.5rem; background: linear-gradient(to bottom, rgba(103,232,249,.7), transparent); }
+.education-launch-button { display: inline-flex; align-items: center; gap: .65rem; padding: .8rem 1.1rem; border: 1px solid rgba(103,232,249,.35); border-radius: 999px; background: rgba(7,18,28,.72); color: #cffafe; font: 600 .7rem/1 'JetBrains Mono', monospace; letter-spacing: .12em; box-shadow: 0 0 24px rgba(34,211,238,.12); }
+.education-launch-button:hover { border-color: rgba(165,243,252,.8); background: rgba(8,35,48,.9); box-shadow: 0 0 32px rgba(34,211,238,.24); }
+.education-launch-button:disabled { cursor: wait; opacity: .65; }
+.education-launchpad__caption { color: rgba(148,163,184,.6); font: .55rem/1 'JetBrains Mono', monospace; letter-spacing: .16em; }
+.rocket-flight { position: fixed; inset: 0; z-index: 80; pointer-events: none; overflow: hidden; }
+.rocket-flight__vehicle { position: absolute; left: 50%; bottom: 4.5rem; display: flex; flex-direction: column; align-items: center; color: #a5f3fc; filter: drop-shadow(0 0 18px rgba(34,211,238,.8)); transform: translateX(-50%); }
+.rocket-flight__flame { width: 1rem; height: 2.8rem; margin-top: -.35rem; border-radius: 50% 50% 60% 60%; background: linear-gradient(#fef08a, #fb923c 48%, transparent); filter: blur(2px); animation: rocket-flame .18s ease-in-out infinite alternate; }
+.rocket-flight__cloud { position: absolute; left: 50%; bottom: 12rem; color: rgba(226,232,240,.55); filter: blur(1px) drop-shadow(0 0 16px rgba(255,255,255,.18)); }
+.rocket-flight__cloud--1 { margin-left: -6rem; }
+.rocket-flight__cloud--2 { margin-left: 1rem; bottom: 18rem; }
+.rocket-flight__cloud--3 { margin-left: -12rem; bottom: 25rem; }
+@keyframes rocket-flame { to { transform: scaleY(1.25) scaleX(.82); opacity: .72; } }
+
+@media (max-width: 767px) {
+  .education-timeline { padding-left: 1rem; }
+  .education-timeline__track, .education-timeline__progress { left: .25rem; transform: none; }
+  .education-timeline__item, .education-timeline__item--reverse { display: block; min-height: 0; padding-left: 1.5rem; }
+  .education-timeline__item .education-timeline__card, .education-timeline__item--reverse .education-timeline__card { width: 100%; margin: 0; }
+  .education-timeline__node { position: absolute; left: -.1rem; top: 0; padding-top: 1.3rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rocket-flight__flame { animation: none; }
+}
+
 .about-scroll-rail {
   background: linear-gradient(to bottom, transparent, rgba(103, 232, 249, .9) 18%, rgba(167, 139, 250, .65) 82%, transparent);
   box-shadow: 0 0 14px rgba(103, 232, 249, .45);

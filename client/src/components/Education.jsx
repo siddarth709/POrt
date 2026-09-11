@@ -1,9 +1,12 @@
 import React, { useRef, useState } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { Cloud, Rocket } from 'lucide-react';
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 
 export default function Education({ data }) {
   const containerRef = useRef(null);
   const [hoveredIdx, setHoveredIdx] = useState(null);
+  const [launched, setLaunched] = useState(false);
+  const reducedMotion = useReducedMotion();
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -17,6 +20,12 @@ export default function Education({ data }) {
   }
 
   const items = data.items;
+
+  const launchRocket = () => {
+    if (launched) return;
+    setLaunched(true);
+    window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' });
+  };
 
   return (
     <section id="education" ref={containerRef} className="relative py-28 sm:py-36 px-5 sm:px-8 border-t border-white/[0.04]">
@@ -34,16 +43,16 @@ export default function Education({ data }) {
           </motion.h2>
         </div>
 
-        {/* Editorial Vertical Layout with Drawing Vertical Line */}
-        <div className="relative pl-6 sm:pl-12">
-          <div className="absolute left-0 top-3 bottom-3 w-[1px] bg-white/[0.08]" />
+        {/* Milestone path keeps each education record easy to scan. */}
+        <div className="education-timeline relative">
+          <div className="education-timeline__track" />
 
           <motion.div
             style={{ height: lineHeight }}
-            className="absolute left-0 top-3 w-[1.5px] bg-gradient-to-b from-emerald-400 via-cyan-400 to-sky-400 origin-top"
+            className="education-timeline__progress"
           />
 
-          <div className="flex flex-col gap-20">
+          <div className="flex flex-col gap-10 sm:gap-14">
             {items.map((item, idx) => {
               const isHovered = hoveredIdx === idx;
               return (
@@ -55,20 +64,24 @@ export default function Education({ data }) {
                   transition={{ duration: 0.7, delay: idx * 0.15, ease: [0.16, 1, 0.3, 1] }}
                   onMouseEnter={() => setHoveredIdx(idx)}
                   onMouseLeave={() => setHoveredIdx(null)}
-                  className={`relative group cursor-default p-4 sm:p-6 -ml-4 sm:-ml-6 rounded-2xl transition-all duration-300 ${
+                  className={`education-timeline__item relative group cursor-default p-4 sm:p-6 rounded-2xl transition-all duration-300 ${
+                    idx % 2 ? 'education-timeline__item--reverse' : ''
+                  } ${
                     isHovered ? 'bg-white/[0.02]' : 'hover:bg-white/[0.01]'
                   }`}
                 >
-                  <div
-                    className={`absolute -left-[11px] sm:-left-[35px] top-7 w-2 h-2 rounded-full transition-all duration-300 ${
+                  <div className={`education-timeline__node ${isHovered ? 'education-timeline__node--active' : ''}`}>
+                    <span
+                      className={`education-timeline__dot transition-all duration-300 ${
                       isHovered
-                        ? 'bg-cyan-400 scale-150 shadow-[0_0_15px_rgba(34,211,238,0.9)] ring-4 ring-cyan-400/20'
-                        : 'bg-white/40 group-hover:bg-white'
-                    }`}
-                  />
+                        ? 'bg-cyan-300 shadow-[0_0_18px_rgba(34,211,238,0.9)]'
+                        : 'bg-slate-500 group-hover:bg-white'
+                      }`}
+                    />
+                  </div>
 
-                  <div className="max-w-4xl">
-                    <div className="flex flex-wrap items-center gap-3 font-mono text-xs text-slate-400 mb-3 tracking-wider">
+                  <div className="education-timeline__card max-w-4xl">
+                    <div className="flex flex-wrap items-center gap-3 font-mono text-xs text-slate-400 mb-4 tracking-wider">
                       {item.logo && (
                         <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-cyan-300/20 bg-white p-2 shadow-[0_0_20px_rgba(103,232,249,0.12)]">
                           <img src={item.logo} alt={`${item.institution || 'Institution'} logo`} className="h-full w-full object-contain" loading="lazy" />
@@ -108,6 +121,49 @@ export default function Education({ data }) {
             })}
           </div>
         </div>
+
+        <div className="education-launchpad">
+          <div className="education-launchpad__signal" aria-hidden="true" />
+          <motion.button
+            type="button"
+            onClick={launchRocket}
+            disabled={launched}
+            className="education-launch-button interactive-hit"
+            whileHover={launched ? undefined : { y: -3, scale: 1.03 }}
+            whileTap={launched ? undefined : { scale: .97 }}
+            aria-label="Launch to the hero section"
+          >
+            <Rocket size={17} />
+            <span>{launched ? 'LIFTING OFF' : 'RETURN TO ORIGIN'}</span>
+          </motion.button>
+          <span className="education-launchpad__caption">NAVIGATE TO ORIGIN // HERO</span>
+        </div>
+
+        {launched && !reducedMotion && (
+          <div className="rocket-flight" aria-hidden="true">
+            <motion.div
+              className="rocket-flight__vehicle"
+              initial={{ x: 0, y: 0, rotate: 0, opacity: 1 }}
+              animate={{ x: [0, -72, 58, 0, 0], y: [0, '-20vh', '-48vh', '-78vh', '-125vh'], rotate: [0, -8, 8, 0, 0], opacity: [1, 1, 1, 1, 0] }}
+              transition={{ duration: 3.2, ease: [0.16, 1, 0.3, 1], times: [0, .18, .46, .72, 1] }}
+              onAnimationComplete={() => setLaunched(false)}
+            >
+              <span className="rocket-flight__flame" />
+              <Rocket size={48} strokeWidth={1.35} />
+            </motion.div>
+            {[0, 1, 2].map((cloudIdx) => (
+              <motion.div
+                key={cloudIdx}
+                className={`rocket-flight__cloud rocket-flight__cloud--${cloudIdx + 1}`}
+                initial={{ opacity: 0, scale: .5, y: 40 }}
+                animate={{ opacity: [0, .8, 0], scale: [0.5, 1.1, 1.45], y: [40, 0, -40], x: cloudIdx % 2 ? 70 : -70 }}
+                transition={{ duration: 2.2, delay: .42 + cloudIdx * .18, ease: 'easeOut' }}
+              >
+                <Cloud size={58 + cloudIdx * 14} strokeWidth={1.2} />
+              </motion.div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
