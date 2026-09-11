@@ -158,9 +158,9 @@ export default function About({ data = {} }) {
                 style={{ x: springX, y: springY }}
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.4 }}
-                  className="image-surface relative z-10 w-full h-full min-h-[22rem] rounded-3xl overflow-hidden glass-panel border border-white/[0.1] group-hover:border-white/[0.25] p-3 shadow-2xl transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.6)]"
+                  className="image-surface relative z-10 w-full h-full min-h-[22rem] rounded-3xl overflow-hidden p-3 shadow-2xl transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.6)]"
               >
-                <div className="relative w-full h-full rounded-2xl overflow-hidden bg-black/40 border border-white/[0.06]">
+                <div className="relative w-full h-full rounded-2xl overflow-hidden bg-transparent">
                   <img
                     src={data.image}
                     alt={data.heading || 'About'}
@@ -173,7 +173,7 @@ export default function About({ data = {} }) {
               <motion.div
                 style={{ x: springX, y: springY }}
                 whileHover={{ scale: 1.02 }}
-                className="relative z-10 w-full h-full min-h-[22rem] rounded-2xl glass-panel p-8 flex flex-col justify-between overflow-hidden group border border-white/[0.08] hover:border-white/20 transition-all duration-300"
+                className="relative z-10 w-full h-full min-h-[22rem] rounded-2xl bg-transparent p-8 flex flex-col justify-between overflow-hidden group transition-all duration-300"
               >
                 <svg
                   className="absolute inset-0 w-full h-full opacity-20 stroke-white group-hover:opacity-30 transition-opacity duration-500"
