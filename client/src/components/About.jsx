@@ -17,10 +17,6 @@ export default function About({ data = {} }) {
     target: sectionRef,
     offset: ['start end', 'end start'],
   });
-  const orbitRotate = useTransform(scrollYProgress, [0, 1], [-18, 22]);
-  const orbitY = useTransform(scrollYProgress, [0, 1], [42, -42]);
-  const orbitTiltX = useTransform(mouseY, [-16, 16], [7, -7]);
-  const orbitTiltY = useTransform(mouseX, [-16, 16], [-9, 9]);
   const signalScale = useTransform(scrollYProgress, [0.08, 0.5, 0.92], [0.12, 1, 0.12]);
 
   const handleMouseMove = (e) => {
@@ -145,16 +141,6 @@ export default function About({ data = {} }) {
             onMouseMove={handleMouseMove}
             className="flex items-center justify-center relative group"
           >
-            <motion.div
-              className="about-orbit about-orbit--head pointer-events-none absolute inset-x-[8%] top-[-4%] bottom-auto z-20 h-[46%]"
-              style={reducedMotion ? undefined : { rotate: orbitRotate, rotateX: orbitTiltX, rotateY: orbitTiltY, y: orbitY }}
-              aria-hidden="true"
-            >
-              <span className="about-orbit__core" />
-              <span className="about-orbit__ring about-orbit__ring--one" />
-              <span className="about-orbit__ring about-orbit__ring--two" />
-              <span className="about-orbit__ring about-orbit__ring--three" />
-            </motion.div>
             {hasImage ? (
               <motion.div
                 style={{ x: springX, y: springY }}
