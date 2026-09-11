@@ -29,13 +29,30 @@ function CloudBurst({ index }) {
 
 export default function RocketLaunch({ className = '' }) {
   const buttonRef = useRef(null);
+  const scrollFrameRef = useRef(0);
   const [launch, setLaunch] = useState(null);
   const reducedMotion = useReducedMotion();
 
   useEffect(() => {
     if (!launch) return undefined;
-    const finish = window.setTimeout(() => setLaunch(null), reducedMotion ? 350 : 7600);
-    return () => window.clearTimeout(finish);
+    if (reducedMotion) return undefined;
+
+    const startTime = performance.now();
+    const tick = (now) => {
+      const progress = Math.min((now - startTime) / launch.duration, 1);
+      const eased = progress * progress * (3 - 2 * progress);
+      window.scrollTo(0, launch.scrollStart + (launch.scrollTarget - launch.scrollStart) * eased);
+      if (progress < 1) {
+        scrollFrameRef.current = requestAnimationFrame(tick);
+      }
+    };
+
+    scrollFrameRef.current = requestAnimationFrame(tick);
+    const finish = window.setTimeout(() => setLaunch(null), launch.duration + 900);
+    return () => {
+      cancelAnimationFrame(scrollFrameRef.current);
+      window.clearTimeout(finish);
+    };
   }, [launch, reducedMotion]);
 
   const launchRocket = () => {
@@ -48,6 +65,7 @@ export default function RocketLaunch({ className = '' }) {
     const target = home?.querySelector('.hero-portrait') || home;
     const homeRect = home?.getBoundingClientRect();
     const targetRect = target?.getBoundingClientRect();
+    const duration = 6200;
 
     if (reducedMotion) {
       home?.scrollIntoView({ behavior: 'auto', block: 'start' });
@@ -59,11 +77,10 @@ export default function RocketLaunch({ className = '' }) {
       startY: rect.top + rect.height / 2,
       targetX: targetRect ? targetRect.left + targetRect.width * 0.72 : window.innerWidth * 0.68,
       targetY: targetRect && homeRect ? targetRect.top - homeRect.top + targetRect.height * 0.3 : window.innerHeight * 0.24,
+      scrollStart: window.scrollY,
+      scrollTarget: window.scrollY + (home?.getBoundingClientRect().top || 0),
+      duration,
     });
-
-    window.setTimeout(() => {
-      home?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 420);
   };
 
   const start = launch || {};
@@ -105,7 +122,7 @@ export default function RocketLaunch({ className = '' }) {
                 scale: [0.72, 0.86, 1, 0.8],
                 opacity: [1, 1, 1, 0],
               }}
-              transition={{ duration: 6.2, times: [0, 0.2, 0.76, 1], ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: start.duration / 1000, times: [0, 0.2, 0.76, 1], ease: 'linear' }}
             >
               <span className="rocket-launch-scene__glow" />
               <span className="rocket-launch-scene__flame rocket-launch-scene__flame--outer" />
