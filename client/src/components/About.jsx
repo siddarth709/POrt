@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 import { ArrowUpRight, FileText } from 'lucide-react';
 import { formatExternalUrl } from '../utils/url';
+import AeroShards from './AeroShards';
 
 export default function About({ data = {} }) {
   const visualRef = useRef(null);
@@ -28,8 +29,33 @@ export default function About({ data = {} }) {
   const hasImage = Boolean(data.image);
 
   return (
-    <section id="about" className="relative py-32 px-6 sm:px-10 border-t border-white/[0.04]">
-      <div className="max-w-7xl mx-auto">
+    <section id="about" className="relative isolate py-32 px-6 sm:px-10 border-t border-white/[0.04]">
+      <div className="pointer-events-none absolute inset-0 opacity-55" aria-hidden="true">
+        <AeroShards
+          backgroundColor="#050508"
+          shardColor="#1D9BF0"
+          accentColor="#67E8F9"
+          placement="full"
+          flow="stream"
+          material="glass"
+          detail="balanced"
+          effect="none"
+          scale={0.8}
+          spread={0.72}
+          depth={0.75}
+          speed={0.35}
+          spin={0.25}
+          interaction="none"
+          density={0.7}
+          shardSize={0.8}
+          turbulence={0.35}
+          glow={0.7}
+          bloom={0.25}
+          grain={0.02}
+          holdToGather={false}
+        />
+      </div>
+      <div className="max-w-7xl mx-auto relative z-10">
         {/* Section Heading */}
         <div className="section-heading mb-14 sm:mb-20">
           <motion.h2
@@ -103,12 +129,18 @@ export default function About({ data = {} }) {
             onMouseMove={handleMouseMove}
             className="flex items-center justify-center relative group"
           >
+            <div className="about-orbit pointer-events-none absolute inset-[8%] z-0" aria-hidden="true">
+              <span className="about-orbit__core" />
+              <span className="about-orbit__ring about-orbit__ring--one" />
+              <span className="about-orbit__ring about-orbit__ring--two" />
+              <span className="about-orbit__ring about-orbit__ring--three" />
+            </div>
             {hasImage ? (
               <motion.div
                 style={{ x: springX, y: springY }}
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.4 }}
-                  className="image-surface w-full h-full min-h-[22rem] rounded-3xl overflow-hidden glass-panel border border-white/[0.1] group-hover:border-white/[0.25] p-3 shadow-2xl relative transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.6)]"
+                  className="image-surface relative z-10 w-full h-full min-h-[22rem] rounded-3xl overflow-hidden glass-panel border border-white/[0.1] group-hover:border-white/[0.25] p-3 shadow-2xl transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.6)]"
               >
                 <div className="relative w-full h-full rounded-2xl overflow-hidden bg-black/40 border border-white/[0.06]">
                   <img
@@ -123,7 +155,7 @@ export default function About({ data = {} }) {
               <motion.div
                 style={{ x: springX, y: springY }}
                 whileHover={{ scale: 1.02 }}
-                className="w-full h-full min-h-[22rem] rounded-2xl glass-panel p-8 relative flex flex-col justify-between overflow-hidden group border border-white/[0.08] hover:border-white/20 transition-all duration-300"
+                className="relative z-10 w-full h-full min-h-[22rem] rounded-2xl glass-panel p-8 flex flex-col justify-between overflow-hidden group border border-white/[0.08] hover:border-white/20 transition-all duration-300"
               >
                 <svg
                   className="absolute inset-0 w-full h-full opacity-20 stroke-white group-hover:opacity-30 transition-opacity duration-500"
