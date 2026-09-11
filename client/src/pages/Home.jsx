@@ -104,17 +104,7 @@ export default function Home() {
     contact: true,
   };
 
-  const visualItems = [
-    ...(content?.gridMotion?.items || []),
-    ...(content?.projects?.items || []).flatMap((project) => [
-      project.image && { _id: `project-cover-${project._id || project.title}`, title: project.title, image: project.image },
-      ...((project.gallery || []).filter(Boolean).map((image, index) => ({ _id: `project-gallery-${project._id || project.title}-${index}`, title: project.title, image }))),
-    ].filter(Boolean)),
-    ...(content?.chronicles?.items || []).filter((item) => item.image).map((item) => ({ _id: `chronicle-${item._id || item.title}`, title: item.title, image: item.image })),
-    ...(content?.certifications?.items || []).filter((item) => item.image).map((item) => ({ _id: `certification-${item._id || item.title}`, title: item.title, image: item.image })),
-    content?.hero?.image ? { _id: 'hero-image', title: content.hero.name || 'Portrait', image: content.hero.image } : null,
-    content?.about?.image ? { _id: 'about-image', title: content.about.heading || 'About', image: content.about.image } : null,
-  ].filter((item, index, collection) => item?.image && collection.findIndex((candidate) => candidate.image === item.image) === index);
+  const visualItems = (content?.gridMotion?.items || []).filter((item) => item?.image);
 
   return (
     <div className="portfolio-shell relative isolate min-h-screen overflow-x-clip bg-[#050508] text-slate-100 selection:bg-cyan-500/20 selection:text-cyan-100">
