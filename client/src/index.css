@@ -380,7 +380,8 @@ main > section:not(#home) {
 .education-timeline__item:hover .education-timeline__card { border-color: rgba(103,232,249,.35); background: linear-gradient(135deg, rgba(103,232,249,.1), rgba(255,255,255,.018)); transform: translateY(-4px); box-shadow: 0 18px 45px rgba(0,0,0,.22), 0 0 24px rgba(103,232,249,.06); }
 .rocket-launch-dock { position: relative; display: flex; flex-direction: column; align-items: center; gap: .7rem; margin: 2rem auto 4rem; padding-top: 1.5rem; }
 .education-launch-button { display: inline-flex; align-items: center; gap: .65rem; padding: .8rem 1.1rem; border: 1px solid rgba(103,232,249,.35); border-radius: 999px; background: rgba(7,18,28,.72); color: #cffafe; font: 600 .7rem/1 'JetBrains Mono', monospace; letter-spacing: .12em; box-shadow: 0 0 24px rgba(34,211,238,.12); }
-.rocket-launch-dock.contact-rocket-launch { margin: 0; padding: 0; align-items: stretch; gap: .35rem; }
+.contact-social-row { position: relative; }
+.rocket-launch-dock.contact-rocket-launch { position: absolute; top: .75rem; right: 0; margin: 0; padding: 0; align-items: stretch; gap: .35rem; }
 .rocket-launch-button { border-color: rgba(251,113,133,.62); background: linear-gradient(135deg, rgba(244,63,94,.82), rgba(124,58,237,.86)); color: #fff1f2; box-shadow: 0 0 28px rgba(244,63,94,.24), inset 0 1px rgba(255,255,255,.28); }
 .rocket-launch-button svg { color: #fde68a; filter: drop-shadow(0 0 7px rgba(253,230,138,.7)); }
 .rocket-launch-button:hover { border-color: rgba(254,205,211,.9); background: linear-gradient(135deg, rgba(244,63,94,.96), rgba(139,92,246,.96)); box-shadow: 0 0 38px rgba(244,63,94,.38), inset 0 1px rgba(255,255,255,.38); }
@@ -390,12 +391,14 @@ main > section:not(#home) {
 .rocket-flight { position: fixed; inset: 0; z-index: 80; pointer-events: none; overflow: hidden; }
 .rocket-flight__vehicle { position: absolute; left: 50%; bottom: 4.5rem; display: flex; flex-direction: column; align-items: center; color: #a5f3fc; filter: drop-shadow(0 0 18px rgba(34,211,238,.8)); transform: translateX(-50%); }
 .rocket-flight__vehicle > svg { color: #fb7185; fill: rgba(251,113,133,.18); filter: drop-shadow(0 0 15px rgba(244,63,94,.8)); }
+.rocket-flight__vehicle { animation: rocket-flight-glow .42s ease-in-out infinite alternate; }
 .rocket-flight__flame { width: 1rem; height: 2.8rem; margin-top: -.35rem; border-radius: 50% 50% 60% 60%; background: linear-gradient(#fef08a, #fb923c 48%, transparent); filter: blur(2px); animation: rocket-flame .18s ease-in-out infinite alternate; }
 .rocket-flight__cloud { position: absolute; left: 50%; bottom: 12rem; color: rgba(226,232,240,.55); filter: blur(1px) drop-shadow(0 0 16px rgba(255,255,255,.18)); }
 .rocket-flight__cloud--1 { margin-left: -6rem; }
 .rocket-flight__cloud--2 { margin-left: 1rem; bottom: 18rem; }
 .rocket-flight__cloud--3 { margin-left: -12rem; bottom: 25rem; }
 @keyframes rocket-flame { to { transform: scaleY(1.25) scaleX(.82); opacity: .72; } }
+@keyframes rocket-flight-glow { to { filter: drop-shadow(0 0 28px rgba(244,63,94,1)); } }
 
 @media (max-width: 767px) {
   .education-timeline { padding-left: 1rem; }
@@ -403,6 +406,7 @@ main > section:not(#home) {
   .education-timeline__item, .education-timeline__item--reverse { display: block; min-height: 0; padding-left: 1.5rem; }
   .education-timeline__item .education-timeline__card, .education-timeline__item--reverse .education-timeline__card { width: 100%; margin: 0; }
   .education-timeline__node { position: absolute; left: -.1rem; top: 0; padding-top: 1.3rem; }
+  .rocket-launch-dock.contact-rocket-launch { position: static; grid-column: 1 / -1; align-items: flex-start; margin-top: .5rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

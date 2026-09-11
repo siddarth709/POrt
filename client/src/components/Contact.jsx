@@ -224,7 +224,7 @@ export default function Contact({ data = {}, heroSocials = [] }) {
 
         {/* Dynamic Social Links from Dashboard */}
         {socials.length > 0 && (
-          <div className="border-t border-white/[0.08] pt-12 grid sm:grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="contact-social-row border-t border-white/[0.08] pt-12 grid sm:grid-cols-2 md:grid-cols-4 gap-6">
             {socials.map((social, idx) => (
               <React.Fragment key={idx}>
                 <a
@@ -242,9 +242,9 @@ export default function Contact({ data = {}, heroSocials = [] }) {
                     className="text-slate-500 group-hover:text-emerald-400 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
                   />
                 </a>
-                {social.platform?.toLowerCase().includes('linkedin') && <RocketLaunch className="contact-rocket-launch" />}
               </React.Fragment>
             ))}
+            <RocketLaunch className="contact-rocket-launch" />
           </div>
         )}
 
