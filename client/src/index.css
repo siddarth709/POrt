@@ -237,6 +237,77 @@ main > section:not(#home) {
   background: linear-gradient(125deg, rgba(255,255,255,.17), transparent 20%, transparent 72%, rgba(103,232,249,.12));
 }
 
+.hero-floating-system { isolation: isolate; }
+
+.hero-floating-node {
+  position: absolute;
+  display: grid;
+  grid-template-columns: .6rem auto;
+  column-gap: .65rem;
+  align-items: center;
+  min-width: 8rem;
+  color: rgba(226, 232, 240, .78);
+  font-family: 'JetBrains Mono', monospace;
+  filter: drop-shadow(0 0 18px rgba(34, 211, 238, .16));
+  animation: hero-node-float 6s ease-in-out infinite;
+}
+
+.hero-floating-node--ai { top: 28%; left: 8%; }
+.hero-floating-node--systems { right: 9%; bottom: 24%; animation-delay: -2.6s; }
+
+.hero-floating-node__dot {
+  grid-row: span 2;
+  width: .55rem;
+  height: .55rem;
+  border: 1px solid rgba(165, 243, 252, .8);
+  border-radius: 50%;
+  background: #07121c;
+  box-shadow: 0 0 0 .25rem rgba(103, 232, 249, .06), 0 0 14px rgba(103, 232, 249, .8);
+}
+
+.hero-floating-node__line {
+  position: absolute;
+  top: .28rem;
+  width: 4.2rem;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(103, 232, 249, .72), transparent);
+}
+
+.hero-floating-node--ai .hero-floating-node__line { left: .95rem; transform-origin: left; transform: rotate(12deg); }
+.hero-floating-node--systems .hero-floating-node__line { right: .95rem; transform-origin: right; transform: rotate(-12deg); background: linear-gradient(90deg, transparent, rgba(52, 211, 153, .72)); }
+
+.hero-floating-node__label {
+  padding: .45rem .65rem;
+  border: 1px solid rgba(255, 255, 255, .14);
+  border-radius: 999px;
+  background: rgba(5, 5, 8, .42);
+  backdrop-filter: blur(12px);
+  color: rgba(241, 245, 249, .92);
+  font-size: .67rem;
+  letter-spacing: .16em;
+  line-height: 1;
+}
+
+.hero-floating-node__meta {
+  grid-column: 2;
+  margin-top: -.25rem;
+  color: rgba(148, 163, 184, .7);
+  font-size: .5rem;
+  letter-spacing: .14em;
+}
+
+.hero-floating-node--systems .hero-floating-node__dot { border-color: rgba(110, 231, 183, .8); box-shadow: 0 0 0 .25rem rgba(52, 211, 153, .06), 0 0 14px rgba(52, 211, 153, .8); }
+.hero-floating-node--systems .hero-floating-node__label { border-color: rgba(52, 211, 153, .28); }
+
+@keyframes hero-node-float {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(-1deg); }
+  50% { transform: translate3d(0, -12px, 0) rotate(1deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-floating-node { animation: none; }
+}
+
 .image-surface {
   isolation: isolate;
   cursor: zoom-in;

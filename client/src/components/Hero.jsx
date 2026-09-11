@@ -119,6 +119,20 @@ export default function Hero({ data = {} }) {
           holdToGather={true}
         />
       </div>
+      <div className="hero-floating-system pointer-events-none absolute inset-0 z-[2] hidden md:block" aria-hidden="true">
+        <div className="hero-floating-node hero-floating-node--ai">
+          <span className="hero-floating-node__dot" />
+          <span className="hero-floating-node__line" />
+          <span className="hero-floating-node__label">AI / ML</span>
+          <span className="hero-floating-node__meta">MODEL LAYER</span>
+        </div>
+        <div className="hero-floating-node hero-floating-node--systems">
+          <span className="hero-floating-node__dot" />
+          <span className="hero-floating-node__line" />
+          <span className="hero-floating-node__label">SYSTEMS</span>
+          <span className="hero-floating-node__meta">RUNTIME CORE</span>
+        </div>
+      </div>
       <div
         className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-r from-[#120F17]/95 via-[#120F17]/78 to-[#120F17]/12"
         aria-hidden="true"
