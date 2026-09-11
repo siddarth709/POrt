@@ -17,7 +17,7 @@ function CloudBurst({ index }) {
       style={{ left: item.left, top: item.top, width: item.size, height: item.size * 0.52 }}
       initial={{ opacity: 0, scale: 0.35, y: 18 }}
       animate={{ opacity: [0, 0.95, 0.9, 0], scale: [0.35, 1.08, 1.16, 1.28], y: [18, 0, -4, -18] }}
-      transition={{ duration: 4.2, delay: item.delay, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 2.8, delay: item.delay, ease: [0.16, 1, 0.3, 1] }}
     >
       <span className="rocket-cloud__puff rocket-cloud__puff--a" />
       <span className="rocket-cloud__puff rocket-cloud__puff--b" />
@@ -65,7 +65,7 @@ export default function RocketLaunch({ className = '' }) {
     const target = home?.querySelector('.hero-portrait') || home;
     const homeRect = home?.getBoundingClientRect();
     const targetRect = target?.getBoundingClientRect();
-    const duration = 6200;
+    const duration = 4000;
 
     if (reducedMotion) {
       home?.scrollIntoView({ behavior: 'auto', block: 'start' });
@@ -109,7 +109,7 @@ export default function RocketLaunch({ className = '' }) {
               className="rocket-launch-scene__trail"
               initial={{ opacity: 0, scaleY: 0.2 }}
               animate={{ opacity: [0, 0.9, 0], scaleY: [0.2, 1, 1.25] }}
-              transition={{ duration: 5.8, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 3.8, ease: [0.16, 1, 0.3, 1] }}
             />
             {[0, 1, 2, 3].map((index) => <CloudBurst key={index} index={index} />)}
             <motion.div
@@ -120,7 +120,7 @@ export default function RocketLaunch({ className = '' }) {
                 top: [start.startY, start.startY - window.innerHeight * 0.18, start.targetY + 35, start.targetY],
                 rotate: [0, -4, -2, 0],
                 scale: [0.72, 0.86, 1, 0.8],
-                opacity: [1, 1, 1, 0],
+                opacity: [1, 1, 1, 1],
               }}
               transition={{ duration: start.duration / 1000, times: [0, 0.2, 0.76, 1], ease: 'linear' }}
             >
@@ -138,7 +138,7 @@ export default function RocketLaunch({ className = '' }) {
               className="rocket-launch-scene__flash"
               initial={{ opacity: 0, scale: 0.3 }}
               animate={{ opacity: [0, 1, 0], scale: [0.3, 1.25, 1.8] }}
-              transition={{ duration: 0.8, delay: 5.85, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.55, delay: 3.65, ease: [0.16, 1, 0.3, 1] }}
             />
           </motion.div>
         )}
