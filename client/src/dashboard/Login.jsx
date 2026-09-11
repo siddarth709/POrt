@@ -240,7 +240,7 @@ export default function Login() {
                   onClick={async () => {
                     setError('');
                     try {
-                      const api = (await import('../services/api')).default;
+                      const api = (await import('../api/axios')).default;
                       await api.post('/auth/reset');
                       await fetchStatus();
                     } catch (err) {
