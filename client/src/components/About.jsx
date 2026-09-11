@@ -1,16 +1,25 @@
 import React, { useRef } from 'react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { motion, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion';
 import { ArrowUpRight, FileText } from 'lucide-react';
 import { formatExternalUrl } from '../utils/url';
 import AeroShards from './AeroShards';
 
 export default function About({ data = {} }) {
+  const sectionRef = useRef(null);
   const visualRef = useRef(null);
+  const reducedMotion = useReducedMotion();
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
   const springX = useSpring(mouseX, { stiffness: 90, damping: 25 });
   const springY = useSpring(mouseY, { stiffness: 90, damping: 25 });
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  });
+  const orbitRotate = useTransform(scrollYProgress, [0, 1], [-18, 22]);
+  const orbitY = useTransform(scrollYProgress, [0, 1], [42, -42]);
+  const signalScale = useTransform(scrollYProgress, [0.08, 0.5, 0.92], [0.12, 1, 0.12]);
 
   const handleMouseMove = (e) => {
     if (!visualRef.current) return;
@@ -29,7 +38,12 @@ export default function About({ data = {} }) {
   const hasImage = Boolean(data.image);
 
   return (
-    <section id="about" className="relative isolate py-32 px-6 sm:px-10 border-t border-white/[0.04]">
+    <section ref={sectionRef} id="about" className="relative isolate py-32 px-6 sm:px-10 border-t border-white/[0.04]">
+      <motion.div
+        className="about-scroll-rail pointer-events-none absolute left-3 top-20 bottom-20 hidden w-px origin-top sm:block"
+        style={reducedMotion ? undefined : { scaleY: signalScale }}
+        aria-hidden="true"
+      />
       <div className="pointer-events-none absolute inset-0 opacity-55" aria-hidden="true">
         <AeroShards
           backgroundColor="#050508"
@@ -129,12 +143,16 @@ export default function About({ data = {} }) {
             onMouseMove={handleMouseMove}
             className="flex items-center justify-center relative group"
           >
-            <div className="about-orbit pointer-events-none absolute inset-[8%] z-0" aria-hidden="true">
+            <motion.div
+              className="about-orbit pointer-events-none absolute inset-[8%] z-0"
+              style={reducedMotion ? undefined : { rotate: orbitRotate, y: orbitY }}
+              aria-hidden="true"
+            >
               <span className="about-orbit__core" />
               <span className="about-orbit__ring about-orbit__ring--one" />
               <span className="about-orbit__ring about-orbit__ring--two" />
               <span className="about-orbit__ring about-orbit__ring--three" />
-            </div>
+            </motion.div>
             {hasImage ? (
               <motion.div
                 style={{ x: springX, y: springY }}

@@ -324,6 +324,25 @@ main > section:not(#home) {
 }
 .about-copy:hover::after { transform: scaleY(1); opacity: .9; }
 
+.about-scroll-rail {
+  background: linear-gradient(to bottom, transparent, rgba(103, 232, 249, .9) 18%, rgba(167, 139, 250, .65) 82%, transparent);
+  box-shadow: 0 0 14px rgba(103, 232, 249, .45);
+}
+
+.about-scroll-rail::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  border: 1px solid #a5f3fc;
+  border-radius: 50%;
+  background: #07121c;
+  box-shadow: 0 0 12px 2px rgba(103, 232, 249, .7);
+  transform: translate(-50%, -50%);
+}
+
 .about-orbit {
   perspective: 900px;
   transform-style: preserve-3d;
