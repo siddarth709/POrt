@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Rocket } from 'lucide-react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 
@@ -34,16 +35,13 @@ export default function RocketLaunch({ className = '' }) {
   const reducedMotion = useReducedMotion();
 
   useEffect(() => {
-    if (!launch) return undefined;
-    if (reducedMotion) return undefined;
+    if (!launch || reducedMotion) return undefined;
 
     const startTime = performance.now();
     const tick = (now) => {
       const progress = Math.min((now - startTime) / launch.duration, 1);
       window.scrollTo(0, launch.scrollStart + (launch.scrollTarget - launch.scrollStart) * progress);
-      if (progress < 1) {
-        scrollFrameRef.current = requestAnimationFrame(tick);
-      }
+      if (progress < 1) scrollFrameRef.current = requestAnimationFrame(tick);
     };
 
     scrollFrameRef.current = requestAnimationFrame(tick);
@@ -83,65 +81,51 @@ export default function RocketLaunch({ className = '' }) {
   };
 
   const start = launch || {};
+  const launchScene = launch ? (
+    <AnimatePresence>
+      <motion.div className="rocket-launch-scene" aria-hidden="true">
+        <motion.div className="rocket-launch-scene__trail" initial={{ opacity: 0, scaleY: 0.2 }} animate={{ opacity: [0, 0.9, 0], scaleY: [0.2, 1, 1.25] }} transition={{ duration: 3.8, ease: [0.16, 1, 0.3, 1] }} />
+        {[0, 1, 2, 3].map((index) => <CloudBurst key={index} index={index} />)}
+        <motion.div
+          className="rocket-launch-scene__rocket"
+          initial={{ left: start.startX, top: start.startY, x: '-50%', y: '-50%', rotate: 0, scale: 0.72, opacity: 1 }}
+          animate={{ left: [start.startX, start.targetX], top: [start.startY, start.targetY], rotate: 0, scale: [0.72, 0.8], opacity: [1, 1] }}
+          transition={{ duration: start.duration / 1000, ease: 'linear' }}
+        >
+          <span className="rocket-launch-scene__glow" />
+          <span className="rocket-launch-scene__flame rocket-launch-scene__flame--outer" />
+          <span className="rocket-launch-scene__flame rocket-launch-scene__flame--inner" />
+          <span className="rocket-launch-scene__body">
+            <span className="rocket-launch-scene__nose" />
+            <span className="rocket-launch-scene__window" />
+            <span className="rocket-launch-scene__fin rocket-launch-scene__fin--left" />
+            <span className="rocket-launch-scene__fin rocket-launch-scene__fin--right" />
+          </span>
+        </motion.div>
+        <motion.div className="rocket-launch-scene__flash" initial={{ opacity: 0, scale: 0.3 }} animate={{ opacity: [0, 1, 0], scale: [0.3, 1.25, 1.8] }} transition={{ duration: 0.55, delay: 3.65, ease: [0.16, 1, 0.3, 1] }} />
+      </motion.div>
+    </AnimatePresence>
+  ) : null;
 
   return (
-    <div className={`rocket-launch-dock ${className}`}>
-      <motion.button
-        ref={buttonRef}
-        type="button"
-        onClick={launchRocket}
-        disabled={Boolean(launch)}
-        className="education-launch-button rocket-launch-button interactive-hit"
-        whileHover={launch ? undefined : { y: -3, scale: 1.04 }}
-        whileTap={launch ? undefined : { scale: 0.96 }}
-        aria-label="Launch rocket back to the hero section"
-      >
-        <span className="rocket-launch-button__icon" aria-hidden="true"><Rocket size={18} strokeWidth={2} /></span>
-        <span>{launch ? 'LIFTING OFF' : 'RETURN TO ORIGIN'}</span>
-      </motion.button>
-      <span className="education-launchpad__caption">LAUNCH TO ORIGIN // HERO</span>
-
-      <AnimatePresence>
-        {launch && (
-          <motion.div className="rocket-launch-scene" aria-hidden="true">
-            <motion.div
-              className="rocket-launch-scene__trail"
-              initial={{ opacity: 0, scaleY: 0.2 }}
-              animate={{ opacity: [0, 0.9, 0], scaleY: [0.2, 1, 1.25] }}
-              transition={{ duration: 3.8, ease: [0.16, 1, 0.3, 1] }}
-            />
-            {[0, 1, 2, 3].map((index) => <CloudBurst key={index} index={index} />)}
-            <motion.div
-              className="rocket-launch-scene__rocket"
-              initial={{ left: start.startX, top: start.startY, x: '-50%', y: '-50%', rotate: 0, scale: 0.72, opacity: 1 }}
-              animate={{
-                left: [start.startX, start.targetX],
-                top: [start.startY, start.targetY],
-                rotate: 0,
-                scale: [0.72, 0.8],
-                opacity: [1, 1, 1, 1],
-              }}
-              transition={{ duration: start.duration / 1000, ease: 'linear' }}
-            >
-              <span className="rocket-launch-scene__glow" />
-              <span className="rocket-launch-scene__flame rocket-launch-scene__flame--outer" />
-              <span className="rocket-launch-scene__flame rocket-launch-scene__flame--inner" />
-              <span className="rocket-launch-scene__body">
-                <span className="rocket-launch-scene__nose" />
-                <span className="rocket-launch-scene__window" />
-                <span className="rocket-launch-scene__fin rocket-launch-scene__fin--left" />
-                <span className="rocket-launch-scene__fin rocket-launch-scene__fin--right" />
-              </span>
-            </motion.div>
-            <motion.div
-              className="rocket-launch-scene__flash"
-              initial={{ opacity: 0, scale: 0.3 }}
-              animate={{ opacity: [0, 1, 0], scale: [0.3, 1.25, 1.8] }}
-              transition={{ duration: 0.55, delay: 3.65, ease: [0.16, 1, 0.3, 1] }}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+    <>
+      <div className={`rocket-launch-dock ${className}`}>
+        <motion.button
+          ref={buttonRef}
+          type="button"
+          onClick={launchRocket}
+          disabled={Boolean(launch)}
+          className="education-launch-button rocket-launch-button interactive-hit"
+          whileHover={launch ? undefined : { y: -3, scale: 1.04 }}
+          whileTap={launch ? undefined : { scale: 0.96 }}
+          aria-label="Launch rocket back to the hero section"
+        >
+          <span className="rocket-launch-button__icon" aria-hidden="true"><Rocket size={18} strokeWidth={2} /></span>
+          <span>{launch ? 'LIFTING OFF' : 'RETURN TO ORIGIN'}</span>
+        </motion.button>
+        <span className="education-launchpad__caption">LAUNCH TO ORIGIN // HERO</span>
+      </div>
+      {typeof document !== 'undefined' && launchScene ? createPortal(launchScene, document.body) : null}
+    </>
   );
 }
