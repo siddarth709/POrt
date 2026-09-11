@@ -141,23 +141,23 @@ export default function Hero({ data = {} }) {
         </div>
 
         {/* MIDDLE: Two-column — left info | portrait — no overlap */}
-        <div className="relative w-full flex-1 min-h-[460px] sm:min-h-[520px] lg:min-h-[580px] flex items-end mt-2 sm:mt-4">
+        <div className="hero-middle relative w-full flex-1 min-h-[340px] sm:min-h-[520px] lg:min-h-[580px] flex flex-col sm:flex-row items-end mt-2 sm:mt-4">
 
-          {/* ── LEFT COLUMN: narrow so it never reaches the centered portrait ── */}
-          <div className="relative z-30 w-[30%] max-w-[280px] flex-shrink-0 pb-8 sm:pb-12 pr-2 flex flex-col gap-0 items-start">
+          {/* ── LEFT COLUMN: full-width on mobile, narrow on desktop ── */}
+          <div className="hero-info-col relative z-30 w-full sm:w-[30%] sm:max-w-[280px] flex-shrink-0 pb-6 sm:pb-12 pr-0 sm:pr-2 flex flex-col gap-0 items-start">
 
             {/* 1. Status Badge */}
             <motion.div
               initial={{ opacity: 0, x: -20, filter: 'blur(6px)' }}
               animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
               transition={{ duration: 0.65, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-              className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/[0.07] backdrop-blur-md mb-4 shadow-sm"
+              className="inline-flex items-center gap-2 sm:gap-2.5 px-3 sm:px-3.5 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/[0.07] backdrop-blur-md mb-3 sm:mb-4 shadow-sm"
             >
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
               </span>
-              <span className="font-mono text-[11px] tracking-wider text-emerald-300 uppercase">
+              <span className="font-mono text-[10px] sm:text-[11px] tracking-wider text-emerald-300 uppercase">
                 Open to collaborations
               </span>
             </motion.div>
@@ -167,7 +167,7 @@ export default function Hero({ data = {} }) {
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              className="font-mono text-[11px] sm:text-xs tracking-[0.18em] uppercase text-indigo-300 mb-3"
+              className="font-mono text-[10px] sm:text-xs tracking-[0.18em] uppercase text-indigo-300 mb-2 sm:mb-3"
             >
               Machine Learning Engineer
             </motion.p>
@@ -178,7 +178,7 @@ export default function Hero({ data = {} }) {
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.75, delay: 0.48, ease: [0.16, 1, 0.3, 1] }}
-                className="text-[13px] sm:text-sm text-white/90 font-normal leading-relaxed mb-6 [text-shadow:0_1px_12px_rgba(0,0,0,0.95)]"
+                className="text-[12px] sm:text-sm text-white/90 font-normal leading-relaxed mb-4 sm:mb-6 [text-shadow:0_1px_12px_rgba(0,0,0,0.95)] max-w-[90%] sm:max-w-none"
               >
                 {taglineText}
               </motion.p>
@@ -189,11 +189,11 @@ export default function Hero({ data = {} }) {
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.65, delay: 0.62, ease: [0.16, 1, 0.3, 1] }}
-              className="flex flex-wrap items-center gap-3"
+              className="flex flex-wrap items-center gap-2 sm:gap-3"
             >
               <MagneticButton
                 onClick={() => scrollTo('contact')}
-                className="interactive-hit group px-5 py-2.5 rounded-full bg-white text-[#090a0f] font-mono text-[11px] sm:text-xs font-semibold tracking-wider flex items-center gap-2 hover:bg-slate-100 hover:shadow-[0_0_24px_rgba(255,255,255,0.25)] transition-all"
+                className="interactive-hit group px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-white text-[#090a0f] font-mono text-[10px] sm:text-xs font-semibold tracking-wider flex items-center gap-2 hover:bg-slate-100 hover:shadow-[0_0_24px_rgba(255,255,255,0.25)] transition-all"
               >
                 <span>GET IN TOUCH</span>
                 <ArrowUpRight size={13} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -210,7 +210,7 @@ export default function Hero({ data = {} }) {
                   href={linkedinUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="interactive-hit group px-5 py-2.5 rounded-full border border-white/[0.18] hover:border-indigo-400/60 bg-white/[0.04] hover:bg-indigo-500/[0.1] backdrop-blur-md text-slate-200 hover:text-white font-mono text-[11px] sm:text-xs font-medium tracking-wider flex items-center gap-2 transition-all"
+                  className="interactive-hit group px-4 sm:px-5 py-2 sm:py-2.5 rounded-full border border-white/[0.18] hover:border-indigo-400/60 bg-white/[0.04] hover:bg-indigo-500/[0.1] backdrop-blur-md text-slate-200 hover:text-white font-mono text-[10px] sm:text-xs font-medium tracking-wider flex items-center gap-2 transition-all"
                 >
                   <span>LINKEDIN</span>
                   <ArrowUpRight size={13} className="text-slate-400 transition-all duration-300 group-hover:text-indigo-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -219,16 +219,16 @@ export default function Hero({ data = {} }) {
             </motion.div>
           </div>
 
-          {/* ── PORTRAIT: absolute center of the full row ── */}
+          {/* ── PORTRAIT: absolute center on desktop, relative on mobile ── */}
           {hasImage && (
-            <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-0 z-20 flex justify-center items-end">
+            <div className="hero-portrait-wrap pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-0 z-20 flex justify-center items-end">
               <motion.img
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
                 src={data.image}
                 alt={data.name || 'Hero'}
-                className="hero-grounded-portrait w-auto max-h-[60vh] sm:max-h-[70vh] lg:max-h-[78vh] object-contain object-bottom"
+                className="hero-grounded-portrait w-auto max-h-[45vh] sm:max-h-[70vh] lg:max-h-[78vh] object-contain object-bottom"
               />
             </div>
           )}
@@ -239,18 +239,18 @@ export default function Hero({ data = {} }) {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="hero-bottom-bar relative z-30 w-full pt-5 border-t border-white/[0.08] flex flex-wrap items-center justify-between gap-4 font-mono text-[11px] text-slate-400"
+          className="hero-bottom-bar relative z-30 w-full pt-4 sm:pt-5 border-t border-white/[0.08] flex flex-wrap items-center justify-between gap-2 sm:gap-4 font-mono text-[10px] sm:text-[11px] text-slate-400"
         >
-          <div className="flex items-center gap-2 text-slate-300 uppercase tracking-widest text-[10px]">
-            <Orbit size={13} className="text-amber-400" />
+          <div className="flex items-center gap-2 text-slate-300 uppercase tracking-widest text-[9px] sm:text-[10px]">
+            <Orbit size={12} className="text-amber-400" />
             <span>CORE SYSTEMS</span>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          <div className="hero-tech-badges flex flex-wrap items-center gap-1.5 sm:gap-3">
             {techBadges.map((badge) => (
               <span
                 key={badge}
-                className="px-3 py-1 rounded-full border border-white/[0.08] bg-white/[0.025] text-slate-300 hover:text-white hover:border-white/25 transition-colors text-[10px] sm:text-[11px]"
+                className="px-2 sm:px-3 py-0.5 sm:py-1 rounded-full border border-white/[0.08] bg-white/[0.025] text-slate-300 hover:text-white hover:border-white/25 transition-colors text-[9px] sm:text-[11px]"
               >
                 {badge}
               </span>

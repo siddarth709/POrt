@@ -782,7 +782,7 @@ body.rocket-launching *:not(.rocket-launch-scene):not(.rocket-launch-scene *) {
 @media (max-width: 640px) {
   .experience-row::before { top: 16px; bottom: 16px; }
   .portfolio-shell main > section {
-    width: calc(100% - 1rem);
+    width: calc(100% - 0.75rem);
     margin-bottom: .5rem;
     border-radius: 1.15rem;
   }
@@ -796,4 +796,169 @@ body.rocket-launching *:not(.rocket-launch-scene):not(.rocket-launch-scene *) {
   .grid-motion-container { gap: .55rem; width: 180vw; height: 155vh; transform: rotate(-6deg); }
   .grid-motion-row { gap: .55rem; }
   .grid-motion-tile { border-radius: 11px; }
+
+  /* ── HERO MOBILE ── */
+  .hero {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    padding-top: 5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+
+  .hero-stage {
+    min-height: calc(100vh - 6rem);
+  }
+
+  .hero-middle {
+    min-height: 280px !important;
+    flex-direction: column-reverse !important;
+    align-items: flex-start !important;
+  }
+
+  .hero-info-col {
+    width: 100% !important;
+    max-width: none !important;
+    padding-right: 0 !important;
+    padding-bottom: 1rem !important;
+  }
+
+  .hero-portrait-wrap {
+    position: relative !important;
+    left: auto !important;
+    transform: none !important;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: -1rem;
+  }
+
+  .hero-grounded-portrait {
+    max-height: 38vh !important;
+    transform: translateY(20px) !important;
+  }
+
+  .hero-bottom-bar {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.5rem !important;
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+
+  .hero-tech-badges {
+    gap: 0.35rem !important;
+  }
+
+  /* ── ABOUT MOBILE ── */
+  #about {
+    padding: 3.5rem 1rem !important;
+  }
+
+  #about .about-copy {
+    min-height: auto !important;
+    padding: 1.25rem !important;
+    font-size: 0.875rem !important;
+  }
+
+  .about-scroll-rail { display: none !important; }
+
+  /* ── EDUCATION MOBILE ── */
+  #education {
+    padding: 2.5rem 0.75rem !important;
+  }
+
+  /* ── EXPERIENCE MOBILE ── */
+  #experience {
+    padding: 2.5rem 0.75rem !important;
+  }
+
+  .experience-row {
+    padding: 1.75rem 0.5rem !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* ── CERTIFICATIONS MOBILE ── */
+  #certifications {
+    padding: 3rem 0.75rem !important;
+  }
+
+  /* ── PROJECTS MOBILE ── */
+  #projects {
+    padding: 3rem 0.75rem !important;
+  }
+
+  .project-card {
+    padding: 0.5rem !important;
+    border-radius: 1rem !important;
+  }
+
+  /* ── CHRONICLES MOBILE ── */
+  #chronicles {
+    padding: 3rem 0.75rem !important;
+  }
+
+  /* ── CONTACT MOBILE ── */
+  #contact {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+    padding-top: 4rem !important;
+  }
+
+  .contact-connect-illustration {
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  .contact-connect-illustration img {
+    width: 5.5rem !important;
+    height: 5.5rem !important;
+  }
+
+  .contact-social-row {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.5rem !important;
+  }
+
+  /* ── MODALS MOBILE ── */
+  .fixed.inset-0.z-\[100\] {
+    padding: 0.75rem !important;
+  }
+
+  .fixed.inset-0.z-\[100\] > div {
+    padding: 1.25rem !important;
+    border-radius: 1rem !important;
+    max-height: 90vh !important;
+  }
+
+  /* ── NAVBAR MOBILE ── */
+  .navbar-brand-name {
+    font-size: 0.75rem !important;
+    letter-spacing: 0.1em !important;
+  }
+
+  /* ── GENERAL MOBILE TYPOGRAPHY ── */
+  .font-display {
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+}
+
+/* ── Extra small phones (< 380px) ── */
+@media (max-width: 380px) {
+  .hero-dribbble-title {
+    font-size: clamp(1.8rem, 13vw, 3rem) !important;
+  }
+
+  .hero-info-col {
+    padding-bottom: 0.5rem !important;
+  }
+
+  .hero-tech-badges span {
+    font-size: 8px !important;
+    padding: 2px 6px !important;
+  }
+
+  .hero-grounded-portrait {
+    max-height: 32vh !important;
+  }
 }
