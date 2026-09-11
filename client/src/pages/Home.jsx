@@ -136,7 +136,7 @@ export default function Home() {
         {visibility.experience && <Experience data={content?.experience} />}
         {visibility.projects && <Projects data={content?.projects} />}
         {visibility.chronicles && <Chronicles data={content?.chronicles} />}
-        {content?.gridMotion?.visible !== false && <GridMotion items={visualItems} />}
+        {content?.gridMotion?.visible !== false && <GridMotion items={visualItems} gradientColor="#5227FF" />}
         <Contact data={content?.contact} heroSocials={content?.hero?.socials} />
       </main>
     </div>
