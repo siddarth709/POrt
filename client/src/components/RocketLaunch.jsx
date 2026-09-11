@@ -17,7 +17,7 @@ function CloudBurst({ index }) {
       style={{ left: item.left, top: item.top, width: item.size, height: item.size * 0.52 }}
       initial={{ opacity: 0, scale: 0.35, y: 18 }}
       animate={{ opacity: [0, 0.95, 0.9, 0], scale: [0.35, 1.08, 1.16, 1.28], y: [18, 0, -4, -18] }}
-      transition={{ duration: 2.1, delay: item.delay, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 4.2, delay: item.delay, ease: [0.16, 1, 0.3, 1] }}
     >
       <span className="rocket-cloud__puff rocket-cloud__puff--a" />
       <span className="rocket-cloud__puff rocket-cloud__puff--b" />
@@ -34,7 +34,7 @@ export default function RocketLaunch({ className = '' }) {
 
   useEffect(() => {
     if (!launch) return undefined;
-    const finish = window.setTimeout(() => setLaunch(null), reducedMotion ? 350 : 3900);
+    const finish = window.setTimeout(() => setLaunch(null), reducedMotion ? 350 : 7600);
     return () => window.clearTimeout(finish);
   }, [launch, reducedMotion]);
 
@@ -63,7 +63,7 @@ export default function RocketLaunch({ className = '' }) {
 
     window.setTimeout(() => {
       home?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 80);
+    }, 420);
   };
 
   const start = launch || {};
@@ -92,7 +92,7 @@ export default function RocketLaunch({ className = '' }) {
               className="rocket-launch-scene__trail"
               initial={{ opacity: 0, scaleY: 0.2 }}
               animate={{ opacity: [0, 0.9, 0], scaleY: [0.2, 1, 1.25] }}
-              transition={{ duration: 2.8, ease: 'easeOut' }}
+              transition={{ duration: 5.8, ease: [0.16, 1, 0.3, 1] }}
             />
             {[0, 1, 2, 3].map((index) => <CloudBurst key={index} index={index} />)}
             <motion.div
@@ -105,7 +105,7 @@ export default function RocketLaunch({ className = '' }) {
                 scale: [0.72, 0.86, 1, 0.8],
                 opacity: [1, 1, 1, 0],
               }}
-              transition={{ duration: 3.25, times: [0, 0.18, 0.72, 1], ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 6.2, times: [0, 0.2, 0.76, 1], ease: [0.16, 1, 0.3, 1] }}
             >
               <span className="rocket-launch-scene__glow" />
               <span className="rocket-launch-scene__flame rocket-launch-scene__flame--outer" />
@@ -121,7 +121,7 @@ export default function RocketLaunch({ className = '' }) {
               className="rocket-launch-scene__flash"
               initial={{ opacity: 0, scale: 0.3 }}
               animate={{ opacity: [0, 1, 0], scale: [0.3, 1.25, 1.8] }}
-              transition={{ duration: 0.45, delay: 3.05, ease: 'easeOut' }}
+              transition={{ duration: 0.8, delay: 5.85, ease: [0.16, 1, 0.3, 1] }}
             />
           </motion.div>
         )}

@@ -399,8 +399,8 @@ main > section:not(#home) {
 .rocket-launch-scene__fin--left { left: -17px; border-radius: 12px 0 4px 8px; transform: skewY(24deg); }
 .rocket-launch-scene__fin--right { right: -17px; border-radius: 0 12px 8px 4px; transform: skewY(-24deg); }
 .rocket-launch-scene__flame { position: absolute; left: 50%; top: 82px; transform: translateX(-50%); transform-origin: top; border-radius: 35% 35% 60% 60%; clip-path: polygon(50% 100%, 0 0, 28% 14%, 50% 0, 72% 14%, 100% 0); }
-.rocket-launch-scene__flame--outer { width: 27px; height: 70px; background: linear-gradient(#fef08a 0%, #fb923c 40%, #ef4444 72%, transparent); filter: blur(2px); animation: rocket-engine .12s ease-in-out infinite alternate; }
-.rocket-launch-scene__flame--inner { width: 12px; height: 46px; background: linear-gradient(#fff 0%, #fde047 40%, #fb923c 72%, transparent); animation: rocket-engine-inner .09s ease-in-out infinite alternate; }
+.rocket-launch-scene__flame--outer { width: 27px; height: 70px; background: linear-gradient(#fef08a 0%, #fb923c 40%, #ef4444 72%, transparent); filter: blur(2px); animation: rocket-engine .22s ease-in-out infinite alternate; }
+.rocket-launch-scene__flame--inner { width: 12px; height: 46px; background: linear-gradient(#fff 0%, #fde047 40%, #fb923c 72%, transparent); animation: rocket-engine-inner .16s ease-in-out infinite alternate; }
 .rocket-launch-scene__trail { position: fixed; left: 50%; top: 36%; width: 3px; height: 52vh; transform-origin: top; background: linear-gradient(to bottom, rgba(251,113,133,0), rgba(251,146,60,.72), rgba(253,224,71,.16), transparent); filter: blur(3px); box-shadow: 0 0 22px rgba(251,146,60,.28); }
 .rocket-cloud { position: fixed; z-index: 2; transform: translate(-50%, -50%); pointer-events: none; filter: blur(.4px) drop-shadow(0 0 18px rgba(255,255,255,.16)); }
 .rocket-cloud__puff { position: absolute; display: block; border-radius: 999px; background: linear-gradient(180deg, rgba(248,250,252,.9), rgba(148,163,184,.46)); box-shadow: inset 0 9px 18px rgba(255,255,255,.15); }
