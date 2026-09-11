@@ -251,9 +251,8 @@ export default function Hero({ data = {} }) {
                   <img
                     src={data.image}
                     alt={data.name || 'Hero'}
-                    className="w-full h-full object-cover grayscale-[15%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                    className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-[1.02]"
                   />
-                  <div className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-[#050508]/85 via-[#050508]/25 to-transparent opacity-75" />
 
                   {/* Badges */}
                   <motion.div

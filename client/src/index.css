@@ -266,15 +266,15 @@ main > section:not(#home) {
 .hero-portrait-layer { z-index: 20; transform-style: preserve-3d; }
 .hero-portrait { background: transparent !important; border-color: transparent !important; box-shadow: none !important; }
 .hero-portrait > div { background: transparent !important; border-color: transparent !important; }
-.hero-portrait img { filter: grayscale(10%) contrast(1.05); mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 78%, transparent 100%); }
+.hero-portrait img { filter: none; mask-image: none; }
 .hero-content > .hero-meta { z-index: 30; }
 .hero .hero-content .hero-name-layer + .hero-copy { position: relative; z-index: 30; }
 
 @media (min-width: 1024px) {
   .hero-content { padding-top: 13rem; width: 54%; }
-  .hero-portrait-layer { position: absolute; right: 3%; bottom: -2rem; width: 40%; transform: translateZ(40px); }
-  .hero-portrait { max-width: none !important; width: 100% !important; min-height: 72vh !important; aspect-ratio: auto !important; }
-  .hero-portrait > div { height: 72vh !important; }
+  .hero-portrait-layer { position: absolute; right: 1%; bottom: -2rem; width: 46%; transform: translateZ(40px); }
+  .hero-portrait { max-width: none !important; width: 100% !important; min-height: 78vh !important; aspect-ratio: auto !important; }
+  .hero-portrait > div { height: 78vh !important; }
 }
 
 @media (max-width: 1023px) {
@@ -289,7 +289,7 @@ main > section:not(#home) {
 @media (max-width: 640px) {
   .hero-name-layer h1 { font-size: clamp(3rem, 16vw, 5rem); }
   .hero-content { padding-top: 2rem; }
-  .hero-portrait { min-height: 56vh !important; }
+  .hero-portrait { min-height: 60vh !important; }
 }
 
 .hero-image-tag { translate: 0 0; animation: hero-image-tag-float 5.5s ease-in-out infinite; }
