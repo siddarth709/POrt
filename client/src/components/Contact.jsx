@@ -4,7 +4,6 @@ import { ArrowUpRight, Send, CheckCircle2, AlertCircle } from 'lucide-react';
 import api from '../api/axios';
 import { formatExternalUrl } from '../utils/url';
 import GradientWaves from './GradientWaves';
-import RocketLaunch from './RocketLaunch';
 
 export default function Contact({ data = {}, heroSocials = [] }) {
   const [formOpen, setFormOpen] = useState(false);
@@ -259,7 +258,6 @@ export default function Contact({ data = {}, heroSocials = [] }) {
                 </a>
               </React.Fragment>
             ))}
-            <RocketLaunch className="contact-rocket-launch" />
           </div>
         )}
 

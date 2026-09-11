@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
+import React, { useRef, useCallback } from 'react';
+import { motion, useScroll, useTransform, useMotionValue, useSpring, useMotionTemplate } from 'framer-motion';
 import { ArrowDown, ArrowUpRight, Orbit } from 'lucide-react';
 import { formatExternalUrl } from '../utils/url';
 
@@ -51,6 +51,22 @@ export default function Hero({ data = {} }) {
   const heroScale = useTransform(scrollY, [0, 500], [1, 0.98]);
   const heroTranslateY = useTransform(scrollY, [0, 500], [0, 50]);
 
+  // Mouse-tracking spotlight
+  const rawMouseX = useMotionValue(50);
+  const rawMouseY = useMotionValue(50);
+  const spotX = useSpring(rawMouseX, { stiffness: 60, damping: 20 });
+  const spotY = useSpring(rawMouseY, { stiffness: 60, damping: 20 });
+
+  const handleHeroMouseMove = useCallback((e) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    rawMouseX.set(((e.clientX - rect.left) / rect.width) * 100);
+    rawMouseY.set(((e.clientY - rect.top) / rect.height) * 100);
+  }, [rawMouseX, rawMouseY]);
+
+  // Reactive spotlight gradient string
+  const spotlightBg = useMotionTemplate`radial-gradient(700px circle at ${spotX}% ${spotY}%, rgba(99,102,241,0.22) 0%, rgba(139,92,246,0.07) 38%, transparent 68%)`;
+
   const scrollTo = (id) => {
     const element = document.getElementById(id);
     if (element) {
@@ -79,18 +95,29 @@ export default function Hero({ data = {} }) {
     <section
       id="home"
       ref={containerRef}
+      onMouseMove={handleHeroMouseMove}
       className="hero relative min-h-screen flex flex-col justify-between pt-24 sm:pt-28 pb-8 px-5 sm:px-8 overflow-hidden bg-[#090a0f]"
     >
-      {/* Clean Hero Background */}
+      {/* ── Interactive Background ── */}
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
-        {/* Single clean sweep: deep indigo to transparent, top-center */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_90%_65%_at_50%_-5%,_rgba(79,70,229,0.45)_0%,_rgba(67,56,202,0.15)_40%,_transparent_70%)]" />
-        {/* Subtle warm amber behind the portrait - not oversaturated */}
-        <div className="absolute top-[25%] left-[45%] -translate-x-1/2 w-[480px] h-[480px] rounded-full bg-[radial-gradient(ellipse_at_center,_rgba(245,158,11,0.12)_0%,_transparent_65%)] blur-3xl" />
-        {/* Faint horizontal light streak across middle */}
-        <div className="absolute top-[38%] inset-x-0 h-px bg-gradient-to-r from-transparent via-indigo-500/20 to-transparent" />
-        {/* Bottom fade to base */}
-        <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#090a0f] via-[#090a0f]/60 to-transparent z-[5]" />
+
+        {/* 1. Ambient base — deep indigo arc at top */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_90%_55%_at_50%_-10%,_rgba(79,70,229,0.35)_0%,_transparent_65%)]" />
+
+        {/* 2. Mouse-following spotlight — useMotionTemplate makes it fully reactive */}
+        <motion.div className="absolute inset-0" style={{ background: spotlightBg }} />
+
+        {/* 3. Warm amber glow behind portrait center */}
+        <div className="absolute top-[30%] left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full bg-[radial-gradient(ellipse_at_center,_rgba(245,158,11,0.1)_0%,_transparent_65%)] blur-3xl" />
+
+        {/* 4. Subtle dot-grid */}
+        <div
+          className="absolute inset-0 opacity-[0.035]"
+          style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.9) 1px, transparent 1px)', backgroundSize: '36px 36px' }}
+        />
+
+        {/* 5. Bottom fade */}
+        <div className="absolute inset-x-0 bottom-0 h-52 bg-gradient-to-t from-[#090a0f] via-[#090a0f]/70 to-transparent z-[5]" />
       </div>
 
       <motion.div
