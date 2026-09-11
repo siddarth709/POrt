@@ -14,17 +14,17 @@ export default function Experience({ data }) {
     const ctx = gsap.context(() => {
       gsap.utils.toArray('.experience-item').forEach((item) => {
         gsap.fromTo(item,
-          { rotationX: -35, z: -250, opacity: 0, transformPerspective: 1000 },
+          { y: 40, opacity: 0 },
           {
-            rotationX: 0,
-            z: 0,
+            y: 0,
             opacity: 1,
-            ease: 'none',
+            ease: 'power2.out',
             scrollTrigger: {
               trigger: item,
-              start: 'top 88%',
-              end: 'top 42%',
-              scrub: 1.2,
+              start: 'top 90%',
+              end: 'top 60%',
+              scrub: false,
+              toggleActions: 'play none none none',
             },
           }
         );
@@ -41,7 +41,7 @@ export default function Experience({ data }) {
   const items = data.items;
 
   return (
-    <section id="experience" ref={sectionRef} className="relative py-28 sm:py-36 px-5 sm:px-8 border-t border-white/[0.04]">
+    <section id="experience" ref={sectionRef} className="relative py-16 sm:py-24 px-5 sm:px-8 border-t border-white/[0.04]">
       <div className="max-w-7xl mx-auto">
         {/* Section Heading */}
         <div className="section-heading mb-14 sm:mb-16">

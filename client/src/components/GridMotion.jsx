@@ -38,10 +38,10 @@ export default function GridMotion({ items = [], gradientColor = '#5227FF' }) {
       const scrollDistance = Math.max(sectionHeight - window.innerHeight, 1);
       const progress = Math.max(0, Math.min(1, -(sectionBounds?.top || 0) / scrollDistance));
       gsap.to(canvasRef.current, {
-        x: (progress - 0.5) * -180,
-        y: (progress - 0.5) * 260,
-        rotation: -15 + (progress - 0.5) * 7,
-        scale: 1.08 + progress * 0.08,
+        x: (progress - 0.5) * -60,
+        y: (progress - 0.5) * 80,
+        rotation: -8 + (progress - 0.5) * 4,
+        scale: 1.02 + progress * 0.04,
         duration: 0.85,
         ease: 'power3.out',
         overwrite: 'auto',
