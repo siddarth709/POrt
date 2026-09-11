@@ -226,15 +226,32 @@ export default function Login() {
                 {submitting ? 'VERIFYING…' : isSetup ? 'SIGN IN TO DASHBOARD' : 'ACTIVATE & CONTINUE'}
               </button>
 
-              {!isSetup && (
+              <div className="flex items-center justify-between pt-2 border-t border-white/[0.08] mt-3 font-mono text-xs text-slate-400">
                 <button
                   type="button"
-                  onClick={handleRegenerate}
-                  className="text-center text-xs font-mono text-slate-500 hover:text-slate-300 transition-colors mt-2"
+                  onClick={handleEnterLocal}
+                  className="hover:text-white transition-colors"
                 >
-                  Regenerate QR Code
+                  Bypass to Dashboard
                 </button>
-              )}
+
+                <button
+                  type="button"
+                  onClick={async () => {
+                    setError('');
+                    try {
+                      const api = (await import('../services/api')).default;
+                      await api.post('/auth/reset');
+                      await fetchStatus();
+                    } catch (err) {
+                      handleEnterLocal();
+                    }
+                  }}
+                  className="text-indigo-400 hover:text-indigo-300 transition-colors"
+                >
+                  Reset 2FA Setup
+                </button>
+              </div>
             </form>
           </div>
         )}

@@ -139,17 +139,31 @@ router.post('/login-totp', async (req, res) => {
       secret: user.totpSecret,
       encoding: 'base32',
       token: cleanToken,
-      window: 2, // Allow slight time drift
+      window: 6, // Allow 3 minutes time drift
     });
 
     if (!verified) {
-      return res.status(400).json({ message: 'Invalid or expired OTP. Please try again.' });
+      return res.status(400).json({ message: 'Invalid or expired OTP. Ensure your device clock is synced.' });
     }
 
     const jwtToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET || 'secret', { expiresIn: '30d' });
     res.json({ success: true, token: jwtToken, email: user.email });
   } catch (err) {
     res.status(500).json({ message: 'Authentication error', error: err.message });
+  }
+});
+
+// POST /api/auth/reset - emergency reset TOTP setup
+router.post('/reset', async (req, res) => {
+  try {
+    const user = await getOwner();
+    user.totpSecret = null;
+    user.tempTotpSecret = null;
+    user.isTotpSetup = false;
+    await user.save();
+    res.json({ success: true, message: 'TOTP 2FA reset successfully. Please set up a new authenticator key.' });
+  } catch (err) {
+    res.status(500).json({ message: 'Error resetting auth', error: err.message });
   }
 });
 
