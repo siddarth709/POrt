@@ -10,6 +10,7 @@ import Projects from '../components/Projects';
 import Chronicles from '../components/Chronicles';
 import Contact from '../components/Contact';
 import GridMotion from '../components/GridMotion';
+import ScrollScene3D from '../components/ScrollScene3D';
 
 export default function Home() {
   const { content } = useContent();
@@ -116,6 +117,7 @@ export default function Home() {
   return (
     <div className="portfolio-shell relative isolate min-h-screen overflow-x-clip bg-[#050508] text-slate-100 selection:bg-cyan-500/20 selection:text-cyan-100">
       <a className="skip-link" href="#main-content">Skip to content</a>
+      <ScrollScene3D />
       <CustomCursor />
       <Navbar visibility={visibility} />
 
