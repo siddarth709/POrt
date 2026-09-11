@@ -145,7 +145,7 @@ export default function Hero({ data = {} }) {
         }}
         className="hero-stage max-w-7xl mx-auto w-full relative"
       >
-        <div className={hasImage ? "grid lg:grid-cols-12 gap-12 lg:gap-16 items-center" : "max-w-6xl text-left"}>
+        <div className={`hero-grid ${hasImage ? "grid lg:grid-cols-12 gap-12 lg:gap-16 items-center" : "max-w-6xl text-left"}`}>
           
           {/* Left Column: Big Name & Beautiful Tag Below */}
           <div className={`hero-content ${hasImage ? "lg:col-span-7 flex flex-col items-start text-left" : "flex flex-col items-start text-left"}`}>
