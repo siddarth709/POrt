@@ -80,7 +80,7 @@ body {
 
 /* Editorial subtle text gradient */
 .editorial-gradient {
-  background: linear-gradient(180deg, #101731 0%, #050508 100%);
+  background: linear-gradient(180deg, #e2e8f0 0%, #93a4c7 52%, #33446b 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -238,7 +238,7 @@ main > section:not(#home) {
 }
 
 .hero {
-  background: #09070c;
+  background: #0d0f18;
   isolation: isolate;
 }
 
