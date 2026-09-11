@@ -20,13 +20,13 @@ export default function Certifications({ data }) {
             </div>
             <AnimatedHeading
               text="Certifications"
-              className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight"
+              className="scroll-text-reveal font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight"
               wordClassName="gradient-text"
             />
           </div>
         </Reveal>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
+        <div className="scroll-stagger-grid grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
           {data.items.map((c, i) => (
             <Reveal key={c._id || i} custom={i} variants={scaleIn}>
               <motion.button

@@ -962,3 +962,112 @@ body.rocket-launching *:not(.rocket-launch-scene):not(.rocket-launch-scene *) {
     max-height: 32vh !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════
+   AWWWARDS SCROLL ANIMATION SYSTEM
+═══════════════════════════════════════════════════ */
+
+/* Smooth scroll root (Lenis overrides this on desktop) */
+html {
+  scroll-behavior: auto; /* Lenis handles it */
+}
+
+/* ── Scroll word reveal container ── */
+.scroll-text-reveal {
+  overflow: hidden;
+  display: block;
+}
+
+.scroll-word {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* ── Stagger grid: children start invisible until GSAP fires ── */
+@media (min-width: 768px) {
+  .scroll-stagger-grid > * {
+    will-change: transform, opacity;
+  }
+}
+
+/* ── Line draw base ── */
+.scroll-line-draw {
+  transform-origin: left center;
+  will-change: transform;
+}
+
+/* ── Fade-up base ── */
+.scroll-fade-up {
+  will-change: transform, opacity;
+}
+
+/* ── Section entrance: subtle depth ring that pulses in ── */
+@media (min-width: 768px) {
+  main > section:not(#home) {
+    will-change: transform, opacity, border-radius;
+    transform-origin: center 60%;
+  }
+}
+
+/* ── Image parallax container ── */
+.image-surface {
+  overflow: hidden;
+}
+
+.image-surface img {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* ── Lenis wrapper: prevent double scroll bars ── */
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+/* ── Awwwards-style section reveal shimmer ── */
+@keyframes aww-shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+.aww-shimmer-text {
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.15) 0%,
+    rgba(255,255,255,0.85) 40%,
+    rgba(255,255,255,0.15) 80%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: aww-shimmer 3s linear infinite;
+}
+
+/* ── Cursor blend mode on interactive items ── */
+.scroll-magnetic {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* ── Scroll progress indicator ── */
+#scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #06b6d4, #818cf8, #f472b6);
+  transform-origin: left;
+  z-index: 9999;
+  pointer-events: none;
+}
+

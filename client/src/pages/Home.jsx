@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useContent } from '../context/ContentContext';
+import useScrollAnimations from '../hooks/useScrollAnimations';
 import CustomCursor from '../components/CustomCursor';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
@@ -14,6 +15,7 @@ import GridMotion from '../components/GridMotion';
 
 export default function Home() {
   const { content } = useContent();
+  useScrollAnimations();
 
   useEffect(() => {
     const sections = [...document.querySelectorAll('main > section')];
@@ -107,6 +109,8 @@ export default function Home() {
 
   return (
     <div className="portfolio-shell relative isolate min-h-screen overflow-x-clip bg-[#050508] text-slate-100 selection:bg-cyan-500/20 selection:text-cyan-100">
+      {/* Awwwards scroll progress bar */}
+      <div id="scroll-progress" style={{ transform: 'scaleX(0)' }} />
       <a className="skip-link" href="#main-content">Skip to content</a>
       <CustomCursor />
       <Navbar visibility={visibility} />

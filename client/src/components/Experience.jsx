@@ -57,7 +57,7 @@ export default function Experience({ data }) {
         </div>
 
         {/* Editorial Experiences Flowing Seamlessly */}
-        <div className="divide-y divide-white/[0.06] border-y border-white/[0.06]">
+        <div className="scroll-stagger-grid divide-y divide-white/[0.06] border-y border-white/[0.06]">
           {items.map((item, idx) => {
             const isHovered = hoveredId === (item._id || idx);
             return (

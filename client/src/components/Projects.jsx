@@ -53,7 +53,7 @@ export default function Projects({ data }) {
             >
               PROJECTS
             </motion.h2>
-            <p className="font-display text-2xl sm:text-3xl text-slate-200 font-medium mt-3">
+            <p className="scroll-text-reveal font-display text-2xl sm:text-3xl text-slate-200 font-medium mt-3">
               Selected systems, made tangible.
             </p>
           </div>
@@ -63,7 +63,7 @@ export default function Projects({ data }) {
         </div>
 
         {/* Large Immersive Showcases */}
-        <div className="grid gap-5 lg:grid-cols-2">
+        <div className="scroll-stagger-grid grid gap-5 lg:grid-cols-2">
           {projects.map((project, idx) => {
             const isEven = idx % 2 === 0;
 
