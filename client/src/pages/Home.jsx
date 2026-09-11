@@ -32,7 +32,7 @@ export default function Home() {
         return;
       }
 
-      const targets = [...section.querySelectorAll('h2, h3, p, img, .glass-panel, .project-card, .experience-row, .chroma-card, form, input, textarea')]
+      const targets = [...section.querySelectorAll('h2, h3, p, img:not(.hero-grounded-portrait), .glass-panel, .project-card, .experience-row, .chroma-card, form, input, textarea')]
         .filter((element) => !element.dataset.revealed);
 
       targets.forEach((element, index) => {

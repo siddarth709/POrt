@@ -223,9 +223,9 @@ export default function Hero({ data = {} }) {
           {hasImage && (
             <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-0 z-20 flex justify-center items-end">
               <motion.img
-                initial={{ opacity: 0, y: 40, scale: 0.97 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 1, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
                 src={data.image}
                 alt={data.name || 'Hero'}
                 className="hero-grounded-portrait w-auto max-h-[60vh] sm:max-h-[70vh] lg:max-h-[78vh] object-contain object-bottom"
