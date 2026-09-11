@@ -272,7 +272,7 @@ main > section:not(#home) {
 
 @media (min-width: 1024px) {
   .hero-content { padding-top: 13rem; width: 54%; }
-  .hero-portrait-layer { position: absolute; right: 1%; bottom: -2rem; width: 46%; transform: translateZ(40px); }
+  .hero-portrait-layer { position: absolute; left: 50%; right: auto; bottom: -2rem; width: 46%; margin-left: -23%; transform: translateZ(40px); }
   .hero-portrait { max-width: none !important; width: 100% !important; min-height: 78vh !important; aspect-ratio: auto !important; }
   .hero-portrait > div { height: 78vh !important; }
 }
