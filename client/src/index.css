@@ -495,7 +495,7 @@ main > section:not(#home) {
 #grid-motion { perspective: 1200px; }
 
 .grid-motion-section { min-height: 155vh; padding: .5rem; background: #060710 !important; }
-.grid-motion-shell { width: min(100%, 1080px); aspect-ratio: 1; height: auto; min-height: 0; margin: 0 auto; overflow: hidden; border-radius: 1.25rem; background: #060710; box-shadow: inset 0 0 120px color-mix(in srgb, var(--grid-gradient, #5227FF) 18%, transparent); }
+.grid-motion-shell { width: 100%; max-width: none; aspect-ratio: 16 / 9; height: auto; min-height: 0; margin: 0; overflow: hidden; border-radius: 1.25rem; background: #060710; box-shadow: inset 0 0 120px color-mix(in srgb, var(--grid-gradient, #5227FF) 18%, transparent); }
 .grid-motion-section .grid-motion-shell { position: sticky; top: 11vh; }
 .grid-motion-intro { position: relative; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; overflow: hidden; }
 .grid-motion-intro::after { content: ''; position: absolute; inset: 0; z-index: 4; pointer-events: none; box-shadow: inset 0 0 96px rgba(6, 7, 16, .42), inset 0 -160px 180px color-mix(in srgb, var(--grid-gradient, #5227FF) 16%, transparent); }
