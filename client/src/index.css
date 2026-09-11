@@ -257,8 +257,11 @@ main > section:not(#home) {
 .hero-stage { z-index: 10; min-height: min(82vh, 820px); display: flex; align-items: center; }
 .hero-grid { position: relative; width: 100%; min-height: min(76vh, 760px); }
 .hero-content { position: relative; z-index: 30; }
+.hero-status { margin-bottom: 1rem; }
+.hero-description p { max-width: 42rem; font-size: clamp(1rem, 1.5vw, 1.22rem); line-height: 1.5; }
+.hero-actions { margin-top: 0; }
 .hero-name-layer { transform-style: preserve-3d; }
-  .hero-name-layer { position: absolute; top: 1rem; left: 0; width: calc(100vw - 3rem); margin: 0; }
+.hero-name-layer { position: absolute; top: 1rem; left: 0; width: calc(100vw - 3rem); margin: 0; }
 .hero-name-layer h1 { position: relative; z-index: 10; font-size: clamp(4.2rem, 11vw, 10.5rem); letter-spacing: -.055em; line-height: .88; white-space: nowrap; }
 .hero-portrait-layer { z-index: 20; transform-style: preserve-3d; }
 .hero-portrait { background: transparent !important; border-color: transparent !important; box-shadow: none !important; }
@@ -268,8 +271,8 @@ main > section:not(#home) {
 .hero .hero-content .hero-name-layer + .hero-copy { position: relative; z-index: 30; }
 
 @media (min-width: 1024px) {
-  .hero-content { padding-top: 13rem; width: 52%; }
-  .hero-portrait-layer { position: absolute; right: 5%; bottom: -2rem; width: 42%; transform: translateZ(40px); }
+  .hero-content { padding-top: 13rem; width: 54%; }
+  .hero-portrait-layer { position: absolute; right: 3%; bottom: -2rem; width: 40%; transform: translateZ(40px); }
   .hero-portrait { max-width: none !important; width: 100% !important; min-height: 72vh !important; aspect-ratio: auto !important; }
   .hero-portrait > div { height: 72vh !important; }
 }

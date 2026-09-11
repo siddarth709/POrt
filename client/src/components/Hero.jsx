@@ -155,7 +155,7 @@ export default function Hero({ data = {} }) {
               initial={false}
               whileHover={{ scale: 1.02, y: -1 }}
               transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="relative z-30 inline-flex items-center gap-2.5 px-3.5 py-2 rounded-full border border-white/[0.1] hover:border-cyan-300/40 bg-white/[0.035] hover:bg-cyan-300/[0.07] backdrop-blur-md mb-7 transition-all cursor-default shadow-sm hover:shadow-[0_0_24px_rgba(34,211,238,0.12)]"
+              className="hero-status relative z-30 inline-flex items-center gap-2.5 px-3.5 py-2 rounded-full border border-white/[0.1] hover:border-cyan-300/40 bg-white/[0.035] hover:bg-cyan-300/[0.07] backdrop-blur-md mb-7 transition-all cursor-default shadow-sm hover:shadow-[0_0_24px_rgba(34,211,238,0.12)]"
             >
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -186,7 +186,7 @@ export default function Hero({ data = {} }) {
                 initial={false}
                 whileHover={{ x: 4 }}
                 transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                className="relative z-30 max-w-2xl mb-9 group"
+                className="hero-description relative z-30 max-w-2xl mb-7 group"
               >
                 <p className="text-base sm:text-lg md:text-xl text-slate-100 font-normal leading-relaxed text-left whitespace-pre-line border-l-2 border-cyan-300/60 group-hover:border-cyan-300 pl-4 py-0.5 transition-colors duration-300 [text-shadow:0_2px_18px_rgba(18,15,23,0.9)]">
                   {taglineText}
@@ -197,7 +197,7 @@ export default function Hero({ data = {} }) {
             {/* Action Buttons */}
             <motion.div
               initial={false}
-              className="relative z-30 flex flex-wrap items-center gap-3 sm:gap-4"
+              className="hero-actions relative z-30 flex flex-wrap items-center gap-3 sm:gap-4"
             >
               <MagneticButton
                 as={motion.a}
@@ -245,15 +245,15 @@ export default function Hero({ data = {} }) {
               <motion.div
                 whileHover={{ y: -6, scale: 1.01 }}
                 transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                className="image-surface hero-portrait relative w-full max-w-sm sm:max-w-md aspect-[4/5] rounded-[2rem] overflow-hidden glass-panel border border-white/[0.1] group-hover:border-white/[0.25] p-3 shadow-2xl transition-colors duration-500"
+                className="image-surface hero-portrait relative z-20 w-full max-w-sm sm:max-w-md aspect-[4/5] overflow-visible transition-colors duration-500"
               >
-                <div className="relative w-full h-full rounded-2xl overflow-hidden bg-black/40 border border-white/[0.06]">
+                <div className="relative w-full h-full overflow-visible bg-transparent">
                   <img
                     src={data.image}
                     alt={data.name || 'Hero'}
                     className="w-full h-full object-cover grayscale-[15%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#050508]/80 via-transparent to-transparent opacity-50" />
+                  <div className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-[#050508]/85 via-[#050508]/25 to-transparent opacity-75" />
 
                   {/* Badges */}
                   <motion.div
