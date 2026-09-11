@@ -9,3 +9,16 @@ export function formatExternalUrl(url = '') {
   }
   return `https://${trimmed}`;
 }
+
+export function formatImageUrl(url = '') {
+  if (!url) return '';
+  let str = String(url).trim();
+  if (!str) return '';
+  if (str.startsWith('http://')) {
+    str = 'https://' + str.slice(7);
+  }
+  if (!/^(https?:|\/|data:)/i.test(str)) {
+    str = `https://${str}`;
+  }
+  return str;
+}
