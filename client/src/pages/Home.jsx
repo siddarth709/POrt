@@ -104,7 +104,6 @@ export default function Home() {
     contact: true,
   };
 
-  const visualItems = (content?.gridMotion?.items || []).filter((item) => item?.image);
 
   return (
     <div className="portfolio-shell relative isolate min-h-screen overflow-x-clip bg-[#050508] text-slate-100 selection:bg-cyan-500/20 selection:text-cyan-100">
@@ -130,7 +129,6 @@ export default function Home() {
         {visibility.certifications && <Certifications data={content?.certifications} />}
         {visibility.projects && <Projects data={content?.projects} />}
         {visibility.chronicles && <Chronicles data={content?.chronicles} />}
-        {content?.gridMotion?.visible !== false && <GridMotion items={visualItems} gradientColor="#5227FF" />}
         <Contact data={content?.contact} heroSocials={content?.hero?.socials} />
       </main>
     </div>
