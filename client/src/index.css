@@ -330,6 +330,8 @@ main > section:not(#home) {
 
 .image-surface:hover { transform: translateY(-5px) scale(1.012); border-color: rgba(165, 243, 252, .5) !important; box-shadow: 0 24px 55px rgba(0,0,0,.38), 0 0 34px rgba(103,232,249,.12); }
 .image-surface:hover::after { opacity: 1; }
+.hero-portrait::after,
+.hero-portrait:hover::after { opacity: 0 !important; background: none; }
 .image-surface img { transition: transform .75s cubic-bezier(.16,1,.3,1), filter .5s ease; }
 .image-surface:hover img { transform: scale(1.09); filter: saturate(1.14) contrast(1.04); }
 
