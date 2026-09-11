@@ -95,9 +95,9 @@ export default function Hero({ data = {} }) {
     <section
       id="home"
       ref={containerRef}
-      className="relative min-h-[94vh] sm:min-h-screen flex items-center justify-center pt-28 pb-16 px-5 sm:px-8 overflow-hidden"
+      className="hero relative min-h-[94vh] sm:min-h-screen flex items-center justify-center pt-28 pb-16 px-5 sm:px-8 overflow-hidden"
     >
-      <div className="absolute inset-0 z-0 pointer-events-none" aria-hidden="true">
+      <div className="hero-ambient absolute inset-0 z-0 pointer-events-none" aria-hidden="true">
         <AeroShards
           backgroundColor="#120F17"
           shardColor="#896ABD"
@@ -130,11 +130,11 @@ export default function Hero({ data = {} }) {
         />
       </div>
       <div
-        className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-r from-[#120F17]/95 via-[#120F17]/78 to-[#120F17]/12"
+        className="hero-vignette pointer-events-none absolute inset-0 z-[1] bg-gradient-to-r from-[#120F17]/95 via-[#120F17]/78 to-[#120F17]/12"
         aria-hidden="true"
       />
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-1/3 bg-gradient-to-t from-[#120F17]/72 to-transparent"
+        className="hero-vignette-bottom pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-1/3 bg-gradient-to-t from-[#120F17]/72 to-transparent"
         aria-hidden="true"
       />
       <motion.div
@@ -143,12 +143,12 @@ export default function Hero({ data = {} }) {
           scale: heroScale,
           y: heroTranslateY,
         }}
-        className="max-w-7xl mx-auto w-full relative"
+        className="hero-stage max-w-7xl mx-auto w-full relative"
       >
         <div className={hasImage ? "grid lg:grid-cols-12 gap-12 lg:gap-16 items-center" : "max-w-6xl text-left"}>
           
           {/* Left Column: Big Name & Beautiful Tag Below */}
-          <div className={hasImage ? "lg:col-span-7 flex flex-col items-start text-left" : "flex flex-col items-start text-left"}>
+          <div className={`hero-content ${hasImage ? "lg:col-span-7 flex flex-col items-start text-left" : "flex flex-col items-start text-left"}`}>
             
             {/* Status indicator */}
             <motion.div
@@ -169,7 +169,7 @@ export default function Hero({ data = {} }) {
             {/* BIG NAME (Headline) */}
             <motion.div
               ref={textLayerRef}
-              className="relative z-10 font-display font-extrabold tracking-tight text-white leading-[1.02] sm:leading-[1] mb-6 select-none group"
+              className="hero-name-layer relative z-10 font-display font-extrabold tracking-tight text-white leading-[1.02] sm:leading-[1] mb-6 select-none group"
             >
               <AnimatedHeading
                 as="h1"
@@ -226,7 +226,7 @@ export default function Hero({ data = {} }) {
             </motion.div>
             <motion.div
               initial={false}
-              className="relative z-30 mt-12 flex flex-wrap items-center gap-x-6 gap-y-3 font-mono text-[10px] uppercase tracking-[0.14em] text-slate-300 [text-shadow:0_2px_14px_rgba(18,15,23,0.95)]"
+              className="hero-meta relative z-30 mt-12 flex flex-wrap items-center gap-x-6 gap-y-3 font-mono text-[10px] uppercase tracking-[0.14em] text-slate-300 [text-shadow:0_2px_14px_rgba(18,15,23,0.95)]"
             >
               <span className="flex items-center gap-2"><Orbit size={13} className="text-cyan-300" /> AI systems</span>
               <span className="h-1 w-1 rounded-full bg-slate-600" />
@@ -240,7 +240,7 @@ export default function Hero({ data = {} }) {
             <motion.div
               initial={false}
               ref={portraitLayerRef}
-              className="relative z-20 lg:col-span-5 flex justify-center group"
+              className="hero-portrait-layer relative z-20 lg:col-span-5 flex justify-center group"
             >
               <motion.div
                 whileHover={{ y: -6, scale: 1.01 }}

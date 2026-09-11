@@ -237,6 +237,55 @@ main > section:not(#home) {
   background: linear-gradient(125deg, rgba(255,255,255,.17), transparent 20%, transparent 72%, rgba(103,232,249,.12));
 }
 
+.hero {
+  background: #09070c;
+  isolation: isolate;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: .16;
+  background-image: radial-gradient(rgba(255,255,255,.25) .6px, transparent .7px);
+  background-size: 5px 5px;
+  mix-blend-mode: soft-light;
+}
+
+.hero-stage { z-index: 10; min-height: min(78vh, 800px); display: flex; align-items: center; }
+.hero-content { position: relative; z-index: 30; }
+.hero-name-layer { transform-style: preserve-3d; }
+.hero-name-layer h1 { position: relative; z-index: 10; font-size: clamp(4.2rem, 11vw, 10.5rem); letter-spacing: -.055em; white-space: nowrap; }
+.hero-portrait-layer { z-index: 20; transform-style: preserve-3d; }
+.hero-portrait { background: transparent !important; border-color: transparent !important; box-shadow: none !important; }
+.hero-portrait > div { background: transparent !important; border-color: transparent !important; }
+.hero-portrait img { filter: grayscale(10%) contrast(1.05); mask-image: linear-gradient(to bottom, #000 80%, transparent 100%); }
+.hero-content > .hero-meta { z-index: 30; }
+.hero .hero-content .hero-name-layer + .hero-copy { position: relative; z-index: 30; }
+
+@media (min-width: 1024px) {
+  .hero-stage > div { position: relative; }
+  .hero-content { padding-top: 8rem; }
+  .hero-name-layer { position: relative; width: calc(100vw - 3rem); margin-left: -1rem; }
+  .hero-portrait-layer { margin-left: -8rem; transform: translateZ(40px); }
+  .hero-portrait { max-width: 30rem !important; width: min(34vw, 30rem) !important; min-height: 70vh !important; }
+}
+
+@media (max-width: 1023px) {
+  .hero-stage { min-height: auto; }
+  .hero-name-layer h1 { white-space: normal; font-size: clamp(3.5rem, 13vw, 7rem); }
+  .hero-portrait-layer { order: 2; margin-top: 2rem; }
+  .hero-content { order: 1; }
+}
+
+@media (max-width: 640px) {
+  .hero-name-layer h1 { font-size: clamp(3rem, 16vw, 5rem); }
+  .hero-content { padding-top: 2rem; }
+  .hero-portrait { min-height: 56vh !important; }
+}
+
 .hero-image-tag { translate: 0 0; animation: hero-image-tag-float 5.5s ease-in-out infinite; }
 .hero-image-tag--systems { animation-delay: -2.3s; }
 
