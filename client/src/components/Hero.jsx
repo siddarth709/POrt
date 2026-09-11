@@ -134,7 +134,7 @@ export default function Hero({ data = {} }) {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="hero-dribbble-title font-display font-black uppercase tracking-tight bg-gradient-to-r from-blue-400 via-indigo-300 to-slate-900 bg-clip-text text-transparent drop-shadow-[0_0_40px_rgba(99,102,241,0.4)]"
+            className="hero-dribbble-title font-display font-black uppercase tracking-tight bg-gradient-to-b from-[#2563eb] via-[#1e3a8a] to-[#000000] bg-clip-text text-transparent drop-shadow-[0_4px_30px_rgba(37,99,235,0.35)]"
           >
             {nameText}
           </motion.h1>
