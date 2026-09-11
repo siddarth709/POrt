@@ -1279,6 +1279,9 @@ export default function AeroShards({
   const ripplesRef = useRef(createRipples());
   const holdRef = useRef(createHold());
   const [ready, setReady] = useState(false);
+  const [showFallback, setShowFallback] = useState(false);
+
+  const fallbackImage = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1600 900%22 preserveAspectRatio=%22none%22%3E%3Crect width=%221600%22 height=%22900%22 fill=%22%23120F17%22/%3E%3Cpath d=%22M-80 760 520 140l350 300L1510-40M410 940 980 260l700 480%22 fill=%22none%22 stroke=%22%23896ABD%22 stroke-opacity=%22.28%22 stroke-width=%22120%22/%3E%3Cpath d=%22M-40 620 540 40m380 820 650-760%22 fill=%22none%22 stroke=%22%23A855F7%22 stroke-opacity=%22.24%22 stroke-width=%2230%22/%3E%3C/svg%3E';
 
   const resolvedMaterial = MATERIAL_PRESETS[material] || MATERIAL_PRESETS.pearl;
   const resolvedDetail = DETAIL_PRESETS[detail] || DETAIL_PRESETS.balanced;
@@ -1429,6 +1432,7 @@ export default function AeroShards({
       gpu = undefined;
       failedGpu?.dispose();
       const resolved = error instanceof Error ? error : new Error(String(error));
+      setShowFallback(true);
       onErrorRef.current?.(resolved);
     };
 
@@ -1553,7 +1557,11 @@ export default function AeroShards({
     window.addEventListener('scroll', markBoundsDirty, { passive: true, capture: true });
     document.addEventListener('visibilitychange', handleVisibilityChange);
     window.addEventListener('focus', handleVisibilityChange);
-    reduceMotion.addEventListener('change', handleVisibilityChange);
+    const handleReducedMotionChange = () => {
+      setShowFallback(reduceMotion.matches);
+      handleVisibilityChange();
+    };
+    reduceMotion.addEventListener('change', handleReducedMotionChange);
 
     visibilityObserver = new IntersectionObserver(
       entries => {
@@ -1580,6 +1588,11 @@ export default function AeroShards({
     void (async () => {
       try {
         setReady(false);
+        if (reduceMotion.matches) {
+          setShowFallback(true);
+          return;
+        }
+        setShowFallback(false);
         const resolvedQuality = resolveQuality(canvas);
         const preset = QUALITY_PRESETS[resolvedQuality] || QUALITY_PRESETS.medium;
         gpu = await init({ powerPreference: 'low-power' });
@@ -1992,7 +2005,7 @@ export default function AeroShards({
       window.removeEventListener('scroll', markBoundsDirty, true);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('focus', handleVisibilityChange);
-      reduceMotion.removeEventListener('change', handleVisibilityChange);
+      reduceMotion.removeEventListener('change', handleReducedMotionChange);
       visibilityObserver?.disconnect();
       resizeObserver?.disconnect();
       unsubscribeResize?.();
@@ -2012,9 +2025,14 @@ export default function AeroShards({
       style={{ backgroundColor }}
       aria-hidden="true"
     >
+      <img
+        src={fallbackImage}
+        alt=""
+        className={`pointer-events-none absolute inset-0 block h-full w-full object-cover transition-opacity duration-[650ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${showFallback || !ready ? 'opacity-100' : 'opacity-0'}`}
+      />
       <canvas
         ref={canvasRef}
-        className={`pointer-events-none absolute inset-0 block h-full w-full transition-opacity duration-[650ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${ready ? 'opacity-100' : 'opacity-0'}`}
+        className={`pointer-events-none absolute inset-0 block h-full w-full transition-opacity duration-[650ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${ready && !showFallback ? 'opacity-100' : 'opacity-0'}`}
       />
     </div>
   );
