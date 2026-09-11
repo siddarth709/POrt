@@ -239,6 +239,8 @@ export default function Hero({ data = {} }) {
           {hasImage && (
             <motion.div
               initial={false}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 1, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
               ref={portraitLayerRef}
               className="hero-portrait-layer relative z-20 lg:col-span-5 flex justify-center group"
             >
@@ -256,6 +258,9 @@ export default function Hero({ data = {} }) {
 
                   {/* Badges */}
                   <motion.div
+                    initial={{ opacity: 0, y: -12, scale: 0.9 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ duration: 0.65, delay: 0.95, ease: [0.16, 1, 0.3, 1] }}
                     whileHover={{ scale: 1.08 }}
                     className="hero-image-tag hero-image-tag--ai absolute top-4 right-4 px-3 py-1 rounded-full glass-panel border border-white/10 hover:border-cyan-400/40 font-mono text-[10px] text-slate-300 flex items-center gap-1.5 shadow-md cursor-default transition-all"
                   >
@@ -264,6 +269,9 @@ export default function Hero({ data = {} }) {
                   </motion.div>
 
                   <motion.div
+                    initial={{ opacity: 0, y: 12, scale: 0.9 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ duration: 0.65, delay: 1.1, ease: [0.16, 1, 0.3, 1] }}
                     whileHover={{ scale: 1.08 }}
                     className="hero-image-tag hero-image-tag--systems absolute bottom-4 left-4 px-3 py-1 rounded-full glass-panel border border-white/10 hover:border-emerald-400/40 font-mono text-[10px] text-slate-300 flex items-center gap-1.5 shadow-md cursor-default transition-all"
                   >
