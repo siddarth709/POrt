@@ -6,7 +6,7 @@ export default function CursorSpotlight() {
   const mouseX = useMotionValue(-1000);
   const mouseY = useMotionValue(-1000);
 
-  const springConfig = { damping: 30, stiffness: 180, mass: 0.6 };
+  const springConfig = { damping: 26, stiffness: 230, mass: 0.5 };
   const smoothX = useSpring(mouseX, springConfig);
   const smoothY = useSpring(mouseY, springConfig);
 

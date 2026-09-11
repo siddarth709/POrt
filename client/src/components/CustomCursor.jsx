@@ -9,7 +9,7 @@ export default function CustomCursor() {
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
 
-  const springConfig = { damping: 26, stiffness: 300, mass: 0.4 };
+  const springConfig = { damping: 23, stiffness: 380, mass: 0.32 };
   const smoothX = useSpring(mouseX, springConfig);
   const smoothY = useSpring(mouseY, springConfig);
 
