@@ -384,6 +384,10 @@ main > section:not(#home) {
   filter: drop-shadow(0 0 24px rgba(34, 211, 238, .12));
 }
 
+.about-orbit--head {
+  transform-origin: center 42%;
+}
+
 .about-orbit__core,
 .about-orbit__ring {
   position: absolute;

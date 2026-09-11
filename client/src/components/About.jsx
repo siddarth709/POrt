@@ -146,7 +146,7 @@ export default function About({ data = {} }) {
             className="flex items-center justify-center relative group"
           >
             <motion.div
-              className="about-orbit pointer-events-none absolute inset-[8%] z-20"
+              className="about-orbit about-orbit--head pointer-events-none absolute inset-x-[8%] top-[-4%] bottom-auto z-20 h-[46%]"
               style={reducedMotion ? undefined : { rotate: orbitRotate, rotateX: orbitTiltX, rotateY: orbitTiltY, y: orbitY }}
               aria-hidden="true"
             >
