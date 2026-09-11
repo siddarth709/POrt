@@ -40,8 +40,7 @@ export default function RocketLaunch({ className = '' }) {
     const startTime = performance.now();
     const tick = (now) => {
       const progress = Math.min((now - startTime) / launch.duration, 1);
-      const eased = progress * progress * (3 - 2 * progress);
-      window.scrollTo(0, launch.scrollStart + (launch.scrollTarget - launch.scrollStart) * eased);
+      window.scrollTo(0, launch.scrollStart + (launch.scrollTarget - launch.scrollStart) * progress);
       if (progress < 1) {
         scrollFrameRef.current = requestAnimationFrame(tick);
       }
@@ -116,13 +115,13 @@ export default function RocketLaunch({ className = '' }) {
               className="rocket-launch-scene__rocket"
               initial={{ left: start.startX, top: start.startY, x: '-50%', y: '-50%', rotate: 0, scale: 0.72, opacity: 1 }}
               animate={{
-                left: [start.startX, start.startX + 8, start.targetX - 35, start.targetX],
-                top: [start.startY, start.startY - window.innerHeight * 0.18, start.targetY + 35, start.targetY],
-                rotate: [0, -4, -2, 0],
-                scale: [0.72, 0.86, 1, 0.8],
+                left: [start.startX, start.targetX],
+                top: [start.startY, start.targetY],
+                rotate: 0,
+                scale: [0.72, 0.8],
                 opacity: [1, 1, 1, 1],
               }}
-              transition={{ duration: start.duration / 1000, times: [0, 0.2, 0.76, 1], ease: 'linear' }}
+              transition={{ duration: start.duration / 1000, ease: 'linear' }}
             >
               <span className="rocket-launch-scene__glow" />
               <span className="rocket-launch-scene__flame rocket-launch-scene__flame--outer" />
