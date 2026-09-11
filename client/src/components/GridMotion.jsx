@@ -9,6 +9,7 @@ export default function GridMotion({ items = [] }) {
   const canvasRef = useRef(null);
   const rowRefs = useRef([]);
   const mouseXRef = useRef(typeof window === 'undefined' ? 0 : window.innerWidth / 2);
+  const lastScrollYRef = useRef(typeof window === 'undefined' ? 0 : window.scrollY);
   const images = useMemo(() => {
     const validImages = items.filter((item) => item?.image);
     if (!validImages.length) return [];
@@ -21,6 +22,10 @@ export default function GridMotion({ items = [] }) {
     const handleMouseMove = (event) => { mouseXRef.current = event.clientX; };
     const handleScroll = () => {
       if (!shellRef.current || !canvasRef.current) return;
+      const currentScrollY = window.scrollY;
+      const scrollingUp = currentScrollY < lastScrollYRef.current;
+      lastScrollYRef.current = currentScrollY;
+      if (scrollingUp) return;
       const bounds = shellRef.current.getBoundingClientRect();
       const sectionBounds = shellRef.current.parentElement?.getBoundingClientRect();
       const sectionHeight = sectionBounds?.height || bounds.height;
