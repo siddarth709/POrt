@@ -16,7 +16,10 @@ export default function ImageUploader({ label, value, onUploaded }) {
     try {
       const formData = new FormData();
       formData.append('image', file);
-      const res = await api.post('/upload', formData);
+      const res = await api.post('/upload', formData, {
+        timeout: 60000, // 60s — image uploads to Cloudinary can take a while
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
       onUploaded(res.data.url);
     } catch (err) {
       setError(err.response?.data?.message || err.message || 'Upload failed');

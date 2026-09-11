@@ -6,6 +6,7 @@ import Hero from '../components/Hero';
 import About from '../components/About';
 import Education from '../components/Education';
 import Experience from '../components/Experience';
+import Certifications from '../components/Certifications';
 import Projects from '../components/Projects';
 import Chronicles from '../components/Chronicles';
 import Contact from '../components/Contact';
@@ -18,7 +19,7 @@ export default function Home() {
     const sections = [...document.querySelectorAll('main > section')];
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const animateSectionContents = (section) => {
-      if (reducedMotion) return;
+      if (reducedMotion || document.documentElement.classList.contains('rocket-launching')) return;
       if (section.id === 'grid-motion') {
         const grid = section.querySelector('.grid-motion-shell');
         if (grid && !grid.dataset.revealed) {
@@ -54,6 +55,7 @@ export default function Home() {
     const observer = new IntersectionObserver(
       (entries) => entries.forEach((entry) => {
         if (!entry.isIntersecting || entry.target.dataset.revealed === 'true') return;
+        if (document.documentElement.classList.contains('rocket-launching')) return;
         entry.target.dataset.revealed = 'true';
         if (entry.target.id === 'home') return;
         const index = sections.indexOf(entry.target);
@@ -96,6 +98,7 @@ export default function Home() {
     about: Boolean(content?.about?.bio || content?.about?.image || content?.about?.heading),
     education: content?.education?.visible !== false && content?.education?.items?.length > 0,
     experience: content?.experience?.visible !== false && content?.experience?.items?.length > 0,
+    certifications: content?.certifications?.visible !== false && content?.certifications?.items?.length > 0,
     projects: content?.projects?.visible !== false && content?.projects?.items?.length > 0,
     chronicles: content?.chronicles?.visible !== false && content?.chronicles?.items?.length > 0,
     contact: true,
@@ -134,6 +137,7 @@ export default function Home() {
         {visibility.about && <About data={content?.about} />}
         {visibility.education && <Education data={content?.education} />}
         {visibility.experience && <Experience data={content?.experience} />}
+        {visibility.certifications && <Certifications data={content?.certifications} />}
         {visibility.projects && <Projects data={content?.projects} />}
         {visibility.chronicles && <Chronicles data={content?.chronicles} />}
         {content?.gridMotion?.visible !== false && <GridMotion items={visualItems} gradientColor="#5227FF" />}

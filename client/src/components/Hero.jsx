@@ -1,9 +1,6 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
-import { gsap } from 'gsap';
 import { ArrowDown, ArrowUpRight, Orbit } from 'lucide-react';
-import AeroShards from './AeroShards';
-import AnimatedHeading from './AnimatedHeading';
 import { formatExternalUrl } from '../utils/url';
 
 // Tactical Magnetic Button component for hero CTAs
@@ -47,34 +44,12 @@ function MagneticButton({ children, as: Component = motion.button, onClick, clas
 
 export default function Hero({ data = {} }) {
   const containerRef = useRef(null);
-  const textLayerRef = useRef(null);
-  const portraitLayerRef = useRef(null);
 
   // Scroll driven subtle fade and scale
   const { scrollY } = useScroll();
-  const heroOpacity = useTransform(scrollY, [0, 480], [1, 0]);
-  const heroScale = useTransform(scrollY, [0, 480], [1, 0.97]);
-  const heroTranslateY = useTransform(scrollY, [0, 480], [0, 60]);
-
-  useLayoutEffect(() => {
-    const container = containerRef.current;
-    if (!container || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
-    let handleParallax;
-    const ctx = gsap.context(() => {
-      const moveText = gsap.quickTo(textLayerRef.current, 'x', { duration: 0.55, ease: 'power3.out' });
-      const movePortrait = gsap.quickTo(portraitLayerRef.current, 'x', { duration: 0.7, ease: 'power3.out' });
-      handleParallax = (event) => {
-        const center = window.innerWidth / 2;
-        moveText((event.clientX - center) * -0.018);
-        movePortrait((event.clientX - center) * 0.035);
-      };
-    }, container);
-    container.addEventListener('mousemove', handleParallax, { passive: true });
-    return () => {
-      container.removeEventListener('mousemove', handleParallax);
-      ctx.revert();
-    };
-  }, []);
+  const heroOpacity = useTransform(scrollY, [0, 500], [1, 0]);
+  const heroScale = useTransform(scrollY, [0, 500], [1, 0.98]);
+  const heroTranslateY = useTransform(scrollY, [0, 500], [0, 50]);
 
   const scrollTo = (id) => {
     const element = document.getElementById(id);
@@ -88,180 +63,181 @@ export default function Hero({ data = {} }) {
   const hasImage = Boolean(data.image);
   const linkedin = (data.socials || []).find((social) => social.platform?.toLowerCase().includes('linkedin'));
   const linkedinUrl = formatExternalUrl(linkedin?.url || 'https://www.linkedin.com');
-  const nameText = data.name || "NS SIDDARTH";
+  const nameText = (data.name || "N S SIDDARTH").toUpperCase();
   const taglineText = data.tagline || "Building intelligent systems with code, models, and ideas. AI/ML engineer exploring complex computational systems.";
+
+  const techBadges = [
+    'PyTorch',
+    'C++',
+    'Distributed Systems',
+    'Stochastic Modeling',
+    'CUDA',
+    'Neural Architectures',
+  ];
 
   return (
     <section
       id="home"
       ref={containerRef}
-      className="hero relative min-h-[94vh] sm:min-h-screen flex items-center justify-center pt-28 pb-16 px-5 sm:px-8 overflow-hidden"
+      className="hero relative min-h-screen flex flex-col justify-between pt-24 sm:pt-28 pb-8 px-5 sm:px-8 overflow-hidden bg-[#090a0f]"
     >
-      <div className="hero-ambient absolute inset-0 z-0 pointer-events-none" aria-hidden="true">
-        <AeroShards
-          backgroundColor="#120F17"
-          shardColor="#896ABD"
-          accentColor="#A855F7"
-          placement="full"
-          flow="stream"
-          material="pearl"
-          detail="balanced"
-          effect="none"
-          scale={1}
-          spread={1}
-          depth={1}
-          speed={1}
-          spin={1}
-          interaction="repel"
-          density={1.5}
-          shardSize={1.1}
-          stretch={1}
-          turbulence={1}
-          glow={1}
-          edgeSoftness={2}
-          bloom={0.5}
-          grain={0.05}
-          chromaticAberration={0.0075}
-          transitionDuration={1}
-          interactionRadius={1.5}
-          interactionStrength={0.5}
-          rippleIntensity={1}
-          holdToGather={true}
-        />
+      {/* Clean Hero Background */}
+      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
+        {/* Single clean sweep: deep indigo to transparent, top-center */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_90%_65%_at_50%_-5%,_rgba(79,70,229,0.45)_0%,_rgba(67,56,202,0.15)_40%,_transparent_70%)]" />
+        {/* Subtle warm amber behind the portrait - not oversaturated */}
+        <div className="absolute top-[25%] left-[45%] -translate-x-1/2 w-[480px] h-[480px] rounded-full bg-[radial-gradient(ellipse_at_center,_rgba(245,158,11,0.12)_0%,_transparent_65%)] blur-3xl" />
+        {/* Faint horizontal light streak across middle */}
+        <div className="absolute top-[38%] inset-x-0 h-px bg-gradient-to-r from-transparent via-indigo-500/20 to-transparent" />
+        {/* Bottom fade to base */}
+        <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#090a0f] via-[#090a0f]/60 to-transparent z-[5]" />
       </div>
-      <div
-        className="hero-vignette pointer-events-none absolute inset-0 z-[1] bg-gradient-to-r from-[#120F17]/95 via-[#120F17]/78 to-[#120F17]/12"
-        aria-hidden="true"
-      />
-      <div
-        className="hero-vignette-bottom pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-1/3 bg-gradient-to-t from-[#120F17]/72 to-transparent"
-        aria-hidden="true"
-      />
+
       <motion.div
         style={{
           opacity: heroOpacity,
           scale: heroScale,
           y: heroTranslateY,
         }}
-        className="hero-stage max-w-7xl mx-auto w-full relative"
+        className="hero-stage max-w-7xl mx-auto w-full relative z-10 flex-1 flex flex-col justify-between"
       >
-        <div className={`hero-grid ${hasImage ? "grid lg:grid-cols-12 gap-12 lg:gap-16 items-center" : "max-w-6xl text-left"}`}>
-          
-          {/* Left Column: Big Name & Beautiful Tag Below */}
-          <div className={`hero-content ${hasImage ? "lg:col-span-7 flex flex-col items-start text-left" : "flex flex-col items-start text-left"}`}>
-            
-            {/* Status indicator */}
+        {/* TOP: Centered Giant Name - Solid White */}
+        <div className="hero-header-center w-full text-center select-none pt-2 sm:pt-4 z-10">
+          <motion.h1
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="hero-dribbble-title font-display font-black uppercase tracking-tight bg-gradient-to-r from-blue-400 via-indigo-300 to-slate-900 bg-clip-text text-transparent drop-shadow-[0_0_40px_rgba(99,102,241,0.4)]"
+          >
+            {nameText}
+          </motion.h1>
+        </div>
+
+        {/* MIDDLE: Two-column — left info | portrait — no overlap */}
+        <div className="relative w-full flex-1 min-h-[460px] sm:min-h-[520px] lg:min-h-[580px] flex items-end mt-2 sm:mt-4">
+
+          {/* ── LEFT COLUMN: narrow so it never reaches the centered portrait ── */}
+          <div className="relative z-30 w-[30%] max-w-[280px] flex-shrink-0 pb-8 sm:pb-12 pr-2 flex flex-col gap-0 items-start">
+
+            {/* 1. Status Badge */}
             <motion.div
-              initial={false}
-              whileHover={{ scale: 1.02, y: -1 }}
-              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="hero-status relative z-30 inline-flex items-center gap-2.5 px-3.5 py-2 rounded-full border border-white/[0.1] hover:border-cyan-300/40 bg-white/[0.035] hover:bg-cyan-300/[0.07] backdrop-blur-md mb-7 transition-all cursor-default shadow-sm hover:shadow-[0_0_24px_rgba(34,211,238,0.12)]"
+              initial={{ opacity: 0, x: -20, filter: 'blur(6px)' }}
+              animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
+              transition={{ duration: 0.65, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/[0.07] backdrop-blur-md mb-4 shadow-sm"
             >
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
               </span>
-              <span className="font-mono text-[11px] tracking-wider text-slate-100 uppercase">
+              <span className="font-mono text-[11px] tracking-wider text-emerald-300 uppercase">
                 Open to collaborations
               </span>
             </motion.div>
 
-            {/* BIG NAME (Headline) */}
-            <motion.div
-              ref={textLayerRef}
-              className="hero-name-layer relative z-10 font-display font-extrabold tracking-tight text-white leading-[1.02] sm:leading-[1] mb-6 select-none group"
+            {/* 2. Role line */}
+            <motion.p
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              className="font-mono text-[11px] sm:text-xs tracking-[0.18em] uppercase text-indigo-300 mb-3"
             >
-              <AnimatedHeading
-                as="h1"
-                text={nameText}
-                animateOnView={false}
-                className={hasImage ? "text-5xl sm:text-6xl md:text-7xl lg:text-[5.7rem]" : "text-5xl sm:text-7xl md:text-8xl lg:text-[6.6rem]"}
-                wordClassName="editorial-gradient transition-all duration-500 group-hover:brightness-125"
-              />
-            </motion.div>
+              Machine Learning Engineer
+            </motion.p>
 
-            {/* ELEGANT TAGLINE ALIGNED BELOW IN REFINED SMALLER FONT */}
+            {/* 3. Bio text */}
             {taglineText && (
-              <motion.div
-                initial={false}
-                whileHover={{ x: 4 }}
-                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                className="hero-description relative z-30 max-w-2xl mb-7 group"
+              <motion.p
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.75, delay: 0.48, ease: [0.16, 1, 0.3, 1] }}
+                className="text-[13px] sm:text-sm text-white/90 font-normal leading-relaxed mb-6 [text-shadow:0_1px_12px_rgba(0,0,0,0.95)]"
               >
-                <p className="text-base sm:text-lg md:text-xl text-slate-100 font-normal leading-relaxed text-left whitespace-pre-line border-l-2 border-cyan-300/60 group-hover:border-cyan-300 pl-4 py-0.5 transition-colors duration-300 [text-shadow:0_2px_18px_rgba(18,15,23,0.9)]">
-                  {taglineText}
-                </p>
-              </motion.div>
+                {taglineText}
+              </motion.p>
             )}
 
-            {/* Action Buttons */}
+            {/* 4. GET IN TOUCH */}
             <motion.div
-              initial={false}
-              className="hero-actions relative z-30 flex flex-wrap items-center gap-3 sm:gap-4"
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.65, delay: 0.62, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-wrap items-center gap-3"
             >
-              <MagneticButton
-                as={motion.a}
-                href={linkedinUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="interactive-hit group px-6 py-3.5 rounded-full bg-white text-[#050508] font-mono text-xs sm:text-sm font-semibold tracking-wider flex items-center gap-2 hover:bg-cyan-50 hover:shadow-[0_0_28px_rgba(255,255,255,0.22)] transition-all"
-              >
-                <span>LINKEDIN</span>
-                <ArrowUpRight
-                  size={16}
-                  className="transition-transform duration-300 group-hover:translate-x-1.5 group-hover:-translate-y-1.5"
-                />
-              </MagneticButton>
-
               <MagneticButton
                 onClick={() => scrollTo('contact')}
-                className="interactive-hit group px-6 py-3.5 rounded-full border border-white/[0.15] hover:border-white/50 bg-white/[0.03] hover:bg-white/[0.08] backdrop-blur-md text-slate-200 hover:text-white font-mono text-xs sm:text-sm font-medium tracking-wider flex items-center gap-2 transition-all hover:shadow-[0_0_20px_rgba(255,255,255,0.08)]"
+                className="interactive-hit group px-5 py-2.5 rounded-full bg-white text-[#090a0f] font-mono text-[11px] sm:text-xs font-semibold tracking-wider flex items-center gap-2 hover:bg-slate-100 hover:shadow-[0_0_24px_rgba(255,255,255,0.25)] transition-all"
               >
                 <span>GET IN TOUCH</span>
-                <ArrowUpRight
-                  size={16}
-                  className="text-slate-400 transition-all duration-300 group-hover:text-white group-hover:translate-x-1.5 group-hover:-translate-y-1.5"
-                />
+                <ArrowUpRight size={13} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </MagneticButton>
-            </motion.div>
-            <motion.div
-              initial={false}
-              className="hero-meta relative z-30 mt-12 flex flex-wrap items-center gap-x-6 gap-y-3 font-mono text-[10px] uppercase tracking-[0.14em] text-slate-300 [text-shadow:0_2px_14px_rgba(18,15,23,0.95)]"
-            >
-              <span className="flex items-center gap-2"><Orbit size={13} className="text-cyan-300" /> AI systems</span>
-              <span className="h-1 w-1 rounded-full bg-slate-600" />
-              <span>Research × product</span>
-              <button onClick={() => scrollTo('about')} className="ml-1 flex items-center gap-2 text-slate-200 transition-colors hover:text-white">Scroll to explore <ArrowDown size={13} /></button>
+
+              {/* 5. LinkedIn */}
+              <motion.div
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.65, delay: 0.74, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <MagneticButton
+                  as={motion.a}
+                  href={linkedinUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="interactive-hit group px-5 py-2.5 rounded-full border border-white/[0.18] hover:border-indigo-400/60 bg-white/[0.04] hover:bg-indigo-500/[0.1] backdrop-blur-md text-slate-200 hover:text-white font-mono text-[11px] sm:text-xs font-medium tracking-wider flex items-center gap-2 transition-all"
+                >
+                  <span>LINKEDIN</span>
+                  <ArrowUpRight size={13} className="text-slate-400 transition-all duration-300 group-hover:text-indigo-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </MagneticButton>
+              </motion.div>
             </motion.div>
           </div>
 
-          {/* Right Column: Hero Image Frame from Dashboard */}
+          {/* ── PORTRAIT: absolute center of the full row ── */}
           {hasImage && (
-            <motion.div
-              initial={false}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 1, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              ref={portraitLayerRef}
-              className="hero-portrait-layer relative z-20 lg:col-span-5 flex justify-center group"
-            >
-              <motion.div
-                whileHover={{ y: -6, scale: 1.01 }}
-                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                className="image-surface hero-portrait relative z-20 w-full max-w-sm sm:max-w-md aspect-[4/5] overflow-visible transition-colors duration-500"
-              >
-                <div className="relative w-full h-full overflow-visible bg-transparent">
-                  <img
-                    src={data.image}
-                    alt={data.name || 'Hero'}
-                    className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-[1.02]"
-                  />
-
-                </div>
-              </motion.div>
-            </motion.div>
+            <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-0 z-20 flex justify-center items-end">
+              <motion.img
+                initial={{ opacity: 0, y: 40, scale: 0.97 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 1, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+                src={data.image}
+                alt={data.name || 'Hero'}
+                className="hero-grounded-portrait w-auto max-h-[60vh] sm:max-h-[70vh] lg:max-h-[78vh] object-contain object-bottom"
+              />
+            </div>
           )}
-
         </div>
+
+        {/* BOTTOM: Minimal Tech Strip (Matches reference layout) */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="hero-bottom-bar relative z-30 w-full pt-5 border-t border-white/[0.08] flex flex-wrap items-center justify-between gap-4 font-mono text-[11px] text-slate-400"
+        >
+          <div className="flex items-center gap-2 text-slate-300 uppercase tracking-widest text-[10px]">
+            <Orbit size={13} className="text-amber-400" />
+            <span>CORE SYSTEMS</span>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+            {techBadges.map((badge) => (
+              <span
+                key={badge}
+                className="px-3 py-1 rounded-full border border-white/[0.08] bg-white/[0.025] text-slate-300 hover:text-white hover:border-white/25 transition-colors text-[10px] sm:text-[11px]"
+              >
+                {badge}
+              </span>
+            ))}
+          </div>
+
+          <button
+            onClick={() => scrollTo('about')}
+            className="flex items-center gap-1.5 text-slate-400 hover:text-white transition-colors"
+          >
+            <span>Scroll to explore</span>
+            <ArrowDown size={12} />
+          </button>
+        </motion.div>
       </motion.div>
     </section>
   );

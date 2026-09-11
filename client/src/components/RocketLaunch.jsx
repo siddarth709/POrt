@@ -64,45 +64,65 @@ export default function RocketLaunch({ className = '' }) {
     }
 
     const distance = Math.abs(scrollStart - scrollTarget);
-    const duration = Math.max(1800, Math.min(5200, (distance / 950) * 1000));
+    // Smooth cinematic travel duration
+    const duration = Math.max(1600, Math.min(3200, (distance / 1200) * 1000));
     launchLockRef.current = true;
-    const previousHtmlOverflow = document.documentElement.style.overflow;
-    const previousBodyOverflow = document.body.style.overflow;
-    document.documentElement.style.overflow = 'hidden';
-    document.body.style.overflow = 'hidden';
 
-    setLaunch({ startDocumentX, startDocumentY, targetDocumentX, targetDocumentY, scrollStart, scrollTarget, duration, restoreOverflow: () => {
-      document.documentElement.style.overflow = previousHtmlOverflow;
-      document.body.style.overflow = previousBodyOverflow;
-    }});
+    // Add rocket-launching class to html and body to disable all background and section animations
+    document.documentElement.classList.add('rocket-launching');
+    document.body.classList.add('rocket-launching');
+
+    setLaunch({
+      startDocumentX,
+      startDocumentY,
+      targetDocumentX,
+      targetDocumentY,
+      scrollStart,
+      scrollTarget,
+      duration,
+    });
   };
 
   useEffect(() => {
     if (!launch || reducedMotion) return undefined;
     const startTime = performance.now();
+
+    // Silky smooth ease-in-out cubic easing curve
+    const easeInOutCubic = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
     const tick = (now) => {
-      const progress = Math.min((now - startTime) / launch.duration, 1);
+      const linearProgress = Math.min((now - startTime) / launch.duration, 1);
+      const progress = easeInOutCubic(linearProgress);
+
       const scrollY = launch.scrollStart + (launch.scrollTarget - launch.scrollStart) * progress;
       const documentX = launch.startDocumentX + (launch.targetDocumentX - launch.startDocumentX) * progress;
       const documentY = launch.startDocumentY + (launch.targetDocumentY - launch.startDocumentY) * progress;
+
       window.scrollTo(0, scrollY);
       document.documentElement.style.setProperty('--rocket-x', `${documentX}px`);
       document.documentElement.style.setProperty('--rocket-y', `${documentY - scrollY}px`);
 
-      if (progress < 1) {
+      if (linearProgress < 1) {
         animationFrameRef.current = requestAnimationFrame(tick);
         return;
       }
+
+      // Reached top smoothly
+      window.scrollTo(0, 0);
+
       window.setTimeout(() => {
-        launch.restoreOverflow();
+        document.documentElement.classList.remove('rocket-launching');
+        document.body.classList.remove('rocket-launching');
         launchLockRef.current = false;
         setLaunch(null);
-      }, 850);
+      }, 700);
     };
 
     animationFrameRef.current = requestAnimationFrame(tick);
     return () => {
       if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
+      document.documentElement.classList.remove('rocket-launching');
+      document.body.classList.remove('rocket-launching');
     };
   }, [launch, reducedMotion]);
 

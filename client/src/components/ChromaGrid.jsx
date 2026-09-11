@@ -19,8 +19,11 @@ export default function ChromaGrid({ items = [], onSelect }) {
           type="button"
           key={item._id || index}
           onClick={() => onSelect(item)}
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
           whileHover={{ y: -7, scale: 1.015 }}
-          transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+          transition={{ duration: 0.55, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
           className="chroma-card group text-left"
         >
           <div className="image-surface relative h-40 overflow-hidden rounded-xl border border-white/10 bg-slate-950/70">
