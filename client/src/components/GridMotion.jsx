@@ -11,7 +11,7 @@ export default function GridMotion({ items = [] }) {
   if (!validItems.length) return null;
 
   return (
-    <section id="grid-motion" className="grid-motion-shell relative min-h-screen py-16 sm:py-24 px-4 sm:px-8 bg-[#07080e] overflow-hidden isolate">
+    <section id="grid-motion" className="relative w-full h-auto min-h-0 py-16 sm:py-24 px-4 sm:px-8 bg-[#07080e] overflow-visible isolate">
       {/* Ambient Subtle Background Lighting */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.08)_0%,transparent_70%)] blur-3xl" />
